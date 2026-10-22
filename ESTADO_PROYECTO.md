@@ -109,11 +109,13 @@ npm run dev
    - `frontend/package.json` actualizado con autor `EdisonPEÑA (Iotdico - https://ossatlas.iotdico.com)`.
    - `README.md` actualizado con título `OSS Atlas` y metadatos de autoría oficial.
    - `frontend/app/page.tsx` actualizado en barra de navegación (`OSS Atlas` / `Iotdico B2B`), fases WBS completadas por `EdisonPEÑA (Iotdico)` y pie de página oficial.
-2. **Control de Versiones y Commit Inicial (COMPLETADO LOCALMENTE):**
+2. **Control de Versiones y Repositorio Remoto (COMPLETADO AL 100%):**
    - Repositorio Git local inicializado en rama principal `main`.
    - Autor configurado y validado: `EdisonPEÑA <124206207+DICO2023@users.noreply.github.com>`.
-   - Primer commit oficial creado: `39ec987` (`feat: release OSS Atlas v1.0 by EdisonPEÑA (Iotdico)`), abarcando 137 archivos limpios sin fugas de secretos ni archivos temporales.
-   - **Pendiente:** Vincular el repositorio remoto de GitHub (`git remote add origin <URL>`) y ejecutar `git push -u origin main`.
+   - Repositorio remoto vinculado: `https://github.com/DICO2023/oss-atlas.git`.
+   - Commits subidos exitosamente a GitHub (`git push -u origin main`):
+     - `39ec987`: `feat: release OSS Atlas v1.0 by EdisonPEÑA (Iotdico)` (137 archivos limpios).
+     - `135e604`: `docs: registrar hito de commit inicial en ESTADO_PROYECTO.md`.
 3. **Conexión de Base de Datos Cloud y Despliegue en `ossatlas.iotdico.com`:**
    - Migrar el esquema y seeds a la instancia PostgreSQL con `pgvector` en la nube (Neon/Supabase Free Tier permanente).
    - Configurar el registro DNS en Hostinger para apuntar `ossatlas.iotdico.com` al despliegue en producción.
