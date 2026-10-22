@@ -11,17 +11,14 @@
 
 | Componente | Configuración / Puerto | Estado Actual |
 | :--- | :--- | :--- |
-| **Docker Engine** | Docker Desktop 4.96.0 | Activo |
-| **Base de Datos** | Contenedor `acelerador-db` (PostgreSQL 16 + pgvector 0.7+ + pg_trgm) en puerto `5432` | Activo y persistente (13 herramientas indexadas) |
-| **Frontend / API** | Next.js 15 App Router en `http://localhost:3000` | Operativo (`npm run dev`) sin errores de Webpack |
+| **Base de Datos Cloud** | Neon Serverless PostgreSQL 16 (`pgvector` 0.7+ con `halfvec`) en AWS US-East-2 | **Activa 24/7 en la nube** (13 herramientas indexadas con vectores semánticos) |
+| **Frontend / API** | Next.js 15 App Router en `http://localhost:3000` | Operativo con Neon Cloud (`npm run dev`) sin errores |
+| **Build Producción** | Next.js 15 compilado (`npm run build`) | **Verificado 100% exitoso** (0 errores de tipos / lint) |
 | **Contenedor Producción** | Imagen Docker `acelerador-frontend:latest` (347 MB en Alpine Linux) | Compilada y lista |
 
-### Comandos para reiniciar el entorno en la próxima sesión:
+### Comandos para ejecutar el entorno:
 ```bash
-# 1. Asegurarse de que Docker esté abierto y el contenedor de base de datos iniciado:
-docker start acelerador-db
-
-# 2. Iniciar el servidor en la carpeta frontend:
+# Iniciar el servidor Next.js conectado directamente a Neon Cloud (no requiere Docker local):
 cd frontend
 npm run dev
 ```
@@ -116,10 +113,18 @@ npm run dev
    - Commits subidos exitosamente a GitHub (`git push -u origin main`):
      - `39ec987`: `feat: release OSS Atlas v1.0 by EdisonPEÑA (Iotdico)` (137 archivos limpios).
      - `135e604`: `docs: registrar hito de commit inicial en ESTADO_PROYECTO.md`.
-3. **Conexión de Base de Datos Cloud y Despliegue en `ossatlas.iotdico.com`:**
-   - Migrar el esquema y seeds a la instancia PostgreSQL con `pgvector` en la nube (Neon/Supabase Free Tier permanente).
-   - Configurar el registro DNS en Hostinger para apuntar `ossatlas.iotdico.com` al despliegue en producción.
-4. **Capa de Cobro B2B:**
+3. **Conexión de Base de Datos Cloud (COMPLETADO AL 100%):**
+   - Instancia Serverless Neon PostgreSQL 16 provisionada en AWS US-East-2 (`oss-atlas`).
+   - Extensiones `vector` (pgvector 0.7+) y `pg_trgm` activadas.
+   - Script consolidado `00_full_migration.sql` y `scripts/migrate-cloud.mjs` ejecutados con éxito.
+   - 13 herramientas B2B curadas sembradas y proyectadas con vectores semánticos `halfvec(1536)`.
+   - Consulta RRF híbrida validada en vivo (< 15ms de latencia).
+   - Variables de entorno en `frontend/.env.local` conectadas por SSL directo a Neon Cloud.
+   - Compilación de producción (`next build`) verificada exitosamente sin advertencias.
+4. **Despliegue en Producción y Subdominio `ossatlas.iotdico.com`:**
+   - Desplegar la aplicación en Vercel (conectado al repo GitHub `DICO2023/oss-atlas`) o en servidor Docker.
+   - Configurar el registro CNAME / A en la zona DNS de Hostinger para vincular `ossatlas.iotdico.com`.
+5. **Capa de Cobro B2B:**
    - Integrar botón de checkout / suscripción con Lemon Squeezy o Stripe para el plan Pro ($10/mes).
 
 ---
