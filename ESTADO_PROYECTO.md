@@ -15,6 +15,7 @@
 | **Frontend / API** | Next.js 15 App Router en `http://localhost:3000` | Operativo con Neon Cloud (`npm run dev`) sin errores |
 | **Build Producción** | Next.js 15 compilado (`npm run build`) | **Verificado 100% exitoso** (0 errores de tipos / lint) |
 | **Contenedor Producción** | Imagen Docker `acelerador-frontend:latest` (347 MB en Alpine Linux) | Compilada y lista |
+| **Despliegue Global en Vivo** | Vercel Edge Network + DNS Hostinger CNAME (`ossatlas.iotdico.com`) | **100% operativo con SSL activo de por vida** |
 
 ### Comandos para ejecutar el entorno:
 ```bash
@@ -60,11 +61,8 @@ npm run dev
   - Generación de `ETag` de sincronización (`W/"sync-[slug]-[timestamp]"`) y soporte para acción administrativa `reindex_all`.
 - **Interfaz Interactiva de Sincronización en Frontend:**
   - Botón `⚡ Ingesta & Sincronización` en el catálogo y acceso desde el header (`INGESTA ETag: ACTIVA`).
-  - Modal multicapa con 3 pestañas:
-    - **Presets Curados B2B:** Sincronización a 1 clic con detección de herramientas ya existentes en la BD.
-    - **Ingesta Personalizada:** Formulario con sliders de calidad y proyección en tiempo real del Health Score calculado antes del envío.
-    - **Reindexación Global:** Mantenimiento vectorial y recálculo masivo de embeddings.
-  - Verificado en navegador con subagente: catálogo incrementado exitosamente a 13 herramientas activas.
+  - Modal multicapa con 3 pestañas: presets curados, ingesta personalizada y reindexación global.
+  - Catálogo validado e incrementado exitosamente a 13 herramientas activas.
 
 ### Paso 6: Build de Producción, Linter y Docker
 - **Validación Estricta de Tipos y Linter:**
@@ -76,89 +74,84 @@ npm run dev
 - **Empaquetado de Contenedor Docker:**
   - Creación de `.dockerignore` para evitar contaminación de arquitectura Windows en Alpine Linux.
   - Dockerfile optimizado (`package*.json` para builds reproducibles).
-  - Imagen `acelerador-frontend:latest` construida y empaquetada exitosamente (347 MB de contenido).
-- **Resolución de Incidencia Webpack:**
-  - Se corrigió el error `Cannot find module ./897.js` limpiando el directorio `.next` tras el build de producción y relanzando `npm run dev` fresco.
+  - Imagen `acelerador-frontend:latest` construida y empaquetada exitosamente (347 MB).
 
 ---
 
-## 🎯 3. Decisiones Estratégicas y de Negocio (Sesión 21 Oct)
+## 🎯 3. Decisiones Estratégicas y de Negocio
 
 1. **Rumbo del Proyecto: Autónomo / Open-Core B2B:**
-   - Se acordó avanzar de forma 100% autónoma, reteniendo la titularidad y propiedad intelectual del producto.
+   - Retención absoluta de titularidad y propiedad intelectual por parte de EdisonPEÑA (Iotdico).
    - Modelo comercial: **Open-Core Freemium**:
      - *Capa Libre / Open Source:* Catálogo, búsqueda híbrida local y despliegue Docker.
-     - *Capa Monetizable SaaS ($10 - $25 USD/mes):* Consultas ilimitadas al Arquitecto RAG, exportación de informes ejecutivos en PDF para clientes B2B, y generador de manifiestos Terraform / Docker Compose unificados.
+     - *Capa Monetizable SaaS ($19 - $49 USD/mes):* Guías paso a paso para Windows y Mac (.md / .pdf), consultas ilimitadas al Arquitecto RAG, manifiestos unificados y soporte técnico.
 2. **Nombre Oficial de Marca y Producto:**
    - **OSS Atlas** *(The Open-Source Architecture & Intelligence Atlas)*.
-3. **Infraestructura Activa a Costo Cero ($0.00 USD de inversión adicional):**
-   - **Subdominio creado:** `ossatlas.iotdico.com`.
-   - **Hosting base:** Hostinger Business Web Hosting con vigencia hasta el **23 de enero de 2029**.
-   - **Beneficios vinculados:** Certificado SSL de por vida, CDN, 100 subdominios, almacenamiento de 200 GB y Hostinger Agent con 393 créditos para automatización de leads con Gmail, Notion y Slack.
-   - **Estrategia de Base de Datos:** PostgreSQL 16 con `pgvector` alojado en Supabase / Neon (Free Tier permanente).
+3. **Infraestructura Activa a Costo Cero:**
+   - **Subdominio corporativo:** `ossatlas.iotdico.com` en Hostinger Business Hosting (hasta enero 2029).
+   - **Vercel Edge Network:** CI/CD automático conectado al repositorio de GitHub.
+   - **Neon Serverless PostgreSQL 16:** Base de datos cloud serverless en AWS US-East-2.
 
 ---
 
-## 🚀 4. Punto de Partida para la Próxima Sesión
+## 🚀 4. Hitos Recientes de Monetización, UI & Ajustes del Cliente (22 Octubre 2026)
 
-1. **Personalización de Marca y Autoría en Código (COMPLETADO):**
-   - Licencia MIT actualizada con titularidad: `Copyright (c) 2026 EdisonPEÑA (Iotdico - https://ossatlas.iotdico.com)`.
-   - `frontend/package.json` actualizado con autor `EdisonPEÑA (Iotdico - https://ossatlas.iotdico.com)`.
-   - `README.md` actualizado con título `OSS Atlas` y metadatos de autoría oficial.
-   - `frontend/app/page.tsx` actualizado en barra de navegación (`OSS Atlas` / `Iotdico B2B`), fases WBS completadas por `EdisonPEÑA (Iotdico)` y pie de página oficial.
-2. **Control de Versiones y Repositorio Remoto (COMPLETADO AL 100%):**
-   - Repositorio Git local inicializado en rama principal `main`.
-   - Autor configurado y validado: `EdisonPEÑA <124206207+DICO2023@users.noreply.github.com>`.
-   - Repositorio remoto vinculado: `https://github.com/DICO2023/oss-atlas.git`.
-   - Commits subidos exitosamente a GitHub (`git push -u origin main`):
-     - `39ec987`: `feat: release OSS Atlas v1.0 by EdisonPEÑA (Iotdico)` (137 archivos limpios).
-     - `135e604`: `docs: registrar hito de commit inicial en ESTADO_PROYECTO.md`.
-3. **Conexión de Base de Datos Cloud (COMPLETADO AL 100%):**
-   - Instancia Serverless Neon PostgreSQL 16 provisionada en AWS US-East-2 (`oss-atlas`).
-   - Extensiones `vector` (pgvector 0.7+) y `pg_trgm` activadas.
-   - Script consolidado `00_full_migration.sql` y `scripts/migrate-cloud.mjs` ejecutados con éxito.
-   - 13 herramientas B2B curadas sembradas y proyectadas con vectores semánticos `halfvec(1536)`.
-   - Consulta RRF híbrida validada en vivo (< 15ms de latencia).
-   - Variables de entorno en `frontend/.env.local` conectadas por SSL directo a Neon Cloud.
-   - Compilación de producción (`next build`) verificada exitosamente sin advertencias.
-4. **Despliegue en Producción y Subdominio `ossatlas.iotdico.com` (COMPLETADO AL 100%):**
-   - Frontend Next.js 15 desplegado en la red global de borde (Edge Network) de Vercel.
-   - Vinculado al repositorio oficial `https://github.com/DICO2023/oss-atlas.git` (CI/CD automático por cada commit).
-   - Variables de entorno en producción configuradas con Neon PostgreSQL 16 (`DATABASE_URL`).
-   - Zona DNS de Hostinger actualizada: CNAME `ossatlas` apuntando a `2d06daa840d5b9de.vercel-dns-017.com`.
-   - Certificado SSL/TLS emitido y activo de por vida.
-   - **Plataforma 100% en vivo y operativa en:** **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)** (y espejo en `https://oss-atlas.vercel.app`).
-5. **Capa de Monetización & Checkout B2B (PayPal, Wenia USDW & Soporte Bilingüe ES/EN) (COMPLETADO AL 100%):**
-   - Endpoint `POST /api/v1/checkout` y `GET /api/v1/checkout` con validación Zod, emisión de facturas proforma (`INV-2026-XXXXXX`) y generación de token criptográfico B2B (`proAccessToken`).
-   - Métodos de Pago configurados y adaptados a las cuentas reales del usuario:
-     - **PayPal**: Cobro internacional en USD con cuenta global de PayPal y tarjetas corporativas.
-     - **Wenia (USDW)**: Criptoactivo vinculado 1:1 al USD creado por Grupo Bancolombia, liquidación inmediata sin comisiones.
-     - **Transferencia Bancaria Empresarial**: Factura electrónica con RUT y soporte B2B.
-   - Modelo de Precios Open-Core B2B implementado:
-     - `Community` ($0 USD / libre de por vida).
-     - `Pro Architecture` ($19 USD/mes o $190 USD/año con 2 meses gratis): Guías de integración paso a paso (.md y .pdf) para Windows y Mac, consultas RAG ilimitadas, manifiestos unificados y soporte prioritario.
-     - `Enterprise Hub` ($49 USD/mes o $490 USD/año): Multi-asiento hasta 10 arquitectos, auditorías normativas, integración CI/CD y sesión 1-on-1 de arquitectura.
-   - Soporte Bilingüe Español / Inglés (`ES` / `EN`):
-     - Selector de idioma en el Header persistente en `localStorage`.
-     - Diccionario unificado en [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts).
-   - Limpieza de UI solicitada en sugerencias:
-     - Remoción de subtítulo técnico redundante del logo/brand (`pgvector 0.7+ ...`).
-     - Remoción de accesos al cronograma PMO y protocolo de traspaso asíncrono de la barra de navegación y del hero.
-     - Remoción completa de la sección WBS/RACI de 32 días y su modal asociado.
-     - Favicon corporativo e ícono de pestaña optimizados con nombre corto `OSS Atlas | B2B Architecture`.
-   - Compilación de producción (`next build`) verificada 100% exitosa sin errores de tipos o linting.
+### 4.1. Pasarelas de Pago Personalizadas B2B (PayPal & Wenia USDW)
+- **PayPal (USD):** Integración directa para recibir pagos internacionales en USD mediante cuenta global de PayPal (saldo de cuenta y tarjetas de crédito/débito internacionales).
+- **Wenia (USDW):** Integración para manejo de transferencias del criptoactivo USDW con paridad estable 1:1 frente al dólar (respaldado por Grupo Bancolombia), permitiendo acreditación directa y sin comisiones cambiarias.
+- **Transferencia Bancaria Empresarial:** Opción corporativa con solicitud de RUT y emisión de factura electrónica/proforma.
+- **Endpoint Backend:** `POST /api/v1/checkout` y `GET /api/v1/checkout` con validación Zod, emisión de facturas proforma (`INV-2026-XXXXXX`) y generación de token criptográfico B2B (`proAccessToken`).
 
-6. **Generador y Exportador de Guías de Integración (.md & .pdf) para Windows & Mac (Próximo paso en curso):**
-   - Cuando el usuario defina o seleccione la herramienta open source deseada, podrá exportar y descargar una guía técnica completa paso a paso adaptada para entornos Windows (PowerShell/WSL2/Docker Desktop) y macOS (Homebrew/Terminal/Colima), disponible en extensiones `.md` y `.pdf`.
+### 4.2. Soporte Bilingüe Completo (Español / Inglés)
+- Diccionario unificado implementado en [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) con soporte para:
+  - Navegación, Hero, Filtros, Estados y Estadísticas.
+  - Modal de Checkout, Planes B2B y Pasarelas de Pago.
+  - Modal de Ingesta Continua, Asistente RAG y Auditoría RAGAS.
+- Selector de idioma en el Header (**`🇪🇸 ES`** / **`🇺🇸 EN`**) con persistencia en `localStorage`.
+
+### 4.3. Depuración Visual y de Marca (Atención a Documento de Sugerencias)
+- **Página 1 del Documento:**
+  - Se eliminó el subtítulo técnico redundante del logo (`pgvector 0.7+ (halfvec) • RRF (k=60) • RAGAS Verified • ossatlas.iotdico.com`).
+  - Se optimizó el favicon e ícono de pestaña con el nombre corto `OSS Atlas | B2B Architecture` ([icon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/icon.svg) y [favicon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/favicon.svg)).
+  - Se eliminaron los botones de navegación `Plan PMO (32 Días)` y `Traspaso Asíncrono`.
+  - Se removió la fecha fija `12 OCT – 13 NOV 2026 (32 DÍAS)` del hero pill.
+- **Página 2 del Documento:**
+  - Se removió en su totalidad la sección de cronograma WBS de 32 días y matriz RACI (`#pmo-wbs-section`), así como el modal de protocolo de traspaso asíncrono.
+- **Página 3 del Documento:**
+  - Pasarelas de pago adaptadas a PayPal y Wenia USDW.
+  - Plataforma completamente en español con selector de cambio a inglés.
+
+### 4.4. Control de Versiones y Despliegue en Vivo
+- Commits subidos a GitHub (`https://github.com/DICO2023/oss-atlas.git` en rama `main`):
+  - `39ec987`: *feat: release OSS Atlas v1.0 by EdisonPEÑA (Iotdico)*
+  - `135e604`: *docs: registrar hito de commit inicial en ESTADO_PROYECTO.md*
+  - `d654c83`: *feat(ui/checkout): apply document adjustments (remove PMO/tagline, add PayPal & Wenia USDW, ES/EN i18n)*
+- Despliegue automático activo en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
+
+---
+
+## 🛠️ 5. Próximo Paso Inmediato: Generador de Guías de Integración (.md & .pdf) para Windows y Mac
+
+Cada vez que un usuario defina o consulte una herramienta de open source en el catálogo:
+1. **Contenido Técnico Paso a Paso Adaptativo:**
+   - **Windows:** Guía detallada usando PowerShell / WSL2 (Ubuntu), variables de entorno con `[System.Environment]`, configuración de Docker Desktop y scripts `.ps1`.
+   - **macOS:** Guía detallada usando Homebrew (`brew install`), Terminal (Zsh), Colima/OrbStack o Docker Desktop, y variables en `.zshrc`.
+2. **Formatos de Descarga:**
+   - **Archivo `.md` (Markdown estructurado):** Descarga directa para que el desarrollador lo incorpore en sus repositorios o notas de ingeniería.
+   - **Archivo `.pdf` (Documento imprimible/ejecutivo con diseño B2B):** Formato profesional con encabezado oficial `OSS Atlas`, tablas de configuración y comandos listos para copiar.
+3. **Puntos de Activación:**
+   - Botón directo en la tarjeta de cada herramienta en el Catálogo B2B.
+   - Botón de exportación en el Asistente RAG al recomendar una arquitectura con herramientas específicas.
 
 ---
 
 ## 📂 Archivos Clave del Desarrollo
 
-- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz completa (Hero, Catálogo interactivo, Modal de Ingesta & Sincronización, Asistente RAG, Auditoría RAGAS).
-- [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Endpoint de Ingesta Continua con cálculo de Health Score y halfvec(1536).
-- [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores halfvec.
-- [embedding.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/embedding.ts) — Generador y proyector vectorial de 1536 dimensiones.
-- [rag.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/rag.ts) — Lógica de síntesis arquitectónica y evaluación RAGAS.
-- [Dockerfile](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/Dockerfile) — Contenedor de producción Alpine Linux optimizado.
-- [docker-compose.yml](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/docker-compose.yml) — Orquestación multicontenedor (PostgreSQL + pgvector, Keycloak, Meilisearch, Next.js).
+- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma).
+- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`).
+- [route.ts (Checkout API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/checkout/route.ts) — Backend de monetización con soporte para PayPal, Wenia USDW y facturas proforma B2B.
+- [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Ingesta continua con Health Score ponderado y vectorización `halfvec(1536)`.
+- [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores semánticos.
+- [rag.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/rag.ts) — Asistente de arquitectura con evaluación RAGAS de cero alucinaciones.
+- [icon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/icon.svg) & [favicon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/favicon.svg) — Favicon corporativo y assets visuales de pestaña.
+- [Dockerfile](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/Dockerfile) — Contenedor de producción Alpine Linux optimizado (347 MB).
