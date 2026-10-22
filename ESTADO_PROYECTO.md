@@ -121,10 +121,14 @@ npm run dev
    - Consulta RRF híbrida validada en vivo (< 15ms de latencia).
    - Variables de entorno en `frontend/.env.local` conectadas por SSL directo a Neon Cloud.
    - Compilación de producción (`next build`) verificada exitosamente sin advertencias.
-4. **Despliegue en Producción y Subdominio `ossatlas.iotdico.com`:**
-   - Desplegar la aplicación en Vercel (conectado al repo GitHub `DICO2023/oss-atlas`) o en servidor Docker.
-   - Configurar el registro CNAME / A en la zona DNS de Hostinger para vincular `ossatlas.iotdico.com`.
-5. **Capa de Cobro B2B:**
+4. **Despliegue en Producción y Subdominio `ossatlas.iotdico.com` (COMPLETADO AL 100%):**
+   - Frontend Next.js 15 desplegado en la red global de borde (Edge Network) de Vercel.
+   - Vinculado al repositorio oficial `https://github.com/DICO2023/oss-atlas.git` (CI/CD automático por cada commit).
+   - Variables de entorno en producción configuradas con Neon PostgreSQL 16 (`DATABASE_URL`).
+   - Zona DNS de Hostinger actualizada: CNAME `ossatlas` apuntando a `2d06daa840d5b9de.vercel-dns-017.com`.
+   - Certificado SSL/TLS emitido y activo de por vida.
+   - **Plataforma 100% en vivo y operativa en:** **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)** (y espejo en `https://oss-atlas.vercel.app`).
+5. **Capa de Cobro B2B (Próximo paso):**
    - Integrar botón de checkout / suscripción con Lemon Squeezy o Stripe para el plan Pro ($10/mes).
 
 ---
