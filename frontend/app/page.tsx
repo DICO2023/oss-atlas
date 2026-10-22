@@ -692,8 +692,38 @@ const IconGitHubRepo: React.FC<IconProps> = ({ className = 'w-5 h-5' }) => (
 
 export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   // Navigation & CTA states (Checkpoint #6)
-  const [activeNavTab, setActiveNavTab] = useState<'CATALOG' | 'RAG_ARCHITECT' | 'PMO_WBS' | 'AUDIT_GATE'>('CATALOG');
+  const [activeNavTab, setActiveNavTab] = useState<'CATALOG' | 'RAG_ARCHITECT' | 'PMO_WBS' | 'AUDIT_GATE' | 'PRICING_B2B'>('CATALOG');
   const [isPipelineSyncActive, setIsPipelineSyncActive] = useState<boolean>(true);
+
+  // B2B Monetization & Checkout states
+  const [userSubscription, setUserSubscription] = useState<{
+    id: string;
+    status: 'ACTIVE' | 'NONE';
+    planId: 'PRO_ARCHITECTURE' | 'ENTERPRISE_HUB';
+    planName: string;
+    billingCycle: 'monthly' | 'annual';
+    companyName: string;
+    expiresAt?: string;
+  } | null>(null);
+
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState<boolean>(false);
+  const [selectedCheckoutPlan, setSelectedCheckoutPlan] = useState<'PRO_ARCHITECTURE' | 'ENTERPRISE_HUB'>('PRO_ARCHITECTURE');
+  const [pricingCycle, setPricingCycle] = useState<'monthly' | 'annual'>('monthly');
+  const [checkoutEmail, setCheckoutEmail] = useState<string>('');
+  const [checkoutCompany, setCheckoutCompany] = useState<string>('');
+  const [checkoutTaxId, setCheckoutTaxId] = useState<string>('');
+  const [checkoutPaymentMethod, setCheckoutPaymentMethod] = useState<'card' | 'bank_transfer' | 'crypto_usdc'>('card');
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState<boolean>(false);
+  const [checkoutSuccess, setCheckoutSuccess] = useState<{
+    invoiceNumber: string;
+    planName: string;
+    token: string;
+    amount: number;
+    features: string[];
+  } | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [checkoutGuideNotice, setCheckoutGuideNotice] = useState<string | null>(null);
+  const [inspectedGuideTool, setInspectedGuideTool] = useState<OpenSourceTool | null>(null);
 
   // Hero Interactive Prompt Bar states (Checkpoint #7)
   const [heroPromptInput, setHeroPromptInput] = useState<string>(
@@ -796,7 +826,88 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
   useEffect(() => {
     refreshCatalog();
+    try {
+      const stored = localStorage.getItem('oss_atlas_sub');
+      if (stored) {
+        setUserSubscription(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.warn('No se pudo recuperar suscripción previa:', e);
+    }
   }, []);
+
+  const handleOpenCheckout = (
+    planId: 'PRO_ARCHITECTURE' | 'ENTERPRISE_HUB',
+    notice?: string
+  ) => {
+    setSelectedCheckoutPlan(planId);
+    setCheckoutGuideNotice(notice || null);
+    setCheckoutError(null);
+    setIsCheckoutModalOpen(true);
+  };
+
+  const handleProcessCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsProcessingCheckout(true);
+    setCheckoutError(null);
+    try {
+      const res = await fetch('/api/v1/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          planId: selectedCheckoutPlan,
+          billingCycle: pricingCycle,
+          customerEmail: checkoutEmail || 'arquitecto@empresa.com',
+          companyName: checkoutCompany || 'Empresa B2B',
+          taxId: checkoutTaxId || undefined,
+          paymentMethod: checkoutPaymentMethod,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Fallo al procesar suscripción');
+      }
+
+      const activeSub = {
+        id: data.subscription.id,
+        status: 'ACTIVE' as const,
+        planId: selectedCheckoutPlan,
+        planName: data.subscription.planName,
+        billingCycle: pricingCycle,
+        companyName: checkoutCompany || 'Empresa B2B',
+        expiresAt: data.subscription.expiresAt,
+      };
+
+      setUserSubscription(activeSub);
+      localStorage.setItem('oss_atlas_sub', JSON.stringify(activeSub));
+      localStorage.setItem('oss_atlas_pro_token', data.proAccessToken);
+
+      setCheckoutSuccess({
+        invoiceNumber: data.subscription.invoiceNumber,
+        planName: data.subscription.planName,
+        token: data.proAccessToken,
+        amount: data.subscription.amountUsd,
+        features: data.unlockedFeatures || [],
+      });
+    } catch (err) {
+      setCheckoutError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsProcessingCheckout(false);
+    }
+  };
+
+  const handleRequestIntegrationGuide = (tool: OpenSourceTool) => {
+    // Si ya tiene plan Pro/Enterprise activo, abre el visor de guía directamente
+    if (userSubscription?.status === 'ACTIVE') {
+      setInspectedGuideTool(tool);
+    } else {
+      // Abre el checkout B2B destacando este beneficio exclusivo
+      handleOpenCheckout(
+        'PRO_ARCHITECTURE',
+        `Para descargar la Guía de Integración (.md y .pdf) de ${tool.name} para Windows y macOS, activa tu suscripción a Pro Architecture.`
+      );
+    }
+  };
 
   const handleSyncPreset = async (presetSlug: string) => {
     try {
@@ -1236,10 +1347,43 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             >
               Traspaso Asíncrono
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveNavTab('PRICING_B2B');
+                document.getElementById('pricing-b2b-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+                activeNavTab === 'PRICING_B2B'
+                  ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/50 shadow-sm'
+                  : 'text-amber-400/80 hover:text-amber-300'
+              }`}
+            >
+              Planes B2B ⭐
+            </button>
           </nav>
 
           {/* CTA with Active State */}
           <div className="flex items-center gap-2.5">
+            {/* Subscription Badge / Upgrade Button */}
+            <button
+              type="button"
+              onClick={() => handleOpenCheckout(userSubscription?.planId || 'PRO_ARCHITECTURE')}
+              title={userSubscription?.status === 'ACTIVE' ? 'Gestionar Suscripción B2B' : 'Desbloquear Capacidades Pro'}
+              className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer ${
+                userSubscription?.status === 'ACTIVE'
+                  ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-amber-500/50 text-amber-300 shadow-lg shadow-amber-950/30'
+                  : 'bg-slate-900/90 hover:bg-slate-800 border-amber-500/30 text-amber-300/90 hover:border-amber-400'
+              }`}
+            >
+              <span>⭐</span>
+              <span className="hidden sm:inline">
+                {userSubscription?.status === 'ACTIVE'
+                  ? `${userSubscription.planName.replace('OSS Atlas ', '')} (Activo)`
+                  : 'Mejorar a Pro'}
+              </span>
+            </button>
+
             <button
               type="button"
               onClick={() => {
@@ -1796,11 +1940,26 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       <button
                         type="button"
                         onClick={() => setInspectedToolId(tool.id)}
-                        className="px-3 py-2.5 rounded-xl text-xs font-mono font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all"
+                        className="px-3 py-2.5 rounded-xl text-xs font-mono font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all cursor-pointer"
                       >
                         Inspeccionar
                       </button>
                     </div>
+
+                    {/* B2B Feature: Step-by-Step Integration Guide (.md & .pdf for Win & Mac) */}
+                    <button
+                      type="button"
+                      onClick={() => handleRequestIntegrationGuide(tool)}
+                      className="w-full inline-flex items-center justify-between gap-2 px-3 py-2 rounded-xl text-xs font-mono font-semibold bg-gradient-to-r from-amber-500/10 via-slate-950 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 text-amber-300 border border-amber-500/30 transition-all cursor-pointer"
+                    >
+                      <span className="flex items-center gap-1.5 truncate">
+                        <span>📄</span>
+                        <span>Guía Integración (.md & .pdf) [Win/Mac]</span>
+                      </span>
+                      <span className="shrink-0 px-2 py-0.5 rounded bg-amber-500/20 text-[10px] font-bold text-amber-300 border border-amber-500/40">
+                        {userSubscription?.status === 'ACTIVE' ? 'DESCARGAR' : 'PRO B2B'}
+                      </span>
+                    </button>
                   </div>
                 </article>
               );
@@ -2157,6 +2316,240 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* B2B Pricing & Monetization Section (Open-Core SaaS Model) */}
+        <section
+          id="pricing-b2b-section"
+          className="rounded-3xl border border-amber-500/30 bg-gradient-to-b from-slate-900/95 via-slate-950 to-slate-900/90 p-6 sm:p-10 lg:p-12 shadow-2xl space-y-10"
+        >
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-xs font-mono text-amber-300">
+              <span>💎 MODELO OPEN-CORE & MONETIZACIÓN B2B</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Planes Diseñados para Arquitectos y Equipos de Ingeniería
+            </h2>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Conserva el control total de tu infraestructura sin ataduras propietarias. Desbloquea guías de integración (.md y .pdf), consultas ilimitadas al Arquitecto RAG y soporte prioritario.
+            </p>
+
+            {/* Billing Cycle Switcher */}
+            <div className="pt-2 flex items-center justify-center gap-3 text-xs font-mono">
+              <span className={pricingCycle === 'monthly' ? 'text-white font-bold' : 'text-slate-400'}>
+                Facturación Mensual
+              </span>
+              <button
+                type="button"
+                onClick={() => setPricingCycle((prev) => (prev === 'monthly' ? 'annual' : 'monthly'))}
+                className="w-14 h-7 rounded-full bg-slate-900 border border-amber-500/40 p-1 flex items-center transition-colors cursor-pointer"
+                aria-label="Cambiar ciclo de facturación"
+              >
+                <div
+                  className={`w-5 h-5 rounded-full bg-amber-400 shadow-md transform transition-transform ${
+                    pricingCycle === 'annual' ? 'translate-x-7' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+              <span className={`flex items-center gap-1.5 ${pricingCycle === 'annual' ? 'text-amber-300 font-bold' : 'text-slate-400'}`}>
+                <span>Facturación Anual</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-[10px] text-emerald-300 border border-emerald-500/40 font-bold">
+                  AHORRA 20% (2 MESES GRATIS)
+                </span>
+              </span>
+            </div>
+          </div>
+
+          {/* Pricing Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            {/* Tier 1: Community (Free Forever) */}
+            <div className="rounded-2xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-slate-800 text-slate-300">
+                  OPEN-CORE LIBRE
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Community</h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Para desarrolladores independientes que buscan explorar herramientas open source evaluadas.
+                  </p>
+                </div>
+                <div className="pt-2 flex items-baseline gap-1">
+                  <span className="text-4xl font-extrabold text-white font-mono">$0</span>
+                  <span className="text-xs text-slate-400 font-mono">USD / siempre libre</span>
+                </div>
+                <ul className="space-y-2.5 text-xs text-slate-300 pt-4 border-t border-slate-800">
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Acceso al Catálogo de 13 herramientas curadas</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Búsqueda Híbrida RRF (FTS + vectores halfvec)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Cálculo transparente de Health Score ponderado</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Comandos Docker Run listos para ejecutar</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-slate-500">
+                    <span>✕</span>
+                    <span>3 consultas diarias al Arquitecto RAG</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-slate-500">
+                    <span>✕</span>
+                    <span>Guías descargables en Markdown y PDF</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                disabled
+                className="w-full py-3 rounded-xl text-xs font-mono font-semibold bg-slate-800/80 text-slate-400 border border-slate-700/80 cursor-default text-center"
+              >
+                {userSubscription?.status === 'ACTIVE' ? 'Plan Base Incluido' : 'Plan Actual (Activo)'}
+              </button>
+            </div>
+
+            {/* Tier 2: Pro Architecture (Most Popular B2B) */}
+            <div className="relative rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border-2 border-amber-400/80 p-6 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xl shadow-amber-950/40">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-[10px] font-mono font-extrabold text-slate-950 shadow-md">
+                ⭐ RECOMENDADO B2B • MÁS POPULAR
+              </div>
+
+              <div className="space-y-4">
+                <div className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                  ARQUITECTURA & GUÍAS PRO
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Pro Architecture</h3>
+                  <p className="text-xs text-slate-300 mt-1">
+                    Para arquitectos de software, tech leads y consultores B2B que necesitan integrar herramientas rápidamente.
+                  </p>
+                </div>
+                <div className="pt-2 flex items-baseline gap-1">
+                  <span className="text-4xl font-extrabold text-amber-300 font-mono">
+                    ${pricingCycle === 'annual' ? '190' : '19'}
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">
+                    USD / {pricingCycle === 'annual' ? 'año (equiv. $15.8/mes)' : 'mes'}
+                  </span>
+                </div>
+                <ul className="space-y-2.5 text-xs text-slate-200 pt-4 border-t border-slate-800">
+                  <li className="flex items-start gap-2 text-amber-200 font-semibold bg-amber-500/10 p-2 rounded-lg border border-amber-500/30">
+                    <span className="text-amber-400 font-bold">★</span>
+                    <span>Descarga de Guías de Integración (.md y .pdf) paso a paso para Windows y macOS</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Consultas ilimitadas al Arquitecto RAG sin límites diarios</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Generador de manifiestos unificados (Docker Compose & Terraform)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Acceso prioritario al Pipeline de Ingesta Continua (ETags en vivo)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Soporte asíncrono de arquitectura con SLA &lt; 12h</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleOpenCheckout('PRO_ARCHITECTURE')}
+                className="w-full py-3.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 transition-all cursor-pointer shadow-lg shadow-amber-500/20 text-center"
+              >
+                {userSubscription?.planId === 'PRO_ARCHITECTURE' && userSubscription.status === 'ACTIVE'
+                  ? 'Plan Activo • Ver Factura'
+                  : 'Mejorar a Pro Architecture'}
+              </button>
+            </div>
+
+            {/* Tier 3: Enterprise Hub */}
+            <div className="rounded-2xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-violet-500/20 text-violet-300 border border-violet-500/40">
+                  EQUIPOS & ENTERPRISE
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Enterprise Hub</h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Para empresas y factorías de software con múltiples células que requieren gobernanza y cumplimiento.
+                  </p>
+                </div>
+                <div className="pt-2 flex items-baseline gap-1">
+                  <span className="text-4xl font-extrabold text-white font-mono">
+                    ${pricingCycle === 'annual' ? '490' : '49'}
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">
+                    USD / {pricingCycle === 'annual' ? 'año (equiv. $40.8/mes)' : 'mes'}
+                  </span>
+                </div>
+                <ul className="space-y-2.5 text-xs text-slate-300 pt-4 border-t border-slate-800">
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Todo lo incluido en Pro Architecture</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Licencia multi-asiento para hasta 10 arquitectos</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Auditorías automáticas de cumplimiento (PCI-DSS, SOC2, HIPAA)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Conectores directos a pipelines CI/CD (GitHub / GitLab)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Facturación corporativa con RUT / Tax ID / NIT</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-violet-300 font-medium">
+                    <span className="text-violet-400 font-bold">✓</span>
+                    <span>Sesión 1-on-1 de revisión arquitectónica con EdisonPEÑA (Iotdico)</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleOpenCheckout('ENTERPRISE_HUB')}
+                className="w-full py-3 rounded-xl text-xs font-mono font-semibold bg-violet-600/30 hover:bg-violet-600/50 text-violet-200 border border-violet-500/50 transition-all cursor-pointer text-center"
+              >
+                {userSubscription?.planId === 'ENTERPRISE_HUB' && userSubscription.status === 'ACTIVE'
+                  ? 'Plan Enterprise Activo'
+                  : 'Contratar Enterprise Hub'}
+              </button>
+            </div>
+          </div>
+
+          {/* Guarantee & Trust Badges */}
+          <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-400">
+            <div className="flex items-center gap-2">
+              <span className="text-emerald-400">🛡️</span>
+              <span>Garantía de reembolso de 14 días sin preguntas.</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-cyan-400">📑</span>
+              <span>Factura legal B2B con RUT / Tax ID para deducción tributaria.</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-amber-400">⚡</span>
+              <span>Activación inmediata con token de acceso corporativo.</span>
+            </div>
           </div>
         </section>
       </main>
@@ -2671,6 +3064,423 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
               >
                 Registrar Traspaso de Turno
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* B2B Checkout & Subscription Modal */}
+      {isCheckoutModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn"
+          aria-labelledby="checkout-modal-title"
+        >
+          <div className="max-w-2xl w-full rounded-3xl bg-slate-900 border border-amber-500/50 p-6 sm:p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                  <span>⭐ CHECKOUT SEGURO B2B</span>
+                  <span>•</span>
+                  <span>SSL 256-BIT ENCRIPTADO</span>
+                </div>
+                <h3 id="checkout-modal-title" className="text-xl sm:text-2xl font-bold text-white mt-1.5">
+                  {selectedCheckoutPlan === 'PRO_ARCHITECTURE'
+                    ? 'Suscripción OSS Atlas Pro Architecture'
+                    : 'Suscripción OSS Atlas Enterprise Hub'}
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Facturación oficial emitida por EdisonPEÑA (Iotdico) · Dominio <code className="text-cyan-300">ossatlas.iotdico.com</code>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCheckoutModalOpen(false);
+                  setCheckoutSuccess(null);
+                  setCheckoutError(null);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono cursor-pointer transition-colors"
+              >
+                ✕ Cerrar [ESC]
+              </button>
+            </div>
+
+            {/* If Notice from Feature Trigger */}
+            {checkoutGuideNotice && !checkoutSuccess && (
+              <div className="p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-200 text-xs font-mono flex items-start gap-2.5">
+                <span className="text-base">💎</span>
+                <span className="leading-relaxed">{checkoutGuideNotice}</span>
+              </div>
+            )}
+
+            {/* Error Message if any */}
+            {checkoutError && (
+              <div className="p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs font-mono">
+                {checkoutError}
+              </div>
+            )}
+
+            {/* If Checkout was Successful */}
+            {checkoutSuccess ? (
+              <div className="space-y-5 text-xs font-mono animate-fadeIn">
+                <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 space-y-3 text-center">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/50 mx-auto flex items-center justify-center text-2xl text-emerald-300">
+                    ✓
+                  </div>
+                  <h4 className="text-base font-bold text-white">¡Suscripción B2B Confirmada y Activa!</h4>
+                  <p className="text-xs text-emerald-200/90 leading-relaxed">
+                    Tu acceso a <strong>{checkoutSuccess.planName}</strong> ha sido activado inmediatamente.
+                  </p>
+                  <div className="pt-2 flex items-center justify-center gap-4 text-slate-300 text-[11px]">
+                    <span>Factura: <strong className="text-white">{checkoutSuccess.invoiceNumber}</strong></span>
+                    <span>•</span>
+                    <span>Total Pagado: <strong className="text-white">${checkoutSuccess.amount} USD</strong></span>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                  <span className="text-slate-400 block text-[11px]">Token de Acceso B2B Generado:</span>
+                  <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800 font-mono text-[10px] text-cyan-300 break-all select-all">
+                    {checkoutSuccess.token}
+                  </div>
+                  <span className="text-[10px] text-slate-500 block">
+                    Guardado automáticamente en tu navegador para desbloquear las descargas y el Asistente RAG.
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                  <span className="text-slate-300 font-bold block">Beneficios Inmediatamente Desbloqueados:</span>
+                  <ul className="space-y-1.5 text-slate-400">
+                    <li className="flex items-center gap-2 text-emerald-300">
+                      <span>✓</span>
+                      <span>Descarga de Guías de Integración (.md y .pdf) para Windows y macOS</span>
+                    </li>
+                    <li className="flex items-center gap-2 text-emerald-300">
+                      <span>✓</span>
+                      <span>Consultas ilimitadas al Arquitecto RAG con contexto PostgreSQL 16</span>
+                    </li>
+                    <li className="flex items-center gap-2 text-emerald-300">
+                      <span>✓</span>
+                      <span>Generador de manifiestos unificados (Docker Compose & Terraform)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsCheckoutModalOpen(false);
+                    setCheckoutSuccess(null);
+                  }}
+                  className="w-full py-3.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 transition-all cursor-pointer shadow-lg shadow-emerald-500/20 text-center"
+                >
+                  🚀 Continuar y Explorar OSS Atlas Pro
+                </button>
+              </div>
+            ) : (
+              /* Checkout Form */
+              <form onSubmit={handleProcessCheckout} className="space-y-5 text-xs font-mono">
+                {/* Plan Summary & Cycle Switcher inside Modal */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] uppercase text-amber-400 font-bold block">Plan Seleccionado</span>
+                    <span className="text-sm font-bold text-white">
+                      {selectedCheckoutPlan === 'PRO_ARCHITECTURE' ? 'Pro Architecture' : 'Enterprise Hub'}
+                    </span>
+                    <span className="text-xs text-slate-400 block mt-0.5">
+                      {pricingCycle === 'annual' ? 'Facturación Anual (2 meses gratis)' : 'Facturación Mensual'}
+                    </span>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="text-2xl font-extrabold text-amber-300 font-mono">
+                      ${selectedCheckoutPlan === 'PRO_ARCHITECTURE'
+                        ? (pricingCycle === 'annual' ? '190' : '19')
+                        : (pricingCycle === 'annual' ? '490' : '49')}
+                    </span>
+                    <span className="text-[10px] text-slate-500 block">USD / {pricingCycle === 'annual' ? 'año' : 'mes'}</span>
+                  </div>
+                </div>
+
+                {/* Form Inputs */}
+                <div className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-slate-300 block mb-1">Correo Corporativo *</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="arquitecto@empresa.com"
+                        value={checkoutEmail}
+                        onChange={(e) => setCheckoutEmail(e.target.value)}
+                        className="w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-white focus:border-amber-400 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-slate-300 block mb-1">Empresa / Razón Social *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Mi Empresa B2B S.A."
+                        value={checkoutCompany}
+                        onChange={(e) => setCheckoutCompany(e.target.value)}
+                        className="w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-white focus:border-amber-400 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-slate-300 block mb-1">RUT / Tax ID / NIT (Para factura)</label>
+                      <input
+                        type="text"
+                        placeholder="900.123.456-7"
+                        value={checkoutTaxId}
+                        onChange={(e) => setCheckoutTaxId(e.target.value)}
+                        className="w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-white focus:border-amber-400 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-slate-300 block mb-1">Método de Pago</label>
+                      <select
+                        value={checkoutPaymentMethod}
+                        onChange={(e) => setCheckoutPaymentMethod(e.target.value as any)}
+                        className="w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-white focus:border-amber-400 focus:outline-none"
+                      >
+                        <option value="card">💳 Tarjeta de Crédito / Débito (Stripe / Lemon)</option>
+                        <option value="bank_transfer">🏦 Factura Proforma B2B (Transferencia)</option>
+                        <option value="crypto_usdc">🪙 Cripto Corporativo (USDC / USDT)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pricing Breakdown Summary */}
+                <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1.5 text-slate-400 text-[11px]">
+                  <div className="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span className="text-white font-mono">
+                      ${selectedCheckoutPlan === 'PRO_ARCHITECTURE'
+                        ? (pricingCycle === 'annual' ? '228.00' : '19.00')
+                        : (pricingCycle === 'annual' ? '588.00' : '49.00')} USD
+                    </span>
+                  </div>
+                  {pricingCycle === 'annual' && (
+                    <div className="flex justify-between text-emerald-400">
+                      <span>Descuento 2 Meses Gratis (Anual):</span>
+                      <span className="font-mono">
+                        -${selectedCheckoutPlan === 'PRO_ARCHITECTURE' ? '38.00' : '98.00'} USD
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span>Impuestos (B2B Exportación):</span>
+                    <span className="text-emerald-300 font-mono">$0.00 USD (Exento)</span>
+                  </div>
+                  <div className="pt-2 border-t border-slate-800 flex justify-between text-xs font-bold text-white">
+                    <span>Total a Facturar:</span>
+                    <span className="text-amber-300 font-mono text-sm">
+                      ${selectedCheckoutPlan === 'PRO_ARCHITECTURE'
+                        ? (pricingCycle === 'annual' ? '190.00' : '19.00')
+                        : (pricingCycle === 'annual' ? '490.00' : '49.00')} USD
+                    </span>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-2 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                    <span>🔒 Cancelación flexible en 1 clic</span>
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isProcessingCheckout}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 disabled:opacity-50 transition-all cursor-pointer shadow-lg shadow-amber-500/20"
+                  >
+                    {isProcessingCheckout ? (
+                      <>
+                        <span className="w-3.5 h-3.5 rounded-full border-2 border-slate-950 border-t-transparent animate-spin" />
+                        <span>Validando Facturación B2B...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>💳 Confirmar y Activar Suscripción</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Integration Guide Viewer / Download Modal (Próxima Funcionalidad Vinculada) */}
+      {inspectedGuideTool && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn"
+          aria-labelledby="guide-modal-title"
+        >
+          <div className="max-w-3xl w-full rounded-3xl bg-slate-900 border border-cyan-500/50 p-6 sm:p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                  <span>📄 GUÍA DE INTEGRACIÓN B2B PRO</span>
+                  <span>•</span>
+                  <span>{inspectedGuideTool.license}</span>
+                </div>
+                <h3 id="guide-modal-title" className="text-xl sm:text-2xl font-bold text-white mt-1.5">
+                  Guía de Integración: {inspectedGuideTool.name}
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Paso a paso técnico multiplataforma para entornos Windows (PowerShell/WSL2) y macOS (Homebrew/Zsh).
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setInspectedGuideTool(null)}
+                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono cursor-pointer transition-colors"
+              >
+                ✕ Cerrar [ESC]
+              </button>
+            </div>
+
+            {/* Quick Architecture Details */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="text-slate-400 block text-[10px]">Categoría B2B</span>
+                <span className="text-cyan-300 font-bold">{inspectedGuideTool.category}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="text-slate-400 block text-[10px]">Health Score</span>
+                <span className="text-emerald-400 font-bold">{inspectedGuideTool.healthScore}/100</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="text-slate-400 block text-[10px]">Dificultad</span>
+                <span className="text-amber-300 font-bold">{inspectedGuideTool.integrationDifficulty}</span>
+              </div>
+            </div>
+
+            {/* Platform Previews */}
+            <div className="space-y-4 text-xs font-mono">
+              {/* Windows Section */}
+              <div className="p-4 rounded-2xl bg-slate-950 border border-blue-500/30 space-y-2">
+                <div className="flex items-center justify-between text-blue-400 font-bold">
+                  <span>🪟 Paso a Paso para Windows (PowerShell / Docker Desktop)</span>
+                  <span className="text-[10px] text-slate-500">WSL2 Ready</span>
+                </div>
+                <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 overflow-x-auto text-[11px] leading-relaxed">
+                  <code>{`# 1. Asegurar Docker Desktop y WSL2 en ejecución
+wsl --status
+
+# 2. Desplegar contenedor ${inspectedGuideTool.slug}
+${inspectedGuideTool.dockerCommand}
+
+# 3. Validar estado del contenedor
+docker ps --filter "ancestor=${inspectedGuideTool.dockerCommand.split(' ').pop()}"`}</code>
+                </pre>
+              </div>
+
+              {/* Mac Section */}
+              <div className="p-4 rounded-2xl bg-slate-950 border border-purple-500/30 space-y-2">
+                <div className="flex items-center justify-between text-purple-400 font-bold">
+                  <span>🍎 Paso a Paso para macOS (Terminal / Homebrew / Colima o OrbStack)</span>
+                  <span className="text-[10px] text-slate-500">Apple Silicon & Intel</span>
+                </div>
+                <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 overflow-x-auto text-[11px] leading-relaxed">
+                  <code>{`# 1. Verificar runtime de contenedores (Colima o Docker)
+brew install colima docker || true
+colima start
+
+# 2. Ejecutar servicio ${inspectedGuideTool.name}
+${inspectedGuideTool.dockerCommand}
+
+# 3. Comprobar logs y endpoints
+docker logs -f $(docker ps -lq)`}</code>
+                </pre>
+              </div>
+            </div>
+
+            {/* Download Buttons (.md and .pdf) */}
+            <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+              <span className="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
+                <span>✓</span>
+                <span>Descarga habilitada con tu plan Pro Architect</span>
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const mdContent = `# Guía de Integración B2B: ${inspectedGuideTool.name}
+**Plataforma:** OSS Atlas (https://ossatlas.iotdico.com)
+**Autor:** EdisonPEÑA (Iotdico)
+**Licencia:** ${inspectedGuideTool.license}
+**Health Score:** ${inspectedGuideTool.healthScore}/100
+
+---
+
+## 1. Descripción
+${inspectedGuideTool.description}
+
+## 2. Requisitos y Dependencias
+- Dependencias: ${inspectedGuideTool.dependencies.join(', ')}
+- Disparadores (Triggers): ${inspectedGuideTool.triggers.join(', ')}
+
+---
+
+## 3. Despliegue en Windows (PowerShell / Docker Desktop)
+\`\`\`powershell
+# Comprobar WSL2
+wsl --status
+
+# Ejecutar servicio
+${inspectedGuideTool.dockerCommand}
+\`\`\`
+
+---
+
+## 4. Despliegue en macOS (Terminal / Colima / OrbStack)
+\`\`\`bash
+# Iniciar runtime
+colima start
+
+# Ejecutar contenedor
+${inspectedGuideTool.dockerCommand}
+\`\`\`
+
+---
+*Generado automáticamente por OSS Atlas Pro B2B — https://ossatlas.iotdico.com*`;
+
+                    const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `Guia_Integracion_${inspectedGuideTool.slug.replace('/', '_')}.md`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 transition-all cursor-pointer"
+                >
+                  <span>📥 Descargar .MD</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    alert(`Generación de PDF para ${inspectedGuideTool.name}: Se descargará el informe ejecutivo en la siguiente actualización del generador PDF.`);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 transition-all cursor-pointer shadow-md shadow-amber-500/20"
+                >
+                  <span>📥 Descargar .PDF</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
