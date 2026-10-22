@@ -1,0 +1,10 @@
+name: Deploy (placeholder)
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Definir destino de producción en Fase 4 (docs/entregables/tarea4-enlaces)."

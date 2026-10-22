@@ -1,0 +1,31 @@
+# Dependencias
+node_modules/
+__pycache__/
+.venv/
+venv/
+*.pyc
+
+# Entornos y secretos (nunca subir .env real)
+.env
+.env.local
+*.pem
+*.key
+
+# Datos de pipeline (cache / crudos locales)
+pipeline/data/raw/
+pipeline/data/cache/
+*.parquet
+*.sqlite3
+
+# Builds
+frontend/.next/
+frontend/out/
+frontend/dist/
+backend/dist/
+*.log
+.DS_Store
+Thumbs.db
+
+# Modelos / vectores locales
+*.onnx
+*.bin

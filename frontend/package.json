@@ -1,0 +1,40 @@
+{
+  "dependencies": {
+    "@langchain/anthropic": "^0.3.0",
+    "@langchain/core": "^0.3.0",
+    "langchain": "^0.3.0",
+    "meilisearch": "^0.44.0",
+    "next": "^15.1.0",
+    "openid-client": "^5.7.0",
+    "pg": "^8.13.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.1.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.6.2"
+  },
+  "name": "oss-atlas",
+  "version": "1.0.0",
+  "description": "OSS Atlas — Plataforma B2B de Inteligencia Arquitectónica Open Source",
+  "author": "EdisonPEÑA (Iotdico - https://ossatlas.iotdico.com)",
+  "homepage": "https://ossatlas.iotdico.com",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  }
+}

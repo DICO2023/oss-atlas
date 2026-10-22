@@ -1,0 +1,6 @@
+httpx>=0.27
+gql>=3.5
+tenacity>=8.5
+psycopg[binary]>=3.2
+python-dotenv>=1.0
+pytest>=8.3

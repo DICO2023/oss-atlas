@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos base. El Design System vive en design/design-system/.
+   El componente page.tsx usa clases Tailwind (ver tailwind.config.ts). */
+:root { color-scheme: dark; }
+body { margin: 0; background: #020617; color: #f1f5f9; font-family: ui-sans-serif, system-ui, sans-serif; }

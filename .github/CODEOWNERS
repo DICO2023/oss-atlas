@@ -1,0 +1,34 @@
+# CODEOWNERS — Propietario del Repositorio OSS Atlas
+*                           @DICO2023
+
+# Documentación raíz + PMO (EdisonPEÑA)
+/README.md                 @DICO2023
+/docs/                     @DICO2023
+
+# Frontend / UI (A: David Vergara; diseño: Fabián Martinez)
+/frontend/                @usuario-david-vergara @usuario-fabian-martinez
+/design/                   @usuario-fabian-martinez @usuario-claudia-maucaylli
+
+# Base de datos y contenedores (A: Jeison Pinzón)
+/db/                        @usuario-jeison-pinzon @usuario-justina-mutigliengo
+
+# Pipeline de ingesta (A: Justina Mutigliengo)
+/pipeline/                  @usuario-justina-mutigliengo @usuario-andres-iglesias
+
+# Búsqueda híbrida / API Next.js (A: Andres Iglesias)
+/frontend/app/api/          @usuario-andres-iglesias @usuario-jeison-pinzon
+/frontend/lib/server/       @usuario-andres-iglesias @usuario-jeison-pinzon
+
+# RAG y evaluación (A: Aleja Noriega)
+/ai/                        @usuario-aleja-noriega @usuario-exequiel-perez @usuario-edison-pena
+
+# Pruebas de usabilidad y calidad RAG (A: Edison Peña)
+/frontend/e2e/             @usuario-edison-pena @usuario-claudia-maucaylli
+/docs/ux/                   @usuario-claudia-maucaylli @usuario-edison-pena
+
+# Video Demo (Claudia Maucaylli + Fabián Martinez)
+/video-demo/                @usuario-claudia-maucaylli @usuario-fabian-martinez
+
+# Herramientas y entregables (David Vergara)
+/tools/                     @usuario-david-vergara
+/docs/entregables/         @usuario-david-vergara
