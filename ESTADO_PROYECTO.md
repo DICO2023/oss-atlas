@@ -128,14 +128,24 @@ npm run dev
    - Zona DNS de Hostinger actualizada: CNAME `ossatlas` apuntando a `2d06daa840d5b9de.vercel-dns-017.com`.
    - Certificado SSL/TLS emitido y activo de por vida.
    - **Plataforma 100% en vivo y operativa en:** **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)** (y espejo en `https://oss-atlas.vercel.app`).
-5. **Capa de Monetización & Checkout B2B (COMPLETADO AL 100%):**
+5. **Capa de Monetización & Checkout B2B (PayPal, Wenia USDW & Soporte Bilingüe ES/EN) (COMPLETADO AL 100%):**
    - Endpoint `POST /api/v1/checkout` y `GET /api/v1/checkout` con validación Zod, emisión de facturas proforma (`INV-2026-XXXXXX`) y generación de token criptográfico B2B (`proAccessToken`).
+   - Métodos de Pago configurados y adaptados a las cuentas reales del usuario:
+     - **PayPal**: Cobro internacional en USD con cuenta global de PayPal y tarjetas corporativas.
+     - **Wenia (USDW)**: Criptoactivo vinculado 1:1 al USD creado por Grupo Bancolombia, liquidación inmediata sin comisiones.
+     - **Transferencia Bancaria Empresarial**: Factura electrónica con RUT y soporte B2B.
    - Modelo de Precios Open-Core B2B implementado:
      - `Community` ($0 USD / libre de por vida).
-     - `Pro Architecture` ($19 USD/mes o $190 USD/año con 2 meses gratis): Guías de integración paso a paso (.md y .pdf) para Windows y Mac, consultas RAG ilimitadas, manifiestos unificados y soporte &lt; 12h.
+     - `Pro Architecture` ($19 USD/mes o $190 USD/año con 2 meses gratis): Guías de integración paso a paso (.md y .pdf) para Windows y Mac, consultas RAG ilimitadas, manifiestos unificados y soporte prioritario.
      - `Enterprise Hub` ($49 USD/mes o $490 USD/año): Multi-asiento hasta 10 arquitectos, auditorías normativas, integración CI/CD y sesión 1-on-1 de arquitectura.
-   - Interfaz interactiva: selector mensual/anual con ahorro del 20%, botón de estado de suscripción en Header, modal de checkout corporativo con exención tributaria B2B e hidratación persistente en `localStorage`.
-   - Botón directo en tarjetas del catálogo: `📄 Guía de Integración (.md & .pdf) [Win/Mac]` con badge `PRO B2B`.
+   - Soporte Bilingüe Español / Inglés (`ES` / `EN`):
+     - Selector de idioma en el Header persistente en `localStorage`.
+     - Diccionario unificado en [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts).
+   - Limpieza de UI solicitada en sugerencias:
+     - Remoción de subtítulo técnico redundante del logo/brand (`pgvector 0.7+ ...`).
+     - Remoción de accesos al cronograma PMO y protocolo de traspaso asíncrono de la barra de navegación y del hero.
+     - Remoción completa de la sección WBS/RACI de 32 días y su modal asociado.
+     - Favicon corporativo e ícono de pestaña optimizados con nombre corto `OSS Atlas | B2B Architecture`.
    - Compilación de producción (`next build`) verificada 100% exitosa sin errores de tipos o linting.
 
 6. **Generador y Exportador de Guías de Integración (.md & .pdf) para Windows & Mac (Próximo paso en curso):**

@@ -10,7 +10,7 @@ const CheckoutRequestSchema = z.object({
   customerEmail: z.string().email("Correo corporativo inválido"),
   companyName: z.string().min(2, "El nombre de la empresa debe tener al menos 2 caracteres"),
   taxId: z.string().optional(),
-  paymentMethod: z.enum(["card", "bank_transfer", "crypto_usdc"]).default("card"),
+  paymentMethod: z.enum(["paypal", "wenia_usdw", "bank_transfer"]).default("paypal"),
 });
 
 interface PlanPricingConfig {

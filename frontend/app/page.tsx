@@ -3,6 +3,7 @@
 // https://share.gemini.google/XnsITNsohkKp
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { TRANSLATIONS, type Language } from '@/lib/translations';
 
 export type CategoryId = 'ALL' | 'AUTH' | 'DBS' | 'PAYMENTS' | 'AI';
 
@@ -691,8 +692,22 @@ const IconGitHubRepo: React.FC<IconProps> = ({ className = 'w-5 h-5' }) => (
 );
 
 export default function OpenSourceAcceleratorPage(): React.JSX.Element {
-  // Navigation & CTA states (Checkpoint #6)
-  const [activeNavTab, setActiveNavTab] = useState<'CATALOG' | 'RAG_ARCHITECT' | 'PMO_WBS' | 'AUDIT_GATE' | 'PRICING_B2B'>('CATALOG');
+  // Language & i18n states
+  const [lang, setLang] = useState<Language>('es');
+  const t = TRANSLATIONS[lang];
+
+  const toggleLanguage = () => {
+    const next = lang === 'es' ? 'en' : 'es';
+    setLang(next);
+    try {
+      localStorage.setItem('oss_atlas_lang', next);
+    } catch (e) {
+      console.warn('No se pudo guardar preferencia de idioma:', e);
+    }
+  };
+
+  // Navigation & CTA states (Simplified public interface)
+  const [activeNavTab, setActiveNavTab] = useState<'CATALOG' | 'RAG_ARCHITECT' | 'PRICING_B2B'>('CATALOG');
   const [isPipelineSyncActive, setIsPipelineSyncActive] = useState<boolean>(true);
 
   // B2B Monetization & Checkout states
@@ -712,7 +727,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const [checkoutEmail, setCheckoutEmail] = useState<string>('');
   const [checkoutCompany, setCheckoutCompany] = useState<string>('');
   const [checkoutTaxId, setCheckoutTaxId] = useState<string>('');
-  const [checkoutPaymentMethod, setCheckoutPaymentMethod] = useState<'card' | 'bank_transfer' | 'crypto_usdc'>('card');
+  const [checkoutPaymentMethod, setCheckoutPaymentMethod] = useState<'paypal' | 'wenia_usdw' | 'bank_transfer'>('paypal');
   const [isProcessingCheckout, setIsProcessingCheckout] = useState<boolean>(false);
   const [checkoutSuccess, setCheckoutSuccess] = useState<{
     invoiceNumber: string;
@@ -827,12 +842,16 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   useEffect(() => {
     refreshCatalog();
     try {
+      const storedLang = localStorage.getItem('oss_atlas_lang') as Language;
+      if (storedLang === 'es' || storedLang === 'en') {
+        setLang(storedLang);
+      }
       const stored = localStorage.getItem('oss_atlas_sub');
       if (stored) {
         setUserSubscription(JSON.parse(stored));
       }
     } catch (e) {
-      console.warn('No se pudo recuperar suscripción previa:', e);
+      console.warn('No se pudo recuperar suscripción previa o idioma:', e);
     }
   }, []);
 
@@ -1122,27 +1141,6 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const [customBusinessQuery, setCustomBusinessQuery] = useState<string>('');
   const [isSynthesizingRag, setIsSynthesizingRag] = useState<boolean>(false);
   const [showSqlQueryModal, setShowSqlQueryModal] = useState<boolean>(false);
-  const [handoffModalOpen, setHandoffModalOpen] = useState<boolean>(false);
-
-  // Async Handoff Protocol State (5 mandatory parameters from PMO Section 2)
-  const [handoffForm, setHandoffForm] = useState<{
-    completedWithEvidence: string;
-    scopeChanged: string;
-    blockingDependencies: string;
-    nextActionVerbOwnerDeadline: string;
-    retainedArchitecturalDecisions: string;
-  }>({
-    completedWithEvidence:
-      'Esquema PostgreSQL 16 + pgvector 0.7+ desplegado con índice HNSW (m=16, ef_construction=64) y endpoint FastAPI /api/v1/hybrid-search verificado.',
-    scopeChanged:
-      'Ningún cambio de alcance (Cumplimiento estricto Regla 100% WBS). Se migró columna vector a halfvec(1536) para ahorrar 50% de RAM.',
-    blockingDependencies:
-      'Límite secundario de GitHub GraphQL (2,000 pts/min) mitigado activando caché de ETags y Token Bucket.',
-    nextActionVerbOwnerDeadline:
-      'Ejecutar auditoría RAGAS de Faithfulness — Responsable: Edison Peña & Exequiel Pérez — Límite: 06 Nov 2026 18:00 UTC-5.',
-    retainedArchitecturalDecisions:
-      'Preservar configuración to_tsvector("simple", ...) para evitar que el stemming Snowball destruya códigos técnicos como SKU-9941A.',
-  });
 
   // Filtered tools computation
   const filteredCatalogTools = useMemo<OpenSourceTool[]>(() => {
@@ -1271,21 +1269,18 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500/20 via-slate-900 to-emerald-500/20 border border-cyan-500/40 flex items-center justify-center shadow-lg shadow-cyan-500/10">
-              <IconCpuArchitecture className="w-6 h-6 text-cyan-400" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 via-slate-900 to-emerald-500/20 border border-cyan-500/40 flex items-center justify-center shadow-lg shadow-cyan-500/10">
+              <IconCpuArchitecture className="w-5 h-5 text-cyan-400" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold tracking-tight text-base sm:text-lg text-white">
+                <span className="font-extrabold tracking-tight text-lg text-white">
                   OSS Atlas
                 </span>
-                <span className="hidden xl:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                  Iotdico B2B
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                  {t.brandTag}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-mono">
-                pgvector 0.7+ (halfvec) • RRF (k={rrfConstantK}) • RAGAS Verified • ossatlas.iotdico.com
-              </p>
             </div>
           </div>
 
@@ -1297,13 +1292,13 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 setActiveNavTab('CATALOG');
                 document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeNavTab === 'CATALOG'
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Catálogo & Categorías
+              {t.navCatalog}
             </button>
             <button
               type="button"
@@ -1311,41 +1306,13 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 setActiveNavTab('RAG_ARCHITECT');
                 document.getElementById('rag-assistant-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeNavTab === 'RAG_ARCHITECT'
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Arquitecto RAG B2B
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setActiveNavTab('PMO_WBS');
-                document.getElementById('pmo-wbs-section')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeNavTab === 'PMO_WBS'
-                  ? 'bg-violet-500/20 text-violet-300 border border-violet-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              Plan PMO (32 Días)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setActiveNavTab('AUDIT_GATE');
-                setHandoffModalOpen(true);
-              }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeNavTab === 'AUDIT_GATE'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              Traspaso Asíncrono
+              {t.navRag}
             </button>
             <button
               type="button"
@@ -1353,18 +1320,28 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 setActiveNavTab('PRICING_B2B');
                 document.getElementById('pricing-b2b-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeNavTab === 'PRICING_B2B'
                   ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/50 shadow-sm'
                   : 'text-amber-400/80 hover:text-amber-300'
               }`}
             >
-              Planes B2B ⭐
+              {t.navPricing}
             </button>
           </nav>
 
           {/* CTA with Active State */}
           <div className="flex items-center gap-2.5">
+            {/* Language Switcher ES / EN */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              title={lang === 'es' ? 'Switch to English' : 'Cambiar a Español'}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-bold bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400 text-slate-200 transition-all cursor-pointer shadow-sm"
+            >
+              <span>{lang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN'}</span>
+            </button>
+
             {/* Subscription Badge / Upgrade Button */}
             <button
               type="button"
@@ -1379,8 +1356,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
               <span>⭐</span>
               <span className="hidden sm:inline">
                 {userSubscription?.status === 'ACTIVE'
-                  ? `${userSubscription.planName.replace('OSS Atlas ', '')} (Activo)`
-                  : 'Mejorar a Pro'}
+                  ? t.navProActive
+                  : t.navUpgradePro}
               </span>
             </button>
 
@@ -1403,7 +1380,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 }`}
               />
               <span>
-                {isPipelineSyncActive ? 'INGESTA ETag: ACTIVA' : 'INGESTA: MODO CACHÉ'}
+                {isPipelineSyncActive ? t.navSyncActive : t.navSyncCache}
               </span>
             </button>
           </div>
@@ -1416,14 +1393,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
         <section className="relative rounded-3xl border border-slate-800/90 bg-gradient-to-b from-slate-900/90 via-slate-950 to-slate-900/70 p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden">
           <div className="max-w-4xl mx-auto text-center space-y-6">
             {/* Top Status Pill */}
-            <div className="inline-flex flex-wrap items-center justify-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-xs font-mono text-cyan-300">
-              <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">
-                12 OCT – 13 NOV 2026 (32 DÍAS)
-              </span>
-              <span>•</span>
-              <span>Ahorra 15–20h de investigación B2B por proyecto</span>
-              <span>•</span>
-              <span className="text-emerald-400">Latencia HNSW P95 &lt; 250ms</span>
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-xs font-mono text-cyan-300 shadow-inner">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>{t.heroBadge}</span>
             </div>
 
             {/* Hero Headline & Tagline */}
@@ -2256,68 +2228,6 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           </div>
         </section>
 
-        {}
-        <section id="pmo-wbs-section" className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-violet-400">
-                Gobernanza PMO • Regla del 100% WBS (12 Octubre – 13 Noviembre 2026)
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mt-1">
-                Cronograma de 32 Días, Matriz RACI & Colchón de Contingencia
-              </h2>
-              <p className="text-sm text-slate-400 mt-1">
-                27 días de ingeniería intensiva + 5 días de Project Buffer (Code Freeze inamovible el 9 de noviembre).
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setHandoffModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 transition-all cursor-pointer"
-            >
-              <span>Abrir Protocolo de Traspaso Asíncrono</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {WBS_MILESTONES.map((milestone: WbsMilestone) => (
-              <div
-                key={milestone.phase}
-                className="rounded-2xl bg-slate-900/80 border border-slate-800 p-5 flex flex-col justify-between space-y-4"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-mono font-bold text-cyan-400">{milestone.phase}</span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                        milestone.status === 'COMPLETED'
-                          ? 'bg-emerald-500/20 text-emerald-300'
-                          : milestone.status === 'ACTIVE'
-                          ? 'bg-cyan-500/20 text-cyan-300'
-                          : 'bg-amber-500/20 text-amber-300'
-                      }`}
-                    >
-                      {milestone.status}
-                    </span>
-                  </div>
-                  <p className="text-[11px] font-mono text-slate-400">{milestone.dateRange}</p>
-                  <h3 className="text-sm font-bold text-white leading-snug">{milestone.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{milestone.technicalHighlight}</p>
-                </div>
-
-                <div className="pt-3 border-t border-slate-800/80 space-y-1.5 text-[11px] font-mono">
-                  <p className="text-slate-300">
-                    <span className="text-slate-500">RACI:</span> {milestone.owner}
-                  </p>
-                  <p className="text-violet-300">
-                    <span className="text-slate-500">Turno:</span> {milestone.shift}
-                  </p>
-                  <p className="text-emerald-400">{milestone.deliverableRef}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* B2B Pricing & Monetization Section (Open-Core SaaS Model) */}
         <section
@@ -2327,19 +2237,19 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-xs font-mono text-amber-300">
-              <span>💎 MODELO OPEN-CORE & MONETIZACIÓN B2B</span>
+              <span>{t.pricingBadge}</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Planes Diseñados para Arquitectos y Equipos de Ingeniería
+              {t.pricingTitle}
             </h2>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              Conserva el control total de tu infraestructura sin ataduras propietarias. Desbloquea guías de integración (.md y .pdf), consultas ilimitadas al Arquitecto RAG y soporte prioritario.
+              {t.pricingSubtitle}
             </p>
 
             {/* Billing Cycle Switcher */}
             <div className="pt-2 flex items-center justify-center gap-3 text-xs font-mono">
               <span className={pricingCycle === 'monthly' ? 'text-white font-bold' : 'text-slate-400'}>
-                Facturación Mensual
+                {t.pricingMonthly}
               </span>
               <button
                 type="button"
@@ -2354,9 +2264,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 />
               </button>
               <span className={`flex items-center gap-1.5 ${pricingCycle === 'annual' ? 'text-amber-300 font-bold' : 'text-slate-400'}`}>
-                <span>Facturación Anual</span>
+                <span>{t.pricingAnnual}</span>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-[10px] text-emerald-300 border border-emerald-500/40 font-bold">
-                  AHORRA 20% (2 MESES GRATIS)
+                  {t.pricingAnnualDiscount}
                 </span>
               </span>
             </div>
@@ -2413,7 +2323,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 disabled
                 className="w-full py-3 rounded-xl text-xs font-mono font-semibold bg-slate-800/80 text-slate-400 border border-slate-700/80 cursor-default text-center"
               >
-                {userSubscription?.status === 'ACTIVE' ? 'Plan Base Incluido' : 'Plan Actual (Activo)'}
+                {userSubscription?.status === 'ACTIVE' ? t.pricingBaseIncluded : t.pricingCurrentPlan}
               </button>
             </div>
 
@@ -2471,8 +2381,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 className="w-full py-3.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 transition-all cursor-pointer shadow-lg shadow-amber-500/20 text-center"
               >
                 {userSubscription?.planId === 'PRO_ARCHITECTURE' && userSubscription.status === 'ACTIVE'
-                  ? 'Plan Activo • Ver Factura'
-                  : 'Mejorar a Pro Architecture'}
+                  ? t.pricingProActive
+                  : t.pricingUpgradePro}
               </button>
             </div>
 
@@ -2530,8 +2440,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 className="w-full py-3 rounded-xl text-xs font-mono font-semibold bg-violet-600/30 hover:bg-violet-600/50 text-violet-200 border border-violet-500/50 transition-all cursor-pointer text-center"
               >
                 {userSubscription?.planId === 'ENTERPRISE_HUB' && userSubscription.status === 'ACTIVE'
-                  ? 'Plan Enterprise Activo'
-                  : 'Contratar Enterprise Hub'}
+                  ? t.pricingEnterpriseActive
+                  : t.pricingGetEnterprise}
               </button>
             </div>
           </div>
@@ -2540,15 +2450,15 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-400">
             <div className="flex items-center gap-2">
               <span className="text-emerald-400">🛡️</span>
-              <span>Garantía de reembolso de 14 días sin preguntas.</span>
+              <span>{t.pricingGuarantee}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-cyan-400">📑</span>
-              <span>Factura legal B2B con RUT / Tax ID para deducción tributaria.</span>
+              <span>{t.pricingInvoiceNotice}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-amber-400">⚡</span>
-              <span>Activación inmediata con token de acceso corporativo.</span>
+              <span>{t.pricingInstantNotice}</span>
             </div>
           </div>
         </section>
@@ -2967,107 +2877,6 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
         </div>
       )}
 
-      {/* Async End-of-Block Handoff Modal (5 Mandatory Parameters from PMO Doc) */}
-      {handoffModalOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="handoff-modal-title"
-        >
-          <div className="max-w-2xl w-full rounded-3xl bg-slate-900 border border-amber-500/40 p-6 sm:p-8 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div>
-                <span className="text-xs font-mono uppercase text-amber-400">
-                  Mitigación Riesgo R2 • Coordinación Tarde (1pm-5pm) ⇄ Noche (6pm-10pm)
-                </span>
-                <h3 id="handoff-modal-title" className="text-xl font-bold text-white mt-0.5">
-                  Protocolo de Traspaso de Bloque (End-of-Block Handoff)
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setHandoffModalOpen(false)}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white text-xs font-mono"
-              >
-                Cerrar [ESC]
-              </button>
-            </div>
-
-            <div className="space-y-3 text-xs font-mono">
-              <div>
-                <label className="text-emerald-300 block mb-1">
-                  1. ¿Qué se ha completado? (Con evidencia verificable)
-                </label>
-                <textarea
-                  rows={2}
-                  value={handoffForm.completedWithEvidence}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                    setHandoffForm({ ...handoffForm, completedWithEvidence: e.target.value })
-                  }
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-200"
-                />
-              </div>
-              <div>
-                <label className="text-cyan-300 block mb-1">2. ¿Qué alcance o suposición ha cambiado?</label>
-                <input
-                  type="text"
-                  value={handoffForm.scopeChanged}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setHandoffForm({ ...handoffForm, scopeChanged: e.target.value })
-                  }
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-200"
-                />
-              </div>
-              <div>
-                <label className="text-amber-300 block mb-1">3. ¿Qué dependencias bloquean el avance actual?</label>
-                <input
-                  type="text"
-                  value={handoffForm.blockingDependencies}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setHandoffForm({ ...handoffForm, blockingDependencies: e.target.value })
-                  }
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-200"
-                />
-              </div>
-              <div>
-                <label className="text-violet-300 block mb-1">
-                  4. Siguiente acción requerida (Verbo + Responsable + Fecha Límite)
-                </label>
-                <input
-                  type="text"
-                  value={handoffForm.nextActionVerbOwnerDeadline}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setHandoffForm({ ...handoffForm, nextActionVerbOwnerDeadline: e.target.value })
-                  }
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-200"
-                />
-              </div>
-              <div>
-                <label className="text-slate-300 block mb-1">5. Decisiones arquitectónicas que deben retenerse</label>
-                <input
-                  type="text"
-                  value={handoffForm.retainedArchitecturalDecisions}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setHandoffForm({ ...handoffForm, retainedArchitecturalDecisions: e.target.value })
-                  }
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-200"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setHandoffModalOpen(false)}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-semibold text-xs font-mono"
-              >
-                Registrar Traspaso de Turno
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* B2B Checkout & Subscription Modal */}
       {isCheckoutModalOpen && (
@@ -3244,18 +3053,55 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       />
                     </div>
                     <div>
-                      <label className="text-slate-300 block mb-1">Método de Pago</label>
+                      <label className="text-slate-300 block mb-1">{t.checkoutPaymentMethod}</label>
                       <select
                         value={checkoutPaymentMethod}
                         onChange={(e) => setCheckoutPaymentMethod(e.target.value as any)}
                         className="w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-white focus:border-amber-400 focus:outline-none"
                       >
-                        <option value="card">💳 Tarjeta de Crédito / Débito (Stripe / Lemon)</option>
-                        <option value="bank_transfer">🏦 Factura Proforma B2B (Transferencia)</option>
-                        <option value="crypto_usdc">🪙 Cripto Corporativo (USDC / USDT)</option>
+                        <option value="paypal">{t.checkoutPaypalOption}</option>
+                        <option value="wenia_usdw">{t.checkoutWeniaOption}</option>
+                        <option value="bank_transfer">{t.checkoutBankOption}</option>
                       </select>
                     </div>
                   </div>
+
+                  {/* Payment Method Details Badge */}
+                  {checkoutPaymentMethod === 'paypal' && (
+                    <div className="p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-200 text-xs font-mono space-y-1">
+                      <div className="flex items-center gap-2 font-bold text-blue-300">
+                        <span>🅿️ Pasarela PayPal Habilitada</span>
+                        <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-[10px]">Cuenta Global USD</span>
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-slate-300">
+                        Recepción internacional directa en USD mediante cuenta PayPal, tarjeta débito/crédito internacional o saldo global.
+                      </p>
+                    </div>
+                  )}
+
+                  {checkoutPaymentMethod === 'wenia_usdw' && (
+                    <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 text-xs font-mono space-y-1">
+                      <div className="flex items-center gap-2 font-bold text-emerald-300">
+                        <span>💎 Wenia • Criptoactivo USDW</span>
+                        <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px]">Paridad 1:1 USD</span>
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-slate-300">
+                        Transferencia directa de USDW (Bancolombia / Wenia). 1 USDW = 1.00 USD fijo, sin comisiones de cambio y con liquidación inmediata.
+                      </p>
+                    </div>
+                  )}
+
+                  {checkoutPaymentMethod === 'bank_transfer' && (
+                    <div className="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-200 text-xs font-mono space-y-1">
+                      <div className="flex items-center gap-2 font-bold text-purple-300">
+                        <span>🏦 Transferencia Bancaria B2B</span>
+                        <span className="px-1.5 py-0.5 rounded bg-purple-500/20 text-[10px]">Factura con RUT</span>
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-slate-300">
+                        Emisión de factura proforma oficial para transferencia bancaria directa corporativa con soporte tributario.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Pricing Breakdown Summary */}
