@@ -17,7 +17,18 @@ export function getPool(): Pool {
     if (!connectionString) {
       throw new Error("DATABASE_URL no está configurada. Copia frontend/.env.example a .env.local.");
     }
-    globalThis.__aceleradorPool = new Pool({ connectionString });
+
+    const isCloud =
+      connectionString.includes("neon.tech") ||
+      connectionString.includes("supabase.co") ||
+      connectionString.includes("sslmode=require") ||
+      connectionString.includes("aws.") ||
+      process.env.NODE_ENV === "production";
+
+    globalThis.__aceleradorPool = new Pool({
+      connectionString,
+      ssl: isCloud ? { rejectUnauthorized: false } : undefined,
+    });
   }
   return globalThis.__aceleradorPool;
 }
