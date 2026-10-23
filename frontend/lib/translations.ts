@@ -11,24 +11,72 @@ export const TRANSLATIONS = {
     navSyncActive: 'INGESTA ETag: ACTIVA',
     navSyncCache: 'INGESTA: MODO CACHÉ',
 
+    // Hero Section
     heroBadge: 'Ahorra 15–20h de investigación B2B por proyecto • Latencia HNSW P95 < 250ms',
-    heroTitlePrefix: 'Acelerador B2B de',
-    heroTitleGradient: 'Arquitectura Open Source',
-    heroSubtitle:
-      'Catálogo inteligente con cálculo de salud de repositorios (Health Score), búsqueda híbrida RRF en PostgreSQL 16 y asistente RAG sin alucinaciones.',
-    heroSearchPlaceholder: 'Buscar herramientas (ej: keycloak, pgvector, rust, rag, licencias)...',
-    heroSearchChips: 'Sugerencias rápidas:',
-    heroStatsTools: 'Herramientas Evaluadas',
-    heroStatsPgvector: 'PostgreSQL 16 + pgvector',
-    heroStatsZeroHallucination: 'Cero Alucinación RAGAS',
+    heroTitlePrefix: 'Catálogo Inteligente &',
+    heroTitleGradient: 'Arquitecto RAG de Integraciones Open Source',
+    heroSubtitle1: 'Erradicamos la fragmentación del ecosistema open-source para consultoría tecnológica B2B. Describe tu modelo de negocio y nuestro motor de',
+    heroSubtitleBold: 'Búsqueda Híbrida (pgvector + Fusión de Rango Recíproco)',
+    heroSubtitle2: 'emitirá un mapa de arquitectura auto-hospedado con métricas de salud estructural verificadas.',
+    heroSearchPlaceholder: 'Ej: Plataforma de comercio electrónico B2B orientada a la logística con SKU-9941A...',
+    heroGenerateButton: 'Generar Mapa RAG B2B',
+    heroFtsDict: "Diccionario FTS: 'simple' (Sin stemming Snowball)",
+    heroHnswRam: 'halfvec (50% menos RAM)',
+    heroHnswStd: 'float32 estándar',
+    heroHnswIndex: 'Índice HNSW:',
+    heroRrfConstant: 'Constante RRF k=',
+    heroAdjustK: 'Ajustar k',
+    heroTestScenarios: 'Casos de prueba B2B:',
 
-    categoriesTitle: 'Categorías de Infraestructura B2B',
-    categoriesSubtitle: 'Clasificación de repositorios curados por capa tecnológica.',
-    catalogAll: 'Todas las Categorías',
+    // Scenarios titles
+    scenario1: 'Comercio Electrónico B2B Orientado a la Logística',
+    scenario2: 'Infraestructura Fintech B2B & Conciliación Bancaria',
+    scenario3: 'Plataforma SaaS B2B con Copiloto RAG Auto-Hospedado',
+
+    // Executive Metrics Bar
+    heroMetricSavedTimeTitle: 'Tiempo Ahorrado / Proyecto',
+    heroMetricSavedTimeVal: '15 a 20 Horas',
+    heroMetricSavedTimeSub: 'Validación curada B2B',
+    heroMetricTeamCapTitle: 'Capacidad Ágil del Equipo',
+    heroMetricTeamCapVal: '126h Netas / Sem',
+    heroMetricTeamCapSub: '9 Ing. × 14h (70% Focus)',
+    heroMetricRateLimitTitle: 'Evasión Rate-Limit GitHub',
+    heroMetricRateLimitVal: 'ETag + Token Bucket',
+    heroMetricRateLimitSub: '< 2,000 pts/min GraphQL',
+    heroMetricRagasTitle: 'Fidelidad RAGAS',
+    heroMetricRagasVal: '100% Zero-Hallucination',
+    heroMetricRagasSub: 'Colchón: 5 Días Buffer',
+
+    // Categories Section
+    categoriesBadge: 'Taxonomía Estructural Normalizada',
+    categoriesTitle: 'Explorador de Categorías Open Source (CategoriesGrid)',
+    categoriesSubtitle: 'Metadatos atómicos indexados en PostgreSQL para filtrado híbrido sin degradación por JSON plano.',
+    categoriesAllBtn: 'Todas las Categorías',
+
+    // Categories names & descriptions
+    catAuthName: 'Autenticación & Identidad (IAM)',
+    catAuthDesc: 'Control de acceso granular, SSO corporativo (SAML/OIDC), RBAC/ABAC y gestión de sesiones sin vendor lock-in.',
+    catDbsName: 'Bases de Datos & Vectores',
+    catDbsDesc: 'Motores OLTP, almacenes vectoriales de alto rendimiento e índices HNSW para cargas de trabajo RAG empresariales.',
+    catPaymentsName: 'Pasarelas de Pago & Facturación B2B',
+    catPaymentsDesc: 'Suscripciones recurrentes, conciliación bancaria automatizada y orquestación de pagos multi-adquirente.',
+    catAiName: 'Modelos de Lenguaje & RAG Auto-Hospedado',
+    catAiDesc: 'Inferencia local, pipelines de embedding y agentes autónomos desplegables en hardware propio con cero fuga de datos.',
+
+    // Catalog & Filters Section
+    catalogBadge: 'Catálogo Dinámico B2B',
+    catalogTitle: 'Repositorios Evaluados con Métricas Cardinales',
+    catalogSubtitle: 'Filtra por capa arquitectónica, tipo de licencia o umbral de salud para acelerar tu proceso de selección.',
+    catalogSearchPlaceholder: 'Buscar herramientas (ej: keycloak, pgvector, rust, rag, licencias)...',
     catalogFilterLicense: 'Filtrar por Licencia:',
+    catalogAllLicenses: 'Todas las Licencias',
+    catalogMinHealth: 'Health Score Mínimo:',
     catalogEmpty: 'No se encontraron herramientas con los filtros actuales.',
     catalogResetFilters: 'Restablecer filtros',
+    catalogToolsCount: 'Herramientas Disponibles',
+    catalogSyncButton: '⚡ Ingesta & Sincronización',
 
+    // Cards
     cardHealthScore: 'Health Score',
     cardWeightedBreakdown: 'Desglose Ponderado',
     cardCommits: 'Commits (15%)',
@@ -43,20 +91,27 @@ export const TRANSLATIONS = {
     cardProBadge: 'PRO B2B',
     cardDownloadBadge: 'DESCARGAR',
 
+    // RAG Assistant Section
+    ragBadge: 'SÍNTESIS DE ARQUITECTURA ASISTIDA POR IA',
     ragTitle: 'Asistente Conversacional de Arquitectura B2B',
-    ragSubtitle:
-      'Recupera herramientas mediante Fusión de Rango Recíproco (RRF) en PostgreSQL 16 y genera arquitecturas multicapa auditadas.',
+    ragSubtitle: 'Recupera herramientas mediante Fusión de Rango Recíproco (RRF) en PostgreSQL 16 y genera arquitecturas multicapa auditadas.',
     ragSelectCase: '1. Seleccionar Caso de Negocio B2B',
     ragLiveGenerated: 'Generado en Vivo',
     ragCustomPromptTitle: '2. Consulta Personalizada de Arquitectura',
     ragGenerateButton: 'Sintetizar Arquitectura RAG',
     ragGenerating: 'Analizando Catálogo y Vectores...',
     ragMetricsTitle: 'Métricas Cardinales RAGAS (Auditoría Anti-Alucinación)',
+    ragContextPrecision: 'Context Precision: 1.00',
+    ragContextRecall: 'Context Recall: 1.00',
+    ragFaithfulness: 'Faithfulness: 1.00',
+    ragAnswerRelevance: 'Answer Relevance: 0.98',
+    ragArchitectureMap: 'Mapa de Arquitectura Sintetizado',
+    ragRecommendedStack: 'Pila Recomendada',
 
+    // Pricing Section
     pricingBadge: '💎 MODELO OPEN-CORE & MONETIZACIÓN B2B',
     pricingTitle: 'Planes Diseñados para Arquitectos y Equipos de Ingeniería',
-    pricingSubtitle:
-      'Conserva el control total de tu infraestructura sin ataduras propietarias. Desbloquea guías de integración (.md y .pdf), consultas ilimitadas al Arquitecto RAG y soporte prioritario.',
+    pricingSubtitle: 'Conserva el control total de tu infraestructura sin ataduras propietarias. Desbloquea guías de integración (.md y .pdf), consultas ilimitadas al Arquitecto RAG y soporte prioritario.',
     pricingMonthly: 'Facturación Mensual',
     pricingAnnual: 'Facturación Anual',
     pricingAnnualDiscount: 'AHORRA 20% (2 MESES GRATIS)',
@@ -70,6 +125,7 @@ export const TRANSLATIONS = {
     pricingInvoiceNotice: 'Factura legal B2B para deducción tributaria.',
     pricingInstantNotice: 'Activación inmediata con token de acceso corporativo.',
 
+    // Checkout Modal
     checkoutTitle: 'CHECKOUT SEGURO B2B',
     checkoutSsl: 'SSL 256-BIT ENCRIPTADO',
     checkoutIssuedBy: 'Facturación oficial emitida por EdisonPEÑA (Iotdico) · Dominio ossatlas.iotdico.com',
@@ -100,6 +156,7 @@ export const TRANSLATIONS = {
     checkoutBenefit3: 'Generador de manifiestos unificados (Docker Compose & Terraform)',
     checkoutContinueBtn: '🚀 Continuar y Explorar OSS Atlas Pro',
 
+    // Guide Modal
     guideTitle: 'Guía de Integración:',
     guideSubtitle: 'Paso a paso técnico multiplataforma para entornos Windows (PowerShell/WSL2) y macOS (Homebrew/Zsh).',
     guideCategory: 'Categoría B2B',
@@ -111,6 +168,15 @@ export const TRANSLATIONS = {
     guideDownloadPdf: '📥 Descargar .PDF',
     guideProUnlocked: '✓ Descarga habilitada con tu plan Pro Architect',
 
+    // Ingest Modal
+    ingestModalTitle: 'Módulo de Ingesta Continua & Resiliencia ETag',
+    ingestModalSubtitle: 'Gestión atómica de repositorios, sincronización de metadatos y generación de vectores semánticos en PostgreSQL 16.',
+    ingestTabPresets: 'Presets Curados B2B',
+    ingestTabCustom: 'Ingesta Personalizada',
+    ingestTabReindex: 'Reindexación Global',
+    ingestClose: 'Cerrar',
+
+    // Footer
     footerAudit: 'DICTAMEN AUDITORÍA PMO & FRONTEND: APROBADO SIN RESERVAS (10/10 Checkpoints)',
     footerCopyright: '© 2026 OSS Atlas · Una iniciativa de Iotdico',
     footerCreatedBy: 'Creado por EdisonPEÑA (ossatlas.iotdico.com)',
@@ -126,24 +192,72 @@ export const TRANSLATIONS = {
     navSyncActive: 'INGESTION ETag: ACTIVE',
     navSyncCache: 'INGESTION: CACHED MODE',
 
+    // Hero Section
     heroBadge: 'Save 15–20h of B2B research per project • P95 HNSW Latency < 250ms',
-    heroTitlePrefix: 'B2B Accelerator for',
-    heroTitleGradient: 'Open Source Architecture',
-    heroSubtitle:
-      'Intelligent catalog with repository Health Score, RRF hybrid search on PostgreSQL 16, and zero-hallucination RAG assistant.',
-    heroSearchPlaceholder: 'Search tools (e.g., keycloak, pgvector, rust, rag, licenses)...',
-    heroSearchChips: 'Quick suggestions:',
-    heroStatsTools: 'Evaluated Tools',
-    heroStatsPgvector: 'PostgreSQL 16 + pgvector',
-    heroStatsZeroHallucination: 'RAGAS Zero Hallucination',
+    heroTitlePrefix: 'Intelligent Catalog &',
+    heroTitleGradient: 'Open Source Integration RAG Architect',
+    heroSubtitle1: 'Eliminating open-source ecosystem fragmentation for B2B tech consulting. Describe your business model and our',
+    heroSubtitleBold: 'Hybrid Search engine (pgvector + Reciprocal Rank Fusion)',
+    heroSubtitle2: 'will emit a self-hosted architecture blueprint with verified structural health metrics.',
+    heroSearchPlaceholder: 'E.g., B2B e-commerce platform for logistics with SKU-9941A...',
+    heroGenerateButton: 'Generate B2B RAG Blueprint',
+    heroFtsDict: "FTS Dictionary: 'simple' (No Snowball stemming)",
+    heroHnswRam: 'halfvec (50% less RAM)',
+    heroHnswStd: 'standard float32',
+    heroHnswIndex: 'HNSW Index:',
+    heroRrfConstant: 'RRF Constant k=',
+    heroAdjustK: 'Adjust k',
+    heroTestScenarios: 'B2B Test Scenarios:',
 
-    categoriesTitle: 'B2B Infrastructure Categories',
-    categoriesSubtitle: 'Curated repository classification grouped by technical layer.',
-    catalogAll: 'All Categories',
+    // Scenarios titles
+    scenario1: 'Logistics-Oriented B2B E-Commerce Platform',
+    scenario2: 'B2B Fintech Infrastructure & Bank Reconciliation',
+    scenario3: 'B2B SaaS Platform with Self-Hosted RAG Copilot',
+
+    // Executive Metrics Bar
+    heroMetricSavedTimeTitle: 'Saved Time / Project',
+    heroMetricSavedTimeVal: '15 to 20 Hours',
+    heroMetricSavedTimeSub: 'Curated B2B Validation',
+    heroMetricTeamCapTitle: 'Agile Team Capacity',
+    heroMetricTeamCapVal: '126 Net Hrs / Wk',
+    heroMetricTeamCapSub: '9 Eng. × 14h (70% Focus)',
+    heroMetricRateLimitTitle: 'GitHub Rate-Limit Evasion',
+    heroMetricRateLimitVal: 'ETag + Token Bucket',
+    heroMetricRateLimitSub: '< 2,000 pts/min GraphQL',
+    heroMetricRagasTitle: 'RAGAS Fidelity',
+    heroMetricRagasVal: '100% Zero-Hallucination',
+    heroMetricRagasSub: 'Buffer: 5-Day Safety Net',
+
+    // Categories Section
+    categoriesBadge: 'Normalized Structural Taxonomy',
+    categoriesTitle: 'Open Source Category Explorer (CategoriesGrid)',
+    categoriesSubtitle: 'Atomic metadata indexed in PostgreSQL for hybrid filtering without flat JSON degradation.',
+    categoriesAllBtn: 'All Categories',
+
+    // Categories names & descriptions
+    catAuthName: 'Authentication & Identity (IAM)',
+    catAuthDesc: 'Granular access control, corporate SSO (SAML/OIDC), RBAC/ABAC and session management without vendor lock-in.',
+    catDbsName: 'Databases & Vector Engines',
+    catDbsDesc: 'OLTP engines, high-performance vector stores and HNSW indexes for enterprise RAG workloads.',
+    catPaymentsName: 'Payment Gateways & B2B Billing',
+    catPaymentsDesc: 'Recurring subscriptions, automated bank reconciliation and multi-acquirer payment orchestration.',
+    catAiName: 'Language Models & Self-Hosted RAG',
+    catAiDesc: 'Local inference, embedding pipelines and autonomous agents deployable on private hardware with zero data leakage.',
+
+    // Catalog & Filters Section
+    catalogBadge: 'Dynamic B2B Catalog',
+    catalogTitle: 'Evaluated Repositories with Cardinal Metrics',
+    catalogSubtitle: 'Filter by architectural tier, license type or health threshold to accelerate your selection process.',
+    catalogSearchPlaceholder: 'Search tools (e.g., keycloak, pgvector, rust, rag, licenses)...',
     catalogFilterLicense: 'Filter by License:',
+    catalogAllLicenses: 'All Licenses',
+    catalogMinHealth: 'Minimum Health Score:',
     catalogEmpty: 'No open source tools found matching current filters.',
     catalogResetFilters: 'Reset filters',
+    catalogToolsCount: 'Available Tools',
+    catalogSyncButton: '⚡ Ingestion & Sync',
 
+    // Cards
     cardHealthScore: 'Health Score',
     cardWeightedBreakdown: 'Weighted Breakdown',
     cardCommits: 'Commits (15%)',
@@ -158,20 +272,27 @@ export const TRANSLATIONS = {
     cardProBadge: 'PRO B2B',
     cardDownloadBadge: 'DOWNLOAD',
 
+    // RAG Assistant Section
+    ragBadge: 'AI-ASSISTED ARCHITECTURE SYNTHESIS',
     ragTitle: 'B2B Conversational Architecture Assistant',
-    ragSubtitle:
-      'Retrieves repositories via Reciprocal Rank Fusion (RRF) on PostgreSQL 16 and generates audited multi-tier architectures.',
+    ragSubtitle: 'Retrieves repositories via Reciprocal Rank Fusion (RRF) on PostgreSQL 16 and generates audited multi-tier architectures.',
     ragSelectCase: '1. Select B2B Business Scenario',
     ragLiveGenerated: 'Live Generated',
     ragCustomPromptTitle: '2. Custom Architecture Prompt',
     ragGenerateButton: 'Synthesize RAG Architecture',
     ragGenerating: 'Analyzing Catalog and Vectors...',
     ragMetricsTitle: 'RAGAS Cardinal Metrics (Anti-Hallucination Audit)',
+    ragContextPrecision: 'Context Precision: 1.00',
+    ragContextRecall: 'Context Recall: 1.00',
+    ragFaithfulness: 'Faithfulness: 1.00',
+    ragAnswerRelevance: 'Answer Relevance: 0.98',
+    ragArchitectureMap: 'Synthesized Architecture Blueprint',
+    ragRecommendedStack: 'Recommended Stack',
 
+    // Pricing Section
     pricingBadge: '💎 OPEN-CORE MODEL & B2B MONETIZATION',
     pricingTitle: 'Plans Built for Software Architects & Engineering Teams',
-    pricingSubtitle:
-      'Retain full sovereignty over your infrastructure with zero proprietary lock-in. Unlock step-by-step guides (.md and .pdf), unlimited RAG queries, and priority support.',
+    pricingSubtitle: 'Retain full sovereignty over your infrastructure with zero proprietary lock-in. Unlock step-by-step guides (.md and .pdf), unlimited RAG queries, and priority support.',
     pricingMonthly: 'Monthly Billing',
     pricingAnnual: 'Annual Billing',
     pricingAnnualDiscount: 'SAVE 20% (2 MONTHS FREE)',
@@ -185,6 +306,7 @@ export const TRANSLATIONS = {
     pricingInvoiceNotice: 'Official B2B invoice for tax deduction.',
     pricingInstantNotice: 'Immediate activation with corporate access token.',
 
+    // Checkout Modal
     checkoutTitle: 'SECURE B2B CHECKOUT',
     checkoutSsl: '256-BIT ENCRYPTED SSL',
     checkoutIssuedBy: 'Official billing issued by EdisonPEÑA (Iotdico) · Domain ossatlas.iotdico.com',
@@ -215,6 +337,7 @@ export const TRANSLATIONS = {
     checkoutBenefit3: 'Unified multi-tier manifest generator (Docker Compose & Terraform)',
     checkoutContinueBtn: '🚀 Continue & Explore OSS Atlas Pro',
 
+    // Guide Modal
     guideTitle: 'Integration Guide:',
     guideSubtitle: 'Multi-platform step-by-step for Windows (PowerShell/WSL2) and macOS (Homebrew/Zsh).',
     guideCategory: 'B2B Category',
@@ -226,6 +349,15 @@ export const TRANSLATIONS = {
     guideDownloadPdf: '📥 Download .PDF',
     guideProUnlocked: '✓ Downloads enabled with your Pro Architect plan',
 
+    // Ingest Modal
+    ingestModalTitle: 'Continuous Ingestion & ETag Resilience Module',
+    ingestModalSubtitle: 'Atomic repository management, metadata synchronization and semantic vector generation on PostgreSQL 16.',
+    ingestTabPresets: 'Curated B2B Presets',
+    ingestTabCustom: 'Custom Ingestion',
+    ingestTabReindex: 'Global Reindexing',
+    ingestClose: 'Close',
+
+    // Footer
     footerAudit: 'PMO & FRONTEND AUDIT: APPROVED WITHOUT RESERVATION (10/10 Checkpoints)',
     footerCopyright: '© 2026 OSS Atlas · An initiative by Iotdico',
     footerCreatedBy: 'Created by EdisonPEÑA (ossatlas.iotdico.com)',

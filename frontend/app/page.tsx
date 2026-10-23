@@ -691,6 +691,32 @@ const IconGitHubRepo: React.FC<IconProps> = ({ className = 'w-5 h-5' }) => (
   </svg>
 );
 
+const getCategoryName = (catId: string, lang: Language) => {
+  const t = TRANSLATIONS[lang];
+  if (catId === 'AUTH') return t.catAuthName;
+  if (catId === 'DBS') return t.catDbsName;
+  if (catId === 'PAYMENTS') return t.catPaymentsName;
+  if (catId === 'AI') return t.catAiName;
+  return catId;
+};
+
+const getCategoryDesc = (catId: string, lang: Language) => {
+  const t = TRANSLATIONS[lang];
+  if (catId === 'AUTH') return t.catAuthDesc;
+  if (catId === 'DBS') return t.catDbsDesc;
+  if (catId === 'PAYMENTS') return t.catPaymentsDesc;
+  if (catId === 'AI') return t.catAiDesc;
+  return '';
+};
+
+const getScenarioTitle = (scenarioId: string, lang: Language) => {
+  const t = TRANSLATIONS[lang];
+  if (scenarioId === 'scenario-logistics-b2b') return t.scenario1;
+  if (scenarioId === 'scenario-fintech-compliance') return t.scenario2;
+  if (scenarioId === 'scenario-rag-copilot') return t.scenario3;
+  return scenarioId;
+};
+
 export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   // Language & i18n states
   const [lang, setLang] = useState<Language>('es');
@@ -1400,26 +1426,25 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
             {/* Hero Headline & Tagline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-              Catálogo Inteligente &{' '}
+              {t.heroTitlePrefix}{' '}
               <span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
-                Arquitecto RAG de Integraciones Open Source
+                {t.heroTitleGradient}
               </span>
             </h1>
 
             <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
-              Erradicamos la fragmentación del ecosistema open-source para consultoría tecnológica B2B. Describe tu
-              modelo de negocio y nuestro motor de{' '}
+              {t.heroSubtitle1}{' '}
               <strong className="text-white font-semibold">
-                Búsqueda Híbrida (pgvector + Fusión de Rango Recíproco)
+                {t.heroSubtitleBold}
               </strong>{' '}
-              emitirá un mapa de arquitectura auto-hospedado con métricas de salud estructural verificadas.
+              {t.heroSubtitle2}
             </p>
 
             {/* Interactive Prompt Bar Controlled via React useState */}
             <form onSubmit={handleHeroPromptSubmit} className="mt-8 space-y-4 text-left">
               <div className="relative rounded-2xl border border-cyan-500/40 bg-slate-950/95 p-2 sm:p-3 shadow-xl shadow-cyan-950/30 focus-within:border-cyan-400 transition-all">
                 <label htmlFor="b2b-hero-prompt" className="sr-only">
-                  Describe la arquitectura B2B o el código técnico que necesitas integrar
+                  {t.heroSearchPlaceholder}
                 </label>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <div className="flex items-center gap-3 flex-1 px-2">
@@ -1429,7 +1454,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       type="text"
                       value={heroPromptInput}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHeroPromptInput(e.target.value)}
-                      placeholder="Ej: Plataforma de comercio electrónico B2B orientada a la logística con SKU-9941A..."
+                      placeholder={t.heroSearchPlaceholder}
                       className="w-full bg-transparent text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none font-mono"
                     />
                   </div>
@@ -1438,7 +1463,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 shadow-lg shadow-cyan-500/20 transition-all shrink-0 cursor-pointer"
                   >
                     <IconAiBrainRag className="w-4 h-4" />
-                    <span>Generar Mapa RAG B2B</span>
+                    <span>{t.heroGenerateButton}</span>
                   </button>
                 </div>
 
@@ -1446,7 +1471,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 px-2 text-[11px] font-mono text-slate-400">
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="text-cyan-300">
-                      Diccionario FTS: <strong>&apos;simple&apos;</strong> (Sin stemming Snowball)
+                      {t.heroFtsDict}
                     </span>
                     <span>•</span>
                     <button
@@ -1454,17 +1479,17 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       onClick={() => setUseHalfvecOptimization((prev: boolean) => !prev)}
                       className="underline decoration-dotted hover:text-emerald-300"
                     >
-                      Índice HNSW: {useHalfvecOptimization ? 'halfvec (50% menos RAM)' : 'float32 estándar'}
+                      {t.heroHnswIndex} {useHalfvecOptimization ? t.heroHnswRam : t.heroHnswStd}
                     </button>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>Constante RRF k={rrfConstantK}</span>
+                    <span>{t.heroRrfConstant}{rrfConstantK}</span>
                     <button
                       type="button"
                       onClick={() => setRrfConstantK((prev: number) => (prev === 60 ? 40 : 60))}
                       className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:bg-slate-700"
                     >
-                      Ajustar k
+                      {t.heroAdjustK}
                     </button>
                   </div>
                 </div>
@@ -1472,7 +1497,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
               {/* Preset Quick Prompts */}
               <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                <span className="text-xs font-mono text-slate-400">Casos de prueba B2B:</span>
+                <span className="text-xs font-mono text-slate-400">{t.heroTestScenarios}</span>
                 {B2B_RAG_SCENARIOS.map((scenario: B2BScenario) => (
                   <button
                     key={scenario.id}
@@ -1488,7 +1513,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                         : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200'
                     }`}
                   >
-                    {scenario.title}
+                    {getScenarioTitle(scenario.id, lang)}
                   </button>
                 ))}
               </div>
@@ -1497,24 +1522,24 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             {/* Executive Metrics Bar */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
               <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800 text-left">
-                <p className="text-xs font-mono text-slate-400">Tiempo Ahorrado / Proyecto</p>
-                <p className="text-xl font-bold text-white mt-0.5">15 a 20 Horas</p>
-                <p className="text-[11px] text-emerald-400 font-mono">Validación curada B2B</p>
+                <p className="text-xs font-mono text-slate-400">{t.heroMetricSavedTimeTitle}</p>
+                <p className="text-xl font-bold text-white mt-0.5">{t.heroMetricSavedTimeVal}</p>
+                <p className="text-[11px] text-emerald-400 font-mono">{t.heroMetricSavedTimeSub}</p>
               </div>
               <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800 text-left">
-                <p className="text-xs font-mono text-slate-400">Capacidad Ágil del Equipo</p>
-                <p className="text-xl font-bold text-white mt-0.5">126h Netas / Sem</p>
-                <p className="text-[11px] text-cyan-400 font-mono">9 Ing. × 14h (70% Focus)</p>
+                <p className="text-xs font-mono text-slate-400">{t.heroMetricTeamCapTitle}</p>
+                <p className="text-xl font-bold text-white mt-0.5">{t.heroMetricTeamCapVal}</p>
+                <p className="text-[11px] text-cyan-400 font-mono">{t.heroMetricTeamCapSub}</p>
               </div>
               <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800 text-left">
-                <p className="text-xs font-mono text-slate-400">Evasión Rate-Limit GitHub</p>
-                <p className="text-xl font-bold text-white mt-0.5">ETag + Token Bucket</p>
-                <p className="text-[11px] text-violet-400 font-mono">&lt; 2,000 pts/min GraphQL</p>
+                <p className="text-xs font-mono text-slate-400">{t.heroMetricRateLimitTitle}</p>
+                <p className="text-xl font-bold text-white mt-0.5">{t.heroMetricRateLimitVal}</p>
+                <p className="text-[11px] text-violet-400 font-mono">{t.heroMetricRateLimitSub}</p>
               </div>
               <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800 text-left">
-                <p className="text-xs font-mono text-slate-400">Fidelidad RAGAS</p>
-                <p className="text-xl font-bold text-emerald-400 mt-0.5">100% Zero-Hallucination</p>
-                <p className="text-[11px] text-amber-400 font-mono">Colchón: 5 Días Buffer</p>
+                <p className="text-xs font-mono text-slate-400">{t.heroMetricRagasTitle}</p>
+                <p className="text-xl font-bold text-emerald-400 mt-0.5">{t.heroMetricRagasVal}</p>
+                <p className="text-[11px] text-amber-400 font-mono">{t.heroMetricRagasSub}</p>
               </div>
             </div>
           </div>
@@ -1525,13 +1550,13 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <span className="text-xs font-mono uppercase tracking-wider text-cyan-400">
-                Taxonomía Estructural Normalizada
+                {t.categoriesBadge}
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold text-white mt-1">
-                Explorador de Categorías Open Source (CategoriesGrid)
+                {t.categoriesTitle}
               </h2>
               <p className="text-sm text-slate-400 mt-1">
-                Metadatos atómicos indexados en PostgreSQL para filtrado híbrido sin degradación por JSON plano.
+                {t.categoriesSubtitle}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -1544,7 +1569,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                Todas las Categorías (122 Repos)
+                {t.categoriesAllBtn} (122 Repos)
               </button>
             </div>
           </div>
@@ -1583,9 +1608,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
                     {/* Title & Description */}
                     <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
-                      {cat.name}
+                      {getCategoryName(cat.id, lang)}
                     </h3>
-                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">{cat.description}</p>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">{getCategoryDesc(cat.id, lang)}</p>
                   </div>
 
                   <div className="mt-6 pt-4 border-t border-slate-800/80 space-y-3">
@@ -1601,9 +1626,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     </div>
 
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-slate-400">{cat.repoCount} repositorios</span>
+                      <span className="text-slate-400">{cat.repoCount} {lang === 'es' ? 'repositorios' : 'repositories'}</span>
                       <span className="text-emerald-400 font-semibold">
-                        Health Prom: {cat.avgHealthScore}%
+                        {lang === 'es' ? 'Health Prom:' : 'Avg Health:'} {cat.avgHealthScore}%
                       </span>
                     </div>
                   </div>
@@ -1618,33 +1643,32 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <div>
               <span className="text-xs font-mono uppercase tracking-wider text-emerald-400">
-                Algoritmo de Salud Estructural Ponderado (Exequiel Pérez - Fase 2)
+                {t.catalogBadge}
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold text-white mt-1">
-                Catálogo de Herramientas Destacadas (FeaturedToolsCatalog)
+                {t.catalogTitle}
               </h2>
               <p className="text-sm text-slate-400 mt-1">
-                Cada ficha técnica traduce el repositorio en disparadores funcionales, dependencias, licencia y
-                puntuación de salud verificada.
+                {t.catalogSubtitle}
               </p>
               <div className="flex items-center gap-2 mt-2.5">
                 {isDbConnected ? (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    PostgreSQL 16 + pgvector en vivo ({catalogTools.length} herramientas)
+                    PostgreSQL 16 + pgvector ({catalogTools.length} {lang === 'es' ? 'herramientas' : 'tools'})
                   </span>
                 ) : isLoadingCatalog ? (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-amber-500/10 text-amber-300 border border-amber-500/30">
                     <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                    Cargando catálogo desde PostgreSQL...
+                    {lang === 'es' ? 'Cargando catálogo desde PostgreSQL...' : 'Loading catalog from PostgreSQL...'}
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-400 border border-slate-700">
-                    Catálogo en caché local
+                    {lang === 'es' ? 'Catálogo en caché local' : 'Cached local catalog'}
                   </span>
                 )}
                 <span className="text-xs font-mono text-slate-400 ml-1">
-                  Mostrando <strong className="text-white">{filteredCatalogTools.length}</strong> de {catalogTools.length}
+                  {lang === 'es' ? 'Mostrando' : 'Showing'} <strong className="text-white">{filteredCatalogTools.length}</strong> {lang === 'es' ? 'de' : 'of'} {catalogTools.length}
                 </span>
               </div>
             </div>
@@ -1652,7 +1676,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             {/* License Filter Controls & Pipeline Sync Button */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-mono text-slate-400 mr-1">Filtrar Licencia:</span>
+                <span className="text-xs font-mono text-slate-400 mr-1">{t.catalogFilterLicense}</span>
                 {(['ALL', 'Apache-2.0', 'MIT'] as const).map((lic) => (
                   <button
                     key={lic}
@@ -1664,7 +1688,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                         : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
                     }`}
                   >
-                    {lic === 'ALL' ? 'Todas (MIT / Apache-2.0)' : lic}
+                    {lic === 'ALL' ? t.catalogAllLicenses : lic}
                   </button>
                 ))}
               </div>
@@ -1678,7 +1702,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 text-cyan-300 border border-cyan-500/40 shadow-lg shadow-cyan-500/10 transition-all cursor-pointer"
               >
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span>⚡ Ingesta & Sincronización</span>
+                <span>{t.catalogSyncButton}</span>
               </button>
             </div>
           </div>
@@ -1692,7 +1716,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   type="text"
                   value={catalogSearchQuery}
                   onChange={(e) => setCatalogSearchQuery(e.target.value)}
-                  placeholder="Buscar con Motor Híbrido RRF (ej: 'autenticacion SSO', 'pagos', 'busqueda vectorial', 'rust')..."
+                  placeholder={t.catalogSearchPlaceholder}
                   className="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none font-mono"
                 />
                 {catalogSearchQuery && (
@@ -1701,34 +1725,41 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     onClick={() => setCatalogSearchQuery('')}
                     className="text-slate-400 hover:text-white text-xs font-mono px-2 py-0.5 rounded bg-slate-800 shrink-0 cursor-pointer"
                   >
-                    ✕ Limpiar
+                    ✕ {lang === 'es' ? 'Limpiar' : 'Clear'}
                   </button>
                 )}
               </div>
               {isSearchingHybrid ? (
                 <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-300 shrink-0">
                   <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                  Calculando RRF en PostgreSQL...
+                  {lang === 'es' ? 'Calculando RRF en PostgreSQL...' : 'Computing RRF in PostgreSQL...'}
                 </div>
               ) : hybridSearchResults !== null ? (
                 <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-300 shrink-0">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  Ranking RRF activo ({hybridSearchResults.length} coincidencias)
+                  {lang === 'es' ? `Ranking RRF activo (${hybridSearchResults.length} coincidencias)` : `Active RRF Ranking (${hybridSearchResults.length} matches)`}
                 </div>
               ) : null}
             </div>
 
             {/* Quick Keyword Suggestions */}
             <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-              <span className="text-slate-500 font-semibold">Búsquedas rápidas:</span>
-              {[
+              <span className="text-slate-500 font-semibold">{lang === 'es' ? 'Búsquedas rápidas:' : 'Quick searches:'}</span>
+              {(lang === 'es' ? [
                 'autenticacion SSO',
                 'pagos pasarela multi-adquirente',
                 'motor busqueda rust',
                 'PostgreSQL pgvector',
                 'orquestacion RAG agentes',
                 'suscripciones billing',
-              ].map((term) => (
+              ] : [
+                'SSO authentication',
+                'multi-acquirer payments',
+                'rust search engine',
+                'PostgreSQL pgvector',
+                'agent RAG orchestration',
+                'billing subscriptions',
+              ]).map((term) => (
                 <button
                   key={term}
                   type="button"
@@ -1753,12 +1784,16 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   ∅
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">Sin herramientas para este filtro</h3>
+                  <h3 className="text-base font-bold text-white">
+                    {lang === 'es' ? 'Sin herramientas para este filtro' : 'No tools found for this filter'}
+                  </h3>
                   <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
                     {selectedCategory !== 'ALL' && (
-                      <>En la categoría <strong className="text-cyan-300 font-mono">{selectedCategory}</strong>, </>
+                      <>{lang === 'es' ? 'En la categoría' : 'In category'} <strong className="text-cyan-300 font-mono">{selectedCategory}</strong>, </>
                     )}
-                    no existen herramientas registradas con la licencia <strong className="text-emerald-300 font-mono">{selectedLicenseFilter}</strong>.
+                    {lang === 'es'
+                      ? `no existen herramientas registradas con la licencia ${selectedLicenseFilter}.`
+                      : `no tools are registered with license ${selectedLicenseFilter}.`}
                   </p>
                 </div>
                 <button
@@ -1769,7 +1804,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   }}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all cursor-pointer"
                 >
-                  Restablecer filtros (Ver las 10 herramientas)
+                  {t.catalogResetFilters} ({lang === 'es' ? 'Ver todas las herramientas' : 'View all tools'})
                 </button>
               </div>
             ) : (
@@ -1793,7 +1828,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                             {tool.category}
                           </span>
                           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-950 text-emerald-300 border border-emerald-500/30">
-                            Licencia: {tool.license}
+                            {lang === 'es' ? 'Licencia:' : 'License:'} {tool.license}
                           </span>
                         </div>
                         <h3 className="text-xl font-bold text-white mt-2">{tool.name}</h3>
@@ -1812,7 +1847,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                           <span className="text-lg font-extrabold font-mono">{tool.healthScore}/100</span>
                         </div>
                         <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
-                          Health Score
+                          {t.cardHealthScore}
                         </span>
                       </div>
                     </div>
@@ -1823,7 +1858,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     {/* Health Breakdown Bars (15% Commits, 20% Security, 65% Docs/Community) */}
                     <div className="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800/90 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-                        <span>Desglose Ponderado Health Score</span>
+                        <span>{t.cardWeightedBreakdown}</span>
                         <div className="flex items-center gap-1.5">
                           <span className="text-emerald-400 font-bold">RRF #{tool.rrfBaseRank}</span>
                           {tool.rrfScore != null && (
@@ -1835,7 +1870,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       </div>
                       {(tool.lexicalRank != null || tool.vectorRank != null) && (
                         <div className="flex items-center justify-between text-[10px] font-mono px-2 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400">
-                          <span>Ranking Híbrido:</span>
+                          <span>{lang === 'es' ? 'Ranking Híbrido:' : 'Hybrid Ranking:'}</span>
                           <span className="text-cyan-300">
                             FTS: {tool.lexicalRank ? `#${tool.lexicalRank}` : '—'} • Vec: {tool.vectorRank ? `#${tool.vectorRank}` : '—'}
                           </span>
@@ -1843,15 +1878,15 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       )}
                       <div className="grid grid-cols-3 gap-2 text-[11px] font-mono">
                         <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                          <span className="text-slate-400 block">Commits (15%)</span>
+                          <span className="text-slate-400 block">{t.cardCommits}</span>
                           <span className="text-white font-bold">{tool.healthBreakdown.commitVelocity}%</span>
                         </div>
                         <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                          <span className="text-slate-400 block">Seguridad (20%)</span>
+                          <span className="text-slate-400 block">{t.cardSecurity}</span>
                           <span className="text-emerald-300 font-bold">{tool.healthBreakdown.securityStructural}%</span>
                         </div>
                         <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                          <span className="text-slate-400 block">Docs/Com. (65%)</span>
+                          <span className="text-slate-400 block">{t.cardDocs}</span>
                           <span className="text-cyan-300 font-bold">{tool.healthBreakdown.communityDocs}%</span>
                         </div>
                       </div>
@@ -1860,13 +1895,13 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     {/* Standardized Integration Metadata (Triggers & Dependencies) */}
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center justify-between font-mono">
-                        <span className="text-slate-400">Dificultad de Integración:</span>
+                        <span className="text-slate-400">{t.cardDifficulty}</span>
                         <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-200 font-semibold">
                           {tool.integrationDifficulty}
                         </span>
                       </div>
                       <div>
-                        <span className="text-xs font-mono text-slate-400 block mb-1">Disparadores (Triggers):</span>
+                        <span className="text-xs font-mono text-slate-400 block mb-1">{t.cardTriggers}</span>
                         <div className="flex flex-wrap gap-1.5">
                           {tool.triggers.map((trig: string) => (
                             <span
@@ -1899,12 +1934,12 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                         {copiedToolId === tool.id ? (
                           <>
                             <IconCheckVerified className="w-4 h-4 text-emerald-400" />
-                            <span className="text-emerald-300">Comando Docker Copiado</span>
+                            <span className="text-emerald-300">{t.cardDockerCopied}</span>
                           </>
                         ) : (
                           <>
                             <IconTerminalCode className="w-4 h-4 text-cyan-400" />
-                            <span>Copiar Docker Run</span>
+                            <span>{t.cardCopyDocker}</span>
                           </>
                         )}
                       </button>
@@ -1914,7 +1949,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                         onClick={() => setInspectedToolId(tool.id)}
                         className="px-3 py-2.5 rounded-xl text-xs font-mono font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all cursor-pointer"
                       >
-                        Inspeccionar
+                        {t.cardInspect}
                       </button>
                     </div>
 
@@ -1926,10 +1961,10 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     >
                       <span className="flex items-center gap-1.5 truncate">
                         <span>📄</span>
-                        <span>Guía Integración (.md & .pdf) [Win/Mac]</span>
+                        <span>{t.cardIntegrationGuide}</span>
                       </span>
                       <span className="shrink-0 px-2 py-0.5 rounded bg-amber-500/20 text-[10px] font-bold text-amber-300 border border-amber-500/40">
-                        {userSubscription?.status === 'ACTIVE' ? 'DESCARGAR' : 'PRO B2B'}
+                        {userSubscription?.status === 'ACTIVE' ? t.cardDownloadBadge : t.cardProBadge}
                       </span>
                     </button>
                   </div>
@@ -1949,14 +1984,13 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-300 mb-2">
                 <IconAiBrainRag className="w-4 h-4" />
-                <span>Motor Híbrido PostgreSQL pgvector + LangChain + Evaluación RAGAS</span>
+                <span>{t.ragBadge}</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white">
-                Asistente Conversacional de Arquitectura B2B (RAGAssistantChatMock)
+                {t.ragTitle}
               </h2>
               <p className="text-sm text-slate-400 mt-1">
-                Simulación interactiva en tiempo real: recupera repositorios mediante Fusión de Rango Recíproco (RRF) y
-                audita la ausencia total de alucinaciones.
+                {t.ragSubtitle}
               </p>
             </div>
 
@@ -1964,10 +1998,14 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
               <button
                 type="button"
                 onClick={() => setShowSqlQueryModal((prev: boolean) => !prev)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/40 transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/40 transition-all cursor-pointer"
               >
                 <IconTerminalCode className="w-4 h-4" />
-                <span>{showSqlQueryModal ? 'Ocultar SQL Híbrido RRF' : 'Ver SQL Híbrido RRF + halfvec'}</span>
+                <span>
+                  {showSqlQueryModal
+                    ? (lang === 'es' ? 'Ocultar SQL Híbrido RRF' : 'Hide Hybrid SQL RRF')
+                    : (lang === 'es' ? 'Ver SQL Híbrido RRF + halfvec' : 'View Hybrid SQL RRF + halfvec')}
+                </span>
               </button>
             </div>
           </div>
@@ -1977,7 +2015,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <div className="rounded-2xl bg-slate-950 border border-cyan-500/40 p-4 sm:p-6 space-y-3">
               <div className="flex items-center justify-between text-xs font-mono text-cyan-300">
                 <span>
-                  Consulta ejecutada en PostgreSQL (Rama Léxica &apos;simple&apos; + Rama Vectorial HNSW halfvec)
+                  {lang === 'es'
+                    ? "Consulta ejecutada en PostgreSQL (Rama Léxica 'simple' + Rama Vectorial HNSW halfvec)"
+                    : "PostgreSQL query executed (Lexical 'simple' + HNSW halfvec vector branch)"}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">P95: {currentScenario.ragas.latencyMs}ms</span>
               </div>
@@ -1993,7 +2033,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <div className="lg:col-span-4 space-y-5">
               <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
                 <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-slate-300">
-                  1. Seleccionar Caso de Negocio B2B
+                  {t.ragSelectCase}
                 </h3>
                 <div className="space-y-2">
                   {liveRagResponse && (
@@ -2007,7 +2047,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       <div className="flex items-center justify-between text-xs font-mono mb-1">
                         <span className="text-emerald-300 font-bold flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                          Generado en Vivo
+                          {t.ragLiveGenerated}
                         </span>
                         <span className="text-emerald-400">{liveRagResponse.ragas.latencyMs}ms</span>
                       </div>
@@ -2039,7 +2079,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                           </span>
                           <span className="text-emerald-400">{scen.ragas.latencyMs}ms</span>
                         </div>
-                        <p className="text-xs font-semibold leading-snug">{scen.title}</p>
+                        <p className="text-xs font-semibold leading-snug">{getScenarioTitle(scen.id, lang)}</p>
                       </button>
                     );
                   })}
@@ -2051,9 +2091,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-[11px] font-mono uppercase text-emerald-400 block">
-                      Marco de Auditoría Fase 4
+                      {lang === 'es' ? 'Marco de Auditoría B2B' : 'B2B Audit Framework'}
                     </span>
-                    <h3 className="text-sm font-bold text-white">Métricas Cardinales RAGAS</h3>
+                    <h3 className="text-sm font-bold text-white">{t.ragMetricsTitle}</h3>
                   </div>
                   <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                     PASS
@@ -2076,7 +2116,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   <div className="p-3 rounded-xl bg-slate-950 border border-emerald-500/40">
                     <span className="text-emerald-300 block text-[11px]">Faithfulness</span>
                     <span className="text-lg font-bold text-emerald-400">
-                      {(currentScenario.ragas.faithfulness * 100).toFixed(0)}% (Cero Alucinación)
+                      {(currentScenario.ragas.faithfulness * 100).toFixed(0)}% ({lang === 'es' ? 'Cero Alucinación' : 'Zero Hallucination'})
                     </span>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
@@ -2088,8 +2128,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 </div>
 
                 <p className="text-[11px] text-slate-400 font-mono leading-relaxed">
-                  Mitigación Riesgo R3: Si la similitud del coseno cae bajo el umbral seguro (0.78), el prompt detiene
-                  la inferencia antes de inventar dependencias inexistentes.
+                  {lang === 'es'
+                    ? 'Mitigación Riesgo R3: Si la similitud del coseno cae bajo el umbral seguro (0.78), el prompt detiene la inferencia antes de inventar dependencias inexistentes.'
+                    : 'R3 Risk Mitigation: If cosine similarity falls below safety threshold (0.78), inference halts before fabricating non-existent dependencies.'}
                 </p>
               </div>
             </div>
@@ -2123,11 +2164,11 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                       <span className="text-xs font-mono font-bold text-emerald-300">
                         {isSynthesizingRag
-                          ? 'Calculando Fusión de Rango Recíproco (RRF)...'
-                          : 'Mapa de Arquitectura Emitido y Justificado'}
+                          ? (lang === 'es' ? 'Calculando Fusión de Rango Recíproco (RRF)...' : 'Computing Reciprocal Rank Fusion (RRF)...')
+                          : (lang === 'es' ? 'Mapa de Arquitectura Emitido y Justificado' : 'Emitted & Justified Architecture Blueprint')}
                       </span>
                       <span className="text-[11px] font-mono text-slate-400">
-                        Fórmula RRF: 1 / ({rrfConstantK} + rank_lex) + 1 / ({rrfConstantK} + rank_vec)
+                        {lang === 'es' ? 'Fórmula RRF:' : 'RRF Formula:'} 1 / ({rrfConstantK} + rank_lex) + 1 / ({rrfConstantK} + rank_vec)
                       </span>
                     </div>
 
@@ -2167,7 +2208,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                             <h4 className="text-base font-bold text-white">{node.toolName}</h4>
                             <span className="text-[11px] font-mono text-slate-400">
-                              Match Léxico: <strong className="text-slate-200">{node.lexicalMatch}</strong> | Coseno:{' '}
+                              {lang === 'es' ? 'Match Léxico:' : 'Lexical Match:'} <strong className="text-slate-200">{node.lexicalMatch}</strong> | {lang === 'es' ? 'Coseno:' : 'Cosine:'}{' '}
                               <strong className="text-cyan-300">{node.vectorCosine}</strong>
                             </span>
                           </div>
@@ -2175,7 +2216,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                           <p className="text-xs text-slate-300 leading-relaxed">{node.rationale}</p>
 
                           <div className="pt-1 flex items-center gap-2 text-[11px] font-mono text-amber-300">
-                            <span>🔗 Trigger de Integración:</span>
+                            <span>🔗 {lang === 'es' ? 'Trigger de Integración:' : 'Integration Trigger:'}</span>
                             <span className="text-slate-300">{node.integrationTrigger}</span>
                           </div>
                         </div>
@@ -2200,7 +2241,11 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                         type="text"
                         value={ragInputText}
                         onChange={(e) => setRagInputText(e.target.value)}
-                        placeholder="Escribe otra necesidad de negocio (ej: 'SaaS multi-tenant con login LDAP y facturación')..."
+                        placeholder={
+                          lang === 'es'
+                            ? "Escribe otra necesidad de negocio (ej: 'SaaS multi-tenant con login LDAP y facturación')..."
+                            : "Enter another business requirement (e.g., 'Multi-tenant SaaS with LDAP login and billing')..."
+                        }
                         className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none font-mono"
                       />
                     </div>
@@ -2212,12 +2257,12 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       {isSynthesizingRag ? (
                         <>
                           <span className="w-3 h-3 rounded-full border-2 border-slate-950 border-t-transparent animate-spin" />
-                          <span>Sintetizando...</span>
+                          <span>{t.ragGenerating}</span>
                         </>
                       ) : (
                         <>
                           <IconAiBrainRag className="w-4 h-4" />
-                          <span>Consultar al Arquitecto</span>
+                          <span>{t.ragGenerateButton}</span>
                         </>
                       )}
                     </button>
@@ -3338,13 +3383,13 @@ ${inspectedGuideTool.dockerCommand}
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
             <span className="text-slate-200 font-semibold">
-              DICTAMEN AUDITORÍA PMO & FRONTEND: APROBADO SIN RESERVAS (10/10 Checkpoints)
+              {t.footerAudit}
             </span>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-2 text-right sm:text-left">
-            <span>© 2026 <strong className="text-slate-200">OSS Atlas</strong> · Una iniciativa de <strong className="text-cyan-400">Iotdico</strong></span>
+            <span>© 2026 <strong className="text-slate-200">OSS Atlas</strong> · {lang === 'es' ? 'Una iniciativa de' : 'An initiative by'} <strong className="text-cyan-400">Iotdico</strong></span>
             <span className="hidden sm:inline">•</span>
-            <span>Creado por <strong className="text-slate-200">EdisonPEÑA</strong> (<a href="https://ossatlas.iotdico.com" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">ossatlas.iotdico.com</a>)</span>
+            <span>{lang === 'es' ? 'Creado por' : 'Created by'} <strong className="text-slate-200">EdisonPEÑA</strong> (<a href="https://ossatlas.iotdico.com" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">ossatlas.iotdico.com</a>)</span>
           </div>
         </div>
       </footer>
