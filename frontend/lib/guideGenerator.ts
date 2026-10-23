@@ -418,13 +418,13 @@ export async function downloadPdfGuide(tool: GuideToolData, lang: Language): Pro
   // Section: Technical Description
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(226, 232, 240); // slate-200
+  doc.setTextColor(15, 23, 42); // slate-900 for high-contrast print
   doc.text(isEs ? '1. Descripción Técnica del Repositorio' : '1. Repository Technical Description', margin, y);
   y += 5;
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
-  doc.setTextColor(148, 163, 184); // slate-400
+  doc.setTextColor(51, 65, 85); // slate-700
   const splitDesc = doc.splitTextToSize(desc, contentWidth);
   doc.text(splitDesc, margin, y);
   y += splitDesc.length * 4.5 + 4;
@@ -466,13 +466,13 @@ export async function downloadPdfGuide(tool: GuideToolData, lang: Language): Pro
     checkPageBreak(35);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9.5);
-    doc.setTextColor(226, 232, 240);
+    doc.setTextColor(30, 41, 59); // slate-800
     doc.text(step.title, margin, y);
     y += 4.5;
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
-    doc.setTextColor(148, 163, 184);
+    doc.setTextColor(71, 85, 105); // slate-600
     const splitStepDesc = doc.splitTextToSize(step.description, contentWidth);
     doc.text(splitStepDesc, margin, y);
     y += splitStepDesc.length * 4 + 2;
@@ -521,13 +521,13 @@ export async function downloadPdfGuide(tool: GuideToolData, lang: Language): Pro
     checkPageBreak(35);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9.5);
-    doc.setTextColor(226, 232, 240);
+    doc.setTextColor(30, 41, 59); // slate-800
     doc.text(step.title, margin, y);
     y += 4.5;
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
-    doc.setTextColor(148, 163, 184);
+    doc.setTextColor(71, 85, 105); // slate-600
     const splitMacDesc = doc.splitTextToSize(step.description, contentWidth);
     doc.text(splitMacDesc, margin, y);
     y += splitMacDesc.length * 4 + 2;
@@ -568,7 +568,7 @@ export async function downloadPdfGuide(tool: GuideToolData, lang: Language): Pro
   checkPageBreak(35);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(226, 232, 240);
+  doc.setTextColor(15, 23, 42); // slate-900
   doc.text(isEs ? '4. Recomendaciones de Seguridad para Producción' : '4. Production Security Hardening Recommendations', margin, y);
   y += 6;
 
@@ -589,8 +589,8 @@ export async function downloadPdfGuide(tool: GuideToolData, lang: Language): Pro
   for (const point of securityPoints) {
     checkPageBreak(12);
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(148, 163, 184);
+    doc.setFontSize(8.5);
+    doc.setTextColor(51, 65, 85); // slate-700
     const splitPoint = doc.splitTextToSize(point, contentWidth);
     doc.text(splitPoint, margin, y);
     y += splitPoint.length * 4 + 2;

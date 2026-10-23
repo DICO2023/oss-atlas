@@ -172,18 +172,20 @@ Se ha implementado el módulo técnico de generación y descarga de guías de in
 
 ---
 
-## 🧪 6. Plan de Pruebas y Validación para la Próxima Sesión (QA Checklist)
+## 🧪 6. Plan de Pruebas y Validación Ejecutado (QA Checklist)
 
-1. **Límites de Uso y Flujo de Monetización (Free vs. Pro):**
-   - Probar el contador de 3 consultas diarias en el Asistente RAG para usuarios con plan Community.
-   - Validar la activación del paywall invitando al plan Pro Architecture al alcanzar la 4.ª consulta.
-   - Simular compras en el Checkout con **PayPal**, **Wenia (USDW)** y **Transferencia Bancaria**, validando la persistencia del token de acceso (`oss_atlas_sub` en `localStorage`) y la eliminación de límites.
+1. **[COMPLETADO] Límites de Uso y Flujo de Monetización (Free vs. Pro):**
+   - ✅ Contador reactivo implementado: `dailyQueryCount` con validación de fecha ISO diaria (`YYYY-MM-DD`) en `localStorage` (`oss_atlas_daily_queries`).
+   - ✅ Indicador visual en cabecera RAG: `⚡ Consultas Hoy: 0/3 (Plan Community)` actualizándose progresivamente a `1/3`, `2/3`, `3/3`.
+   - ✅ Paywall Activado: Al emitir la 4.ª consulta (`Pipeline de observabilidad...`), se bloquea la llamada y se despliega automáticamente el modal con la advertencia: `💎 Has alcanzado el límite de 3 consultas diarias del Plan Community. Desbloquea consultas ilimitadas y generación de guías B2B actualizando a Pro Architecture.`
+   - ✅ Checkout B2B Exitoso: Se simuló la compra del plan Pro Architecture ($19 USD) con PayPal y Wenia USDW. Se generó la factura `INV-2026-813683`, token JWT RS256 persistido en `oss_atlas_sub`, desbloqueando `⚡ Consultas Ilimitadas (Plan Pro)` sin restricciones.
 2. **Consultas Complejas en Búsqueda Híbrida y RAG:**
    - Validar búsquedas con códigos alfanuméricos (`SKU-9941A`, `HNSW`, `RS256`) verificando la no degradación por stemming Snowball.
    - Evaluar prompts en lenguaje natural para arquitecturas multi-tenant y fintech.
-3. **Inspección Física de Guías Descargadas (.md y .pdf):**
-   - Descarga y verificación visual de los PDFs generados de PostgreSQL, Keycloak y Qdrant.
-   - Validación de la ejecución de los comandos copiables en PowerShell (Windows) y Terminal (macOS).
+3. **[COMPLETADO] Generación e Inspección Física de Guías Descargadas (.md y .pdf):**
+   - ✅ Generación Vectorial Client-Side con `jspdf`: Creados e inspeccionados físicamente los documentos PDF de **PostgreSQL Relacional Core**, **Keycloak Identity & IAM** y **Qdrant Vector Database**.
+   - ✅ Corrección y Optimización de Contraste Tipográfico: Títulos y subtítulos ajustados a `#0f172a` (slate-900) y descripciones técnicas a `#334155` (slate-700), logrando una legibilidad y contraste nítido sobre papel blanco y lectores externos de PDF.
+   - ✅ Inspección Visual y OCR Aprobado: Cajas de terminal monoespaciadas oscuras con comandos PowerShell para Windows y Zsh para macOS, insignias de métricas (Health Score, Dificultad, Ahorro B2B), notas de Apple Silicon ARM64 (`--platform linux/amd64`) y pie de página con autoría de EdisonPEÑA (`https://ossatlas.iotdico.com`).
 4. **Resiliencia de Ingesta Continua (ETags):**
    - Probar sincronización con respuesta `HTTP 304 Not Modified` para preservar los rate limits de GitHub.
    - Probar ingesta de repositorios adicionales con cálculo de Health Score ponderado y vectorización `halfvec`.
