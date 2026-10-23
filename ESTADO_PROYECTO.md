@@ -229,8 +229,17 @@ Módulo técnico de generación y descarga de guías de integración para cada u
      - Repositorio de prueba ingerido con métricas: Commits 96, Seguridad 98, Docs 94.
      - Cálculo de Health Score validado con la fórmula exacta: $(0.15 \times 96) + (0.20 \times 98) + (0.65 \times 94) = 95.10$.
      - Vector semántico `halfvec(1536)` persistido exitosamente en Neon PostgreSQL y validado en búsqueda híbrida RRF con score `0.0328`.
-5. **Auditoría Responsiva Multi-Dispositivo:**
-   - Validación en viewports móviles (375px / 390px) frente a pantallas de escritorio (1080p / 2K).
+5. **[COMPLETADO] Auditoría Responsiva Multi-Dispositivo y Cross-Browser:**
+   - ✅ **Validación Matemática de Cero Desbordamiento Horizontal:**
+     - Evaluados 5 viewports con Puppeteer / Chrome CDP (`document.documentElement.scrollWidth <= clientWidth`):
+       - **Mobile XS (375x667 - iPhone SE):** `scrollWidth: 375px <= 375px` (0 px exceso). Captura: [Mobile_XS_375px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Mobile_XS_375px.png) (220 KB).
+       - **Mobile Modern (390x844 - iPhone 14/15 Pro):** `scrollWidth: 390px <= 390px` (0 px exceso). Captura: [Mobile_Modern_390px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Mobile_Modern_390px.png) (547 KB).
+       - **Tablet Portrait (768x1024 - iPad):** `scrollWidth: 768px <= 768px` (0 px exceso). Captura: [Tablet_Portrait_768px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Tablet_Portrait_768px.png) (503 KB).
+       - **Desktop FHD (1920x1080 - 1080p):** `scrollWidth: 1920px <= 1920px` (0 px exceso). Captura: [Desktop_FHD_1920px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Desktop_FHD_1920px.png) (266 KB).
+       - **Desktop 2K (2560x1440 - Wide Display):** `scrollWidth: 2560px <= 2560px` (0 px exceso). Contenido acotado en `max-w-7xl` con márgenes balanceados. Captura: [Desktop_2K_2560px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Desktop_2K_2560px.png) (402 KB).
+   - ✅ **Optimización Táctil en Navbar y Modales:**
+     - En pantallas compactas (< 640px), el botón de ingesta conmuta a insignia compacta `ETag` y el logo adapta padding (`px-3`, `gap-2`), impidiendo desbordes.
+     - Inspección táctil del **Modal de Guía de Integración** en viewport de 375px validada exitosamente. Captura: [Mobile_375px_Modal_Guia.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Mobile_375px_Modal_Guia.png) (112 KB).
 
 ---
 
