@@ -33,5 +33,27 @@ export async function GET(request: NextRequest) {
      ORDER BY health_score DESC LIMIT $${values.length}`,
     values
   );
-  return NextResponse.json(rows);
+  // Cálculo determinista de ETag agregado para negociación de caché HTTP 304
+  const etagFingerprint = rows.map((r: { slug: string; etag?: string | null; health_score: number | string }) => `${r.slug}:${r.etag || r.health_score}`).join("|");
+  const catalogEtag = `W/"catalog-${rows.length}-${Buffer.from(etagFingerprint).toString("base64").slice(0, 24)}"`;
+
+  const ifNoneMatch = request.headers.get("if-none-match");
+  if (ifNoneMatch && (ifNoneMatch === catalogEtag || ifNoneMatch.includes(catalogEtag))) {
+    return new NextResponse(null, {
+      status: 304,
+      headers: {
+        ETag: catalogEtag,
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "X-Catalog-Count": String(rows.length),
+      },
+    });
+  }
+
+  return NextResponse.json(rows, {
+    headers: {
+      ETag: catalogEtag,
+      "Cache-Control": "public, max-age=0, must-revalidate",
+      "X-Catalog-Count": String(rows.length),
+    },
+  });
 }

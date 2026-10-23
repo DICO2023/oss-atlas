@@ -217,9 +217,18 @@ Módulo técnico de generación y descarga de guías de integración para cada u
      - **macOS:** Preparación con Homebrew y Colima (`colima start --cpu 4 --memory 4`), compatibilidad Apple Silicon ARM64, `export ...` y healthcheck con `curl`.
    - ✅ **Checklist de Seguridad y Créditos de Autoría:**
      - Aislamiento de red puente, permisos estrictos `chmod 600` en `.env`, políticas de respaldos y pie de página oficial de `EdisonPEÑA (https://ossatlas.iotdico.com)`.
-4. **Resiliencia de Ingesta Continua (ETags):**
-   - Probar sincronización con respuesta `HTTP 304 Not Modified` para preservar los rate limits de GitHub.
-   - Probar ingesta de repositorios adicionales con cálculo de Health Score ponderado y vectorización `halfvec`.
+4. **[COMPLETADO] Resiliencia de Ingesta Continua (ETags):**
+   - ✅ **Negociación de Caché HTTP 304 Not Modified en `GET /api/v1/catalog`:**
+     - Cálculo determinista de ETag agregado (`W/"catalog-25-..."`) basado en el fingerprint de herramientas y health scores.
+     - Petición con `If-None-Match: <etag>` responde inmediatamente con `HTTP 304 Not Modified` y cuerpo vacío (0 bytes), protegiendo ancho de banda y latencia.
+   - ✅ **Negociación de Presets en `GET /api/v1/catalog/sync`:**
+     - ETag `W/"sync-presets-4"` validado con respuesta `HTTP 304 Not Modified`.
+   - ✅ **Protección de Rate Limits en Ingesta `POST /api/v1/catalog/sync`:**
+     - Al re-sincronizar un repositorio enviando su ETag activo (`W/"sync-zitadel-zitadel-..."`), la API detecta que el contenido no ha mutado y responde `HTTP 304 Not Modified` con la cabecera `X-Sync-Status: Not Modified - GitHub Rate-Limit Protected`.
+   - ✅ **Ingesta Continua con Cálculo Ponderado & Vectorización `halfvec(1536)`:**
+     - Repositorio de prueba ingerido con métricas: Commits 96, Seguridad 98, Docs 94.
+     - Cálculo de Health Score validado con la fórmula exacta: $(0.15 \times 96) + (0.20 \times 98) + (0.65 \times 94) = 95.10$.
+     - Vector semántico `halfvec(1536)` persistido exitosamente en Neon PostgreSQL y validado en búsqueda híbrida RRF con score `0.0328`.
 5. **Auditoría Responsiva Multi-Dispositivo:**
    - Validación en viewports móviles (375px / 390px) frente a pantallas de escritorio (1080p / 2K).
 

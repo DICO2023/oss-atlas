@@ -219,6 +219,25 @@ export async function POST(request: NextRequest) {
 
     const data = parsed.data;
 
+    // Negociación de Caché ETag para preservación de Rate Limits
+    const ifNoneMatch = request.headers.get("if-none-match");
+    if (ifNoneMatch && "slug" in data) {
+      const pool = getPool();
+      const existing = await pool.query(
+        "SELECT etag, name, slug FROM oss_repositories WHERE slug = $1",
+        [data.slug]
+      );
+      if (existing.rows.length > 0 && existing.rows[0].etag && (existing.rows[0].etag === ifNoneMatch || ifNoneMatch.includes(existing.rows[0].etag))) {
+        return new NextResponse(null, {
+          status: 304,
+          headers: {
+            ETag: existing.rows[0].etag,
+            "X-Sync-Status": "Not Modified - GitHub Rate-Limit Protected",
+          },
+        });
+      }
+    }
+
     // Acción 1: Reindexar toda la base de datos (recalcula embeddings y health scores)
     if ("action" in data && data.action === "reindex_all") {
       const pool = getPool();
@@ -322,19 +341,39 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * GET /api/v1/catalog/sync — Devuelve los presets disponibles para sincronización rápida
+ * GET /api/v1/catalog/sync — Devuelve los presets disponibles para sincronización rápida con ETag
  */
-export async function GET() {
-  return NextResponse.json({
-    presets: PRESET_REPOSITORIES.map((p) => ({
-      name: p.name,
-      slug: p.slug,
-      category: p.category,
-      license: p.license,
-      stars: p.stars,
-      description: p.description,
-      triggers: p.triggers,
-      dependencies: p.dependencies,
-    })),
-  });
+export async function GET(request: NextRequest) {
+  const presetsEtag = `W/"sync-presets-${PRESET_REPOSITORIES.length}"`;
+  const ifNoneMatch = request.headers.get("if-none-match");
+  if (ifNoneMatch && (ifNoneMatch === presetsEtag || ifNoneMatch.includes(presetsEtag))) {
+    return new NextResponse(null, {
+      status: 304,
+      headers: {
+        ETag: presetsEtag,
+        "Cache-Control": "public, max-age=0, must-revalidate",
+      },
+    });
+  }
+
+  return NextResponse.json(
+    {
+      presets: PRESET_REPOSITORIES.map((p) => ({
+        name: p.name,
+        slug: p.slug,
+        category: p.category,
+        license: p.license,
+        stars: p.stars,
+        description: p.description,
+        triggers: p.triggers,
+        dependencies: p.dependencies,
+      })),
+    },
+    {
+      headers: {
+        ETag: presetsEtag,
+        "Cache-Control": "public, max-age=0, must-revalidate",
+      },
+    }
+  );
 }
