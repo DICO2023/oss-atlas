@@ -1564,7 +1564,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden">
       {/* Subtle Ambient High-Tech Grid Background */}
       <div
         className="fixed inset-0 pointer-events-none opacity-25"
@@ -1576,18 +1576,18 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
       {/* Sticky Top Navbar */}
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 via-slate-900 to-emerald-500/20 border border-cyan-500/40 flex items-center justify-center shadow-lg shadow-cyan-500/10">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 via-slate-900 to-emerald-500/20 border border-cyan-500/40 flex items-center justify-center shadow-lg shadow-cyan-500/10 shrink-0">
               <IconCpuArchitecture className="w-5 h-5 text-cyan-400" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold tracking-tight text-lg text-white">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-extrabold tracking-tight text-base sm:text-lg text-white">
                   OSS Atlas
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
                   {t.brandTag}
                 </span>
               </div>
@@ -1641,13 +1641,13 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           </nav>
 
           {/* CTA with Active State */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             {/* Language Switcher ES / EN */}
             <button
               type="button"
               onClick={toggleLanguage}
               title={lang === 'es' ? 'Switch to English' : 'Cambiar a Español'}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-bold bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400 text-slate-200 transition-all cursor-pointer shadow-sm"
+              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-mono font-bold bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400 text-slate-200 transition-all cursor-pointer shadow-sm"
             >
               <span>{lang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN'}</span>
             </button>
@@ -1657,7 +1657,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
               type="button"
               onClick={() => handleOpenCheckout(userSubscription?.planId || 'PRO_ARCHITECTURE')}
               title={userSubscription?.status === 'ACTIVE' ? 'Gestionar Suscripción B2B' : 'Desbloquear Capacidades Pro'}
-              className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 sm:py-2.5 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer ${
                 userSubscription?.status === 'ACTIVE'
                   ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-amber-500/50 text-amber-300 shadow-lg shadow-amber-950/30'
                   : 'bg-slate-900/90 hover:bg-slate-800 border-amber-500/30 text-amber-300/90 hover:border-amber-400'
@@ -1678,19 +1678,22 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 setSyncFeedback(null);
               }}
               title="Abrir Pipeline de Ingesta Continua & Sincronización"
-              className={`group relative inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-mono font-semibold border transition-all duration-200 cursor-pointer ${
+              className={`group relative inline-flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-mono font-semibold border transition-all duration-200 cursor-pointer ${
                 isPipelineSyncActive
                   ? 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300 shadow-lg shadow-emerald-500/10 hover:border-emerald-400'
                   : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-cyan-500/40'
               }`}
             >
               <span
-                className={`w-2.5 h-2.5 rounded-full ${
+                className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${
                   isPipelineSyncActive ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'
                 }`}
               />
-              <span>
+              <span className="hidden sm:inline">
                 {isPipelineSyncActive ? t.navSyncActive : t.navSyncCache}
+              </span>
+              <span className="sm:hidden text-[11px]">
+                ETag
               </span>
             </button>
           </div>
