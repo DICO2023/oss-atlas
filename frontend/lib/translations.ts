@@ -207,6 +207,11 @@ export const TRANSLATIONS = {
     guidePlatformTabsWin: 'Windows (PowerShell / WSL2)',
     guidePlatformTabsMac: 'macOS (Terminal / Homebrew)',
     guideProUnlocked: '✓ Descarga habilitada con tu plan Pro Architect',
+    ragDailyQueriesBadge: 'Consultas Hoy:',
+    ragDailyQueriesLimit: '3 max (Plan Community)',
+    ragUnlimitedQueriesBadge: '⚡ Consultas Ilimitadas (Plan Pro)',
+    ragDailyLimitReachedNotice: 'Has alcanzado el límite de 3 consultas diarias del Plan Community. Desbloquea consultas ilimitadas y generación de guías B2B actualizando a Pro Architecture.',
+    guideDownloadProNotice: 'La descarga de guías ejecutivas en PDF y Markdown está disponible con el plan Pro Architecture. Puedes revisar las instrucciones completas en pantalla o desbloquear la descarga en 1 clic.',
 
     // Ingest Modal
     ingestModalTitle: 'Módulo de Ingesta Continua & Resiliencia ETag',
@@ -428,6 +433,11 @@ export const TRANSLATIONS = {
     guidePlatformTabsWin: 'Windows (PowerShell / WSL2)',
     guidePlatformTabsMac: 'macOS (Terminal / Homebrew)',
     guideProUnlocked: '✓ Downloads enabled with your Pro Architect plan',
+    ragDailyQueriesBadge: "Today's Queries:",
+    ragDailyQueriesLimit: '3 max (Community Plan)',
+    ragUnlimitedQueriesBadge: '⚡ Unlimited Queries (Pro Plan)',
+    ragDailyLimitReachedNotice: 'You have reached the 3 daily query limit of the Community Plan. Unlock unlimited queries and B2B integration guides by upgrading to Pro Architecture.',
+    guideDownloadProNotice: 'Executive PDF and Markdown downloads are available with the Pro Architecture plan. You can view full instructions on screen or unlock downloads in 1 click.',
 
     // Ingest Modal
     ingestModalTitle: 'Continuous Ingestion & ETag Resilience Module',

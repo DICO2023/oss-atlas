@@ -759,6 +759,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
     expiresAt?: string;
   } | null>(null);
 
+  const [dailyQueryCount, setDailyQueryCount] = useState<number>(0);
+
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState<boolean>(false);
   const [selectedCheckoutPlan, setSelectedCheckoutPlan] = useState<'PRO_ARCHITECTURE' | 'ENTERPRISE_HUB'>('PRO_ARCHITECTURE');
   const [pricingCycle, setPricingCycle] = useState<'monthly' | 'annual'>('monthly');
@@ -890,6 +892,20 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
       const stored = localStorage.getItem('oss_atlas_sub');
       if (stored) {
         setUserSubscription(JSON.parse(stored));
+      }
+      const today = new Date().toISOString().slice(0, 10);
+      const storedQuota = localStorage.getItem('oss_atlas_daily_queries');
+      if (storedQuota) {
+        const parsed = JSON.parse(storedQuota);
+        if (parsed.date === today) {
+          setDailyQueryCount(Number(parsed.count) || 0);
+        } else {
+          localStorage.setItem('oss_atlas_daily_queries', JSON.stringify({ date: today, count: 0 }));
+          setDailyQueryCount(0);
+        }
+      } else {
+        localStorage.setItem('oss_atlas_daily_queries', JSON.stringify({ date: today, count: 0 }));
+        setDailyQueryCount(0);
       }
     } catch (e) {
       console.warn('No se pudo recuperar suscripción previa o idioma:', e);
@@ -1204,6 +1220,37 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
   // Request live architecture synthesis from /api/v1/rag/architecture
   const requestRagArchitecture = async (promptText: string) => {
+    // Check quota for Community users
+    const isPro = userSubscription?.status === 'ACTIVE';
+    if (!isPro) {
+      const today = new Date().toISOString().slice(0, 10);
+      let currentCount = dailyQueryCount;
+      try {
+        const storedQuota = localStorage.getItem('oss_atlas_daily_queries');
+        if (storedQuota) {
+          const parsed = JSON.parse(storedQuota);
+          if (parsed.date === today) {
+            currentCount = Number(parsed.count) || 0;
+          }
+        }
+      } catch (e) {
+        console.warn('Error validando cuota:', e);
+      }
+
+      if (currentCount >= 3) {
+        handleOpenCheckout('PRO_ARCHITECTURE', t.ragDailyLimitReachedNotice);
+        return;
+      }
+
+      const nextCount = currentCount + 1;
+      setDailyQueryCount(nextCount);
+      try {
+        localStorage.setItem('oss_atlas_daily_queries', JSON.stringify({ date: today, count: nextCount }));
+      } catch (e) {
+        console.warn('Error guardando cuota:', e);
+      }
+    }
+
     setIsSynthesizingRag(true);
     setCustomBusinessQuery(promptText);
     setActiveNavTab('RAG_ARCHITECT');
@@ -2010,6 +2057,22 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             </div>
 
             <div className="flex flex-wrap items-center gap-2.5">
+              {/* Daily Quota Indicator */}
+              {userSubscription?.status === 'ACTIVE' ? (
+                <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs font-mono text-emerald-300 font-bold shadow-sm">
+                  <span>⚡</span>
+                  <span>{t.ragUnlimitedQueriesBadge}</span>
+                </div>
+              ) : (
+                <div
+                  id="rag-quota-badge"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/40 text-xs font-mono text-amber-300 font-semibold shadow-sm"
+                >
+                  <span>⚡</span>
+                  <span>{t.ragDailyQueriesBadge} <strong className="text-white">{dailyQueryCount}/3</strong> ({t.ragDailyQueriesLimit})</span>
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={() => setShowSqlQueryModal((prev: boolean) => !prev)}
@@ -3405,15 +3468,30 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
             {/* Download Buttons (.md and .pdf) */}
             <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
-              <span className="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
-                <span>✓</span>
-                <span>{t.guideProUnlocked}</span>
+              <span className="text-xs font-mono flex items-center gap-1.5">
+                {userSubscription?.status === 'ACTIVE' ? (
+                  <span className="text-emerald-400 flex items-center gap-1.5">
+                    <span>✓</span>
+                    <span>{t.guideProUnlocked}</span>
+                  </span>
+                ) : (
+                  <span className="text-amber-400 flex items-center gap-1.5">
+                    <span>💎</span>
+                    <span>{lang === 'es' ? 'Requiere Plan Pro para descarga oficial' : 'Requires Pro Plan for official download'}</span>
+                  </span>
+                )}
               </span>
 
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => downloadMarkdownGuide(inspectedGuideTool, lang)}
+                  onClick={() => {
+                    if (userSubscription?.status !== 'ACTIVE') {
+                      handleOpenCheckout('PRO_ARCHITECTURE', t.guideDownloadProNotice);
+                      return;
+                    }
+                    downloadMarkdownGuide(inspectedGuideTool, lang);
+                  }}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 transition-all cursor-pointer shadow-md"
                 >
                   <span>{t.guideDownloadMd}</span>
@@ -3423,6 +3501,10 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   type="button"
                   disabled={isGeneratingPdf}
                   onClick={async () => {
+                    if (userSubscription?.status !== 'ACTIVE') {
+                      handleOpenCheckout('PRO_ARCHITECTURE', t.guideDownloadProNotice);
+                      return;
+                    }
                     try {
                       setIsGeneratingPdf(true);
                       await downloadPdfGuide(inspectedGuideTool, lang);
