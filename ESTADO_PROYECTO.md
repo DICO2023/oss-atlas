@@ -102,12 +102,17 @@ npm run dev
 - **Transferencia Bancaria Empresarial:** Opción corporativa con solicitud de RUT y emisión de factura electrónica/proforma.
 - **Endpoint Backend:** `POST /api/v1/checkout` y `GET /api/v1/checkout` con validación Zod, emisión de facturas proforma (`INV-2026-XXXXXX`) y generación de token criptográfico B2B (`proAccessToken`).
 
-### 4.2. Soporte Bilingüe Completo (Español / Inglés)
-- Diccionario unificado implementado en [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) con soporte para:
-  - Navegación, Hero, Filtros, Estados y Estadísticas.
-  - Modal de Checkout, Planes B2B y Pasarelas de Pago.
-  - Modal de Ingesta Continua, Asistente RAG y Auditoría RAGAS.
-- Selector de idioma en el Header (**`🇪🇸 ES`** / **`🇺🇸 EN`**) con persistencia en `localStorage`.
+### 4.2. Soporte Bilingüe Completo (Español / Inglés) - Vinculación Integral
+- Diccionario unificado implementado en [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) con soporte exhaustivo:
+  - **Header & Navegación:** Títulos, enlaces de navegación, botón de suscripción Pro y estado de ingesta.
+  - **Hero & Barra Interactiva:** Título principal dinámico, subtítulo con énfasis técnico, placeholder de búsqueda, botón de generación RAG, pie de telemetría (FTS 'simple', halfvec/float32, k=60) y barra de 4 métricas ejecutivas.
+  - **Explorador de Categorías (CategoriesGrid):** Nombres y descripciones de las 4 capas (AUTH, DBS, PAYMENTS, AI), botón de "Todas las categorías" y conteo de repositorios.
+  - **Catálogo & Filtros:** Título, subtítulo, selector de licencias (MIT / Apache-2.0 / Todas), botón de sincronización, barra de búsqueda híbrida RRF, sugerencias de búsqueda rápida y avisos de estado vacío.
+  - **Fichas Técnicas del Catálogo:** Licencia, Health Score con desglose ponderado (Commits 15%, Seguridad 20%, Docs 65%), ranking híbrido, dificultad de integración, disparadores (triggers), botones de copiar Docker run, inspección y botón de descarga de Guía de Integración (.md & .pdf).
+  - **Asistente Conversacional RAG:** Badge, título, subtítulo, selector de escenarios de negocio, panel de métricas cardinales RAGAS (Precision, Recall, Faithfulness 100%, Relevance), mapa de arquitectura emitido, triggers de integración y formulario de consulta interactiva.
+  - **Modal de Checkout & Planes B2B:** Precios, ciclos mensual/anual, descuentos, desglose tributario, métodos de pago (PayPal, Wenia USDW, Transferencia) y confirmación con token corporativo.
+  - **Pie de Página (Footer):** Dictamen de auditoría y créditos oficiales de autoría.
+- Selector de idioma en el Header (**`🇪🇸 ES`** / **`🇺🇸 EN`**) con persistencia en `localStorage`. Al pulsar el botón, el 100% de la interfaz conmuta instantáneamente sin recargar la página.
 
 ### 4.3. Depuración Visual y de Marca (Atención a Documento de Sugerencias)
 - **Página 1 del Documento:**
