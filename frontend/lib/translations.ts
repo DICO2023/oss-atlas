@@ -417,9 +417,9 @@ export function getDifficultyLabel(diff: string, lang: Language): string {
 export function getSavingsLabel(savings: string, lang: Language): string {
   if (lang === 'es' || !savings) return savings;
   return savings
-    .replace(/USD \/ mes vs Cloud Propietario/gi, 'USD / mo vs Proprietary Cloud')
-    .replace(/USD \/ mes en licencias MAU B2B/gi, 'USD / mo in B2B MAU licenses')
-    .replace(/USD \/ mes vs SaaS Search Engines/gi, 'USD / mo vs SaaS Search Engines')
-    .replace(/Reducción de 1\.4% en tasas de fallo transaccional/gi, '1.4% reduction in transactional failure rates');
+    .replace('USD / mes vs Cloud Propietario', 'USD / mo vs Proprietary Cloud')
+    .replace('USD / mes en licencias MAU B2B', 'USD / mo in B2B MAU licenses')
+    .replace('USD / mes vs SaaS Search Engines', 'USD / mo vs SaaS Search Engines')
+    .replace('Reducción de 1.4% en tasas de fallo transaccional', '1.4% reduction in transactional failure rates');
 }
 
