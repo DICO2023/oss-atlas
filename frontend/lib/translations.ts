@@ -166,6 +166,9 @@ export const TRANSLATIONS = {
     guideMacStep: '🍎 Paso a Paso para macOS (Terminal / Homebrew / Colima o OrbStack)',
     guideDownloadMd: '📥 Descargar .MD',
     guideDownloadPdf: '📥 Descargar .PDF',
+    guideGeneratingPdf: '⏳ Generando PDF...',
+    guidePlatformTabsWin: 'Windows (PowerShell / WSL2)',
+    guidePlatformTabsMac: 'macOS (Terminal / Homebrew)',
     guideProUnlocked: '✓ Descarga habilitada con tu plan Pro Architect',
 
     // Ingest Modal
@@ -347,6 +350,9 @@ export const TRANSLATIONS = {
     guideMacStep: '🍎 Step-by-Step for macOS (Terminal / Homebrew / Colima or OrbStack)',
     guideDownloadMd: '📥 Download .MD',
     guideDownloadPdf: '📥 Download .PDF',
+    guideGeneratingPdf: '⏳ Generating PDF...',
+    guidePlatformTabsWin: 'Windows (PowerShell / WSL2)',
+    guidePlatformTabsMac: 'macOS (Terminal / Homebrew)',
     guideProUnlocked: '✓ Downloads enabled with your Pro Architect plan',
 
     // Ingest Modal

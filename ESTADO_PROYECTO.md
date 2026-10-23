@@ -142,25 +142,33 @@ npm run dev
 
 ---
 
-## 🛠️ 5. Próximo Paso Inmediato: Generador de Guías de Integración (.md & .pdf) para Windows y Mac
+## 🛠️ 5. Funcionalidad Implementada: Generador de Guías de Integración (.md & .pdf) para Windows y macOS
 
-Cada vez que un usuario defina o consulte una herramienta de open source en el catálogo:
-1. **Contenido Técnico Paso a Paso Adaptativo:**
-   - **Windows:** Guía detallada usando PowerShell / WSL2 (Ubuntu), variables de entorno con `[System.Environment]`, configuración de Docker Desktop y scripts `.ps1`.
-   - **macOS:** Guía detallada usando Homebrew (`brew install`), Terminal (Zsh), Colima/OrbStack o Docker Desktop, y variables en `.zshrc`.
-2. **Formatos de Descarga:**
-   - **Archivo `.md` (Markdown estructurado):** Descarga directa para que el desarrollador lo incorpore en sus repositorios o notas de ingeniería.
-   - **Archivo `.pdf` (Documento imprimible/ejecutivo con diseño B2B):** Formato profesional con encabezado oficial `OSS Atlas`, tablas de configuración y comandos listos para copiar.
-3. **Puntos de Activación:**
-   - Botón directo en la tarjeta de cada herramienta en el Catálogo B2B.
-   - Botón de exportación en el Asistente RAG al recomendar una arquitectura con herramientas específicas.
+Se ha implementado el módulo técnico de generación y descarga de guías de integración para cada una de las herramientas del catálogo y arquitecturas RAG:
+
+1. **Módulo de Generación Técnica ([guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts)):**
+   - **Windows:** Comandos PowerShell nativos, validación y arranque de WSL2 (`wsl --status`), variables de sesión (`$env:...`), persistencia de volúmenes en `$HOME\oss-atlas-data` y pruebas de endpoints con `Invoke-RestMethod`.
+   - **macOS:** Preparación con Homebrew y Colima (`colima start --cpu 4 --memory 4`), emulación multi-arquitectura Apple Silicon ARM64 (`--platform linux/amd64`), variables en Zsh (`export ...`) y pruebas con `curl`.
+   - **Solución de Problemas (Troubleshooting):** Reglas de firewall de Windows Defender, exclusión de puertos Hyper-V (`netsh`), y permisos de puertos privilegiados en macOS.
+   - **Lista de Verificación de Seguridad en Producción:** Aislamiento de redes puente, gestión de secretos en `.env` (permisos 600), respaldos de volúmenes y gestión de parches CVE.
+
+2. **Formatos de Descarga Disponibles:**
+   - **Archivo `.md` (Markdown Estructurado):** Descarga instantánea client-side mediante `downloadMarkdownGuide(tool, lang)`, listo para incorporar a repositorios Git o wikis de arquitectura.
+   - **Archivo `.pdf` (Informe Ejecutivo Vectorial):** Generado dinámicamente en el cliente mediante `downloadPdfGuide(tool, lang)` con `jspdf`. Cuenta con cabecera corporativa de alta fidelidad, insignias de métricas cardinales (Health Score, Dificultad, Ahorro B2B), cajas de código con tipografía monoespaciada para Windows y Mac, paginación dinámica y pie de página con autoría oficial.
+
+3. **Experiencia de Usuario en la Interfaz ([page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx)):**
+   - Selector de pestañas dinámico en el visor: **Ambos Sistemas**, **🪟 Windows** y **🍎 macOS**.
+   - Botón individual de **Copiar** con feedback reactivo (`✓ Copiado` / `✓ Copied`) en cada bloque de código de la guía.
+   - Estado de carga reactivo con spinner (`⏳ Generando PDF...`) durante el renderizado del documento.
+   - Soporte bilingüe 100% activo: todo el contenido se adapta según el idioma seleccionado (`ES` / `EN`).
 
 ---
 
 ## 📂 Archivos Clave del Desarrollo
 
-- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma).
-- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`).
+- [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos para Windows y Mac.
+- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma y Modal de Guías).
+- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) con descripciones de herramientas y etiquetas de guías.
 - [route.ts (Checkout API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/checkout/route.ts) — Backend de monetización con soporte para PayPal, Wenia USDW y facturas proforma B2B.
 - [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Ingesta continua con Health Score ponderado y vectorización `halfvec(1536)`.
 - [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores semánticos.

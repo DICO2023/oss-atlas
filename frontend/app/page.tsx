@@ -10,6 +10,11 @@ import {
   getDifficultyLabel,
   getSavingsLabel,
 } from '@/lib/translations';
+import {
+  downloadMarkdownGuide,
+  downloadPdfGuide,
+  getPlatformGuides,
+} from '@/lib/guideGenerator';
 
 export type CategoryId = 'ALL' | 'AUTH' | 'DBS' | 'PAYMENTS' | 'AI';
 
@@ -771,6 +776,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutGuideNotice, setCheckoutGuideNotice] = useState<string | null>(null);
   const [inspectedGuideTool, setInspectedGuideTool] = useState<OpenSourceTool | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
+  const [activeGuideTab, setActiveGuideTab] = useState<'both' | 'windows' | 'mac'>('both');
+  const [copiedStepCode, setCopiedStepCode] = useState<string | null>(null);
 
   // Hero Interactive Prompt Bar states (Checkpoint #7)
   const [heroPromptInput, setHeroPromptInput] = useState<string>(
@@ -948,16 +956,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   };
 
   const handleRequestIntegrationGuide = (tool: OpenSourceTool) => {
-    // Si ya tiene plan Pro/Enterprise activo, abre el visor de guía directamente
-    if (userSubscription?.status === 'ACTIVE') {
-      setInspectedGuideTool(tool);
-    } else {
-      // Abre el checkout B2B destacando este beneficio exclusivo
-      handleOpenCheckout(
-        'PRO_ARCHITECTURE',
-        `Para descargar la Guía de Integración (.md y .pdf) de ${tool.name} para Windows y macOS, activa tu suscripción a Pro Architecture.`
-      );
-    }
+    setInspectedGuideTool(tool);
   };
 
   const handleSyncPreset = async (presetSlug: string) => {
@@ -3268,120 +3267,176 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
               </div>
             </div>
 
-            {/* Platform Previews */}
-            <div className="space-y-4 text-xs font-mono">
-              {/* Windows Section */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-blue-500/30 space-y-2">
-                <div className="flex items-center justify-between text-blue-400 font-bold">
-                  <span>{t.guideWindowsStep}</span>
-                  <span className="text-[10px] text-slate-500">WSL2 Ready</span>
+            {/* Platform Tabs Switcher */}
+            {(() => {
+              const platformGuides = getPlatformGuides(inspectedGuideTool, lang);
+              return (
+                <div className="space-y-4 text-xs font-mono">
+                  <div className="flex items-center gap-2 p-1 rounded-xl bg-slate-950 border border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setActiveGuideTab('both')}
+                      className={`flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all cursor-pointer text-center ${
+                        activeGuideTab === 'both'
+                          ? 'bg-slate-800 text-cyan-300 shadow-sm border border-cyan-500/30'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      {lang === 'es' ? 'Ambos Sistemas' : 'All Platforms'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveGuideTab('windows')}
+                      className={`flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all cursor-pointer text-center ${
+                        activeGuideTab === 'windows'
+                          ? 'bg-blue-950/80 text-blue-300 shadow-sm border border-blue-500/40'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      🪟 Windows
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveGuideTab('mac')}
+                      className={`flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all cursor-pointer text-center ${
+                        activeGuideTab === 'mac'
+                          ? 'bg-purple-950/80 text-purple-300 shadow-sm border border-purple-500/40'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      🍎 macOS
+                    </button>
+                  </div>
+
+                  {/* Windows Section */}
+                  {(activeGuideTab === 'both' || activeGuideTab === 'windows') && (
+                    <div className="p-5 rounded-2xl bg-slate-950 border border-blue-500/30 space-y-4">
+                      <div className="flex items-center justify-between text-blue-400 font-bold border-b border-blue-500/20 pb-2">
+                        <span className="text-sm">{t.guideWindowsStep}</span>
+                        <span className="px-2 py-0.5 rounded bg-blue-950 text-[10px] text-blue-300 border border-blue-500/40">PowerShell & WSL2</span>
+                      </div>
+
+                      {platformGuides.windows.steps.map((step, idx) => (
+                        <div key={idx} className="space-y-1.5">
+                          <div className="flex items-center justify-between text-slate-200 font-semibold text-xs">
+                            <span>{step.title}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(step.code);
+                                setCopiedStepCode(`win-${idx}`);
+                                setTimeout(() => setCopiedStepCode(null), 2000);
+                              }}
+                              className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                            >
+                              {copiedStepCode === `win-${idx}` ? (lang === 'es' ? '✓ Copiado' : '✓ Copied') : (lang === 'es' ? 'Copiar' : 'Copy')}
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-slate-400 leading-relaxed">{step.description}</p>
+                          <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-emerald-400 overflow-x-auto text-[11px] leading-relaxed">
+                            <code>{step.code}</code>
+                          </pre>
+                        </div>
+                      ))}
+
+                      {/* Windows Notes */}
+                      <div className="p-3 rounded-xl bg-slate-900/90 border border-amber-500/30 space-y-1">
+                        <span className="text-amber-400 font-bold text-[10px] block">
+                          ⚠️ {lang === 'es' ? 'AVISO TÉCNICO WINDOWS:' : 'WINDOWS TECHNICAL ADVISORY:'}
+                        </span>
+                        {platformGuides.windows.notes.map((note, idx) => (
+                          <p key={idx} className="text-[10px] text-slate-300">• {note}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Mac Section */}
+                  {(activeGuideTab === 'both' || activeGuideTab === 'mac') && (
+                    <div className="p-5 rounded-2xl bg-slate-950 border border-purple-500/30 space-y-4">
+                      <div className="flex items-center justify-between text-purple-400 font-bold border-b border-purple-500/20 pb-2">
+                        <span className="text-sm">{t.guideMacStep}</span>
+                        <span className="px-2 py-0.5 rounded bg-purple-950 text-[10px] text-purple-300 border border-purple-500/40">Homebrew & Colima</span>
+                      </div>
+
+                      {platformGuides.mac.steps.map((step, idx) => (
+                        <div key={idx} className="space-y-1.5">
+                          <div className="flex items-center justify-between text-slate-200 font-semibold text-xs">
+                            <span>{step.title}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(step.code);
+                                setCopiedStepCode(`mac-${idx}`);
+                                setTimeout(() => setCopiedStepCode(null), 2000);
+                              }}
+                              className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                            >
+                              {copiedStepCode === `mac-${idx}` ? (lang === 'es' ? '✓ Copiado' : '✓ Copied') : (lang === 'es' ? 'Copiar' : 'Copy')}
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-slate-400 leading-relaxed">{step.description}</p>
+                          <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-purple-300 overflow-x-auto text-[11px] leading-relaxed">
+                            <code>{step.code}</code>
+                          </pre>
+                        </div>
+                      ))}
+
+                      {/* Mac Notes */}
+                      <div className="p-3 rounded-xl bg-slate-900/90 border border-cyan-500/30 space-y-1">
+                        <span className="text-cyan-400 font-bold text-[10px] block">
+                          💡 {lang === 'es' ? 'AVISO TÉCNICO MACOS / APPLE SILICON:' : 'MACOS / APPLE SILICON TECHNICAL ADVISORY:'}
+                        </span>
+                        {platformGuides.mac.notes.map((note, idx) => (
+                          <p key={idx} className="text-[10px] text-slate-300">• {note}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 overflow-x-auto text-[11px] leading-relaxed">
-                  <code>{`# 1. Asegurar Docker Desktop y WSL2 en ejecución
-wsl --status
-
-# 2. Desplegar contenedor ${inspectedGuideTool.slug}
-${inspectedGuideTool.dockerCommand}
-
-# 3. Validar estado del contenedor
-docker ps --filter "ancestor=${inspectedGuideTool.dockerCommand.split(' ').pop()}"`}</code>
-                </pre>
-              </div>
-
-              {/* Mac Section */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-purple-500/30 space-y-2">
-                <div className="flex items-center justify-between text-purple-400 font-bold">
-                  <span>{t.guideMacStep}</span>
-                  <span className="text-[10px] text-slate-500">Apple Silicon & Intel</span>
-                </div>
-                <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 overflow-x-auto text-[11px] leading-relaxed">
-                  <code>{`# 1. Verificar runtime de contenedores (Colima o Docker)
-brew install colima docker || true
-colima start
-
-# 2. Ejecutar servicio ${inspectedGuideTool.name}
-${inspectedGuideTool.dockerCommand}
-
-# 3. Comprobar logs y endpoints
-docker logs -f $(docker ps -lq)`}</code>
-                </pre>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Download Buttons (.md and .pdf) */}
-            <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
               <span className="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
                 <span>✓</span>
                 <span>{t.guideProUnlocked}</span>
               </span>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => {
-                    const mdContent = `# ${lang === 'es' ? 'Guía de Integración B2B' : 'B2B Integration Guide'}: ${inspectedGuideTool.name}
-**${lang === 'es' ? 'Plataforma' : 'Platform'}:** OSS Atlas (https://ossatlas.iotdico.com)
-**${lang === 'es' ? 'Autor' : 'Author'}:** EdisonPEÑA (Iotdico)
-**${lang === 'es' ? 'Licencia' : 'License'}:** ${inspectedGuideTool.license}
-**Health Score:** ${inspectedGuideTool.healthScore}/100
-
----
-
-## 1. ${lang === 'es' ? 'Descripción' : 'Description'}
-${getToolDescription(inspectedGuideTool.slug, inspectedGuideTool.description, lang)}
-
-## 2. ${lang === 'es' ? 'Requisitos y Dependencias' : 'Requirements & Dependencies'}
-- ${lang === 'es' ? 'Dependencias' : 'Dependencies'}: ${inspectedGuideTool.dependencies.join(', ')}
-- ${lang === 'es' ? 'Disparadores (Triggers)' : 'Integration Triggers'}: ${inspectedGuideTool.triggers.join(', ')}
-
----
-
-## 3. ${lang === 'es' ? 'Despliegue en Windows (PowerShell / Docker Desktop)' : 'Deployment on Windows (PowerShell / Docker Desktop)'}
-\`\`\`powershell
-# Comprobar WSL2
-wsl --status
-
-# Ejecutar servicio
-${inspectedGuideTool.dockerCommand}
-\`\`\`
-
----
-
-## 4. ${lang === 'es' ? 'Despliegue en macOS (Terminal / Colima / OrbStack)' : 'Deployment on macOS (Terminal / Colima / OrbStack)'}
-\`\`\`bash
-# Iniciar runtime
-colima start
-
-# Ejecutar contenedor
-${inspectedGuideTool.dockerCommand}
-\`\`\`
-
----
-*${lang === 'es' ? 'Generado automáticamente por OSS Atlas Pro B2B' : 'Automatically generated by OSS Atlas Pro B2B'} — https://ossatlas.iotdico.com*`;
-
-                    const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `Guia_Integracion_${inspectedGuideTool.slug.replace('/', '_')}.md`;
-                    link.click();
-                    URL.revokeObjectURL(url);
-                  }}
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 transition-all cursor-pointer"
+                  onClick={() => downloadMarkdownGuide(inspectedGuideTool, lang)}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 transition-all cursor-pointer shadow-md"
                 >
                   <span>{t.guideDownloadMd}</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => {
-                    alert(lang === 'es'
-                      ? `Generación de PDF para ${inspectedGuideTool.name}: Se descargará el informe ejecutivo en la siguiente actualización del generador PDF.`
-                      : `PDF Generation for ${inspectedGuideTool.name}: Executive PDF report will be downloaded in the PDF generator update.`);
+                  disabled={isGeneratingPdf}
+                  onClick={async () => {
+                    try {
+                      setIsGeneratingPdf(true);
+                      await downloadPdfGuide(inspectedGuideTool, lang);
+                    } catch (err) {
+                      console.error('Failed to generate PDF:', err);
+                      alert(lang === 'es' ? 'Error al generar el PDF. Por favor reintenta.' : 'Error generating PDF. Please retry.');
+                    } finally {
+                      setIsGeneratingPdf(false);
+                    }
                   }}
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 transition-all cursor-pointer shadow-md shadow-amber-500/20"
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition-all shadow-md ${
+                    isGeneratingPdf
+                      ? 'bg-amber-600/70 text-slate-950 cursor-not-allowed opacity-80'
+                      : 'bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 cursor-pointer shadow-amber-500/20'
+                  }`}
                 >
-                  <span>{t.guideDownloadPdf}</span>
+                  {isGeneratingPdf && (
+                    <span className="w-3 h-3 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                  )}
+                  <span>{isGeneratingPdf ? t.guideGeneratingPdf : t.guideDownloadPdf}</span>
                 </button>
               </div>
             </div>
