@@ -487,6 +487,30 @@ export const TOOL_DESCRIPTIONS_EN: Record<string, string> = {
     'Data framework connecting enterprise data sources to LLMs for precise contextual retrieval and structured RAG pipelines.',
   'langchain-ai/langchain':
     'Comprehensive framework for developing context-aware applications powered by language models, agents, and retrieval chains.',
+  'meetily/meetily':
+    'Self-hosted AI meeting transcription and notes assistant. Private alternative to Granola ($14/mo) processing audio locally with zero data leakage.',
+  'openshorts/openshorts':
+    'Automated short clip and reels generator from long-form videos with AI. Open-source alternative to OpusClip ($15/mo) with zero watermarks or limits.',
+  'presenton/presenton':
+    'Interactive presentation and corporate deck generator with AI. Open-source alternative to Gamma ($12/mo) with native PDF/HTML export and no credit caps.',
+  'topview/topview-3d-builder':
+    'Interactive 3D modeling, rendering and visualization engine for B2B catalogs and architectural digital twins. Open-source alternative to Spline ($25/mo).',
+  'voicestudio/voicestudio':
+    'Ultra-realistic text-to-speech (TTS) and AI voice cloning studio. Open-source alternative to ElevenLabs ($22/mo) with zero character tier billing.',
+  'copilotkit/copilotkit':
+    'Framework for embedding in-app AI copilots and contextual agent assistants in React/Next.js. Alternative to per-seat ChatGPT Pro subscriptions ($200/mo).',
+  'opennotebook/opennotebook':
+    'Self-hosted augmented research notebook and multi-document RAG workspace. Private alternative to Google NotebookLM and Notion AI ($15/mo).',
+  'freellmapi/freellmapi':
+    'High-concurrency LLM gateway and proxy balancer for enterprise AI workloads. Alternative to Claude enterprise seat pricing ($200/seat) with automatic failover.',
+  'vane/vane':
+    'Conversational AI search engine with real-time academic citations and web retrieval. Self-hosted alternative to Perplexity Pro ($20/mo) for enterprise intranets.',
+  'upscayl/upscayl':
+    'AI-powered 4x/8x image super-resolution upscaler using local Real-ESRGAN models. Open-source alternative to Topaz Labs Gigapixel ($29/mo).',
+  'dyad/dyad':
+    'Full-stack application builder and generative AI prototyping studio. Alternative to Lovable ($25/mo) with full, unencumbered React/Node.js code export.',
+  'treblo/treblo':
+    'Commercial AI music, beat and soundscape generator. Open-source alternative to Suno ($10/mo) with full commercial usage rights and stem export.',
 };
 
 export function getToolDescription(slug: string, fallbackDescription: string, lang: Language): string {
@@ -507,6 +531,8 @@ export function getDifficultyLabel(diff: string, lang: Language): string {
 export function getSavingsLabel(savings: string, lang: Language): string {
   if (lang === 'es' || !savings) return savings;
   return savings
+    .replace('Ahorro de', 'Savings of')
+    .replace('USD / mes', 'USD / mo')
     .replace('USD / mes vs Cloud Propietario', 'USD / mo vs Proprietary Cloud')
     .replace('USD / mes en licencias MAU B2B', 'USD / mo in B2B MAU licenses')
     .replace('USD / mes vs SaaS Search Engines', 'USD / mo vs SaaS Search Engines')

@@ -19,7 +19,7 @@ import {
 
 export type CategoryId = 'ALL' | 'AUTH' | 'DBS' | 'PAYMENTS' | 'AI';
 
-export type LicenseType = 'MIT' | 'Apache-2.0' | 'PostgreSQL' | 'BSL-1.1';
+export type LicenseType = 'MIT' | 'Apache-2.0' | 'PostgreSQL' | 'BSL-1.1' | 'AGPL-3.0' | 'GPL-3.0' | 'MPL-2.0';
 
 export interface CategoryItem {
   id: Exclude<CategoryId, 'ALL'>;
@@ -155,6 +155,29 @@ const CATEGORIES_DATA: CategoryItem[] = [
   },
 ];
 
+function getToolSavingsB2B(slug: string, category: string): string {
+  const norm = (slug || '').toLowerCase().trim();
+  const specificMap: Record<string, string> = {
+    'meetily/meetily': 'Ahorro de $14 USD / mes vs Granola',
+    'openshorts/openshorts': 'Ahorro de $15 USD / mes vs OpusClip',
+    'presenton/presenton': 'Ahorro de $12 USD / mes vs Gamma',
+    'topview/topview-3d-builder': 'Ahorro de $25 USD / mes vs Spline 3D',
+    'voicestudio/voicestudio': 'Ahorro de $22 USD / mes vs ElevenLabs',
+    'copilotkit/copilotkit': 'Ahorro de $200 USD / mes vs ChatGPT Pro',
+    'opennotebook/opennotebook': 'Ahorro de $15 USD / mes vs NotebookLM',
+    'freellmapi/freellmapi': 'Ahorro de $200 USD / mes vs Claude Max',
+    'vane/vane': 'Ahorro de $20 USD / mes vs Perplexity Pro',
+    'upscayl/upscayl': 'Ahorro de $29 USD / mes vs Topaz Labs',
+    'dyad/dyad': 'Ahorro de $25 USD / mes vs Lovable',
+    'treblo/treblo': 'Ahorro de $10 USD / mes vs Suno',
+  };
+  if (specificMap[norm]) return specificMap[norm];
+  if (category === 'AUTH') return '$2,400 USD / mes en licencias MAU B2B';
+  if (category === 'DBS') return '$1,850 USD / mes vs Cloud Propietario';
+  if (category === 'PAYMENTS') return 'Reducción de 1.4% en tarifas de fallo';
+  return '$1,200 USD / mes vs SaaS Propietario';
+}
+
 const FEATURED_TOOLS_CATALOG: OpenSourceTool[] = [
   {
     id: 'tool-supabase-pgvector',
@@ -247,6 +270,222 @@ const FEATURED_TOOLS_CATALOG: OpenSourceTool[] = [
     dependencies: ['Rust 1.75+', 'PostgreSQL', 'Redis Cluster'],
     rrfBaseRank: 4,
     selfHostedSavingsB2B: 'Reducción de 1.4% en tasas de fallo transaccional',
+  },
+  {
+    id: 'tool-meetily',
+    name: 'Meetily AI Meeting Assistant',
+    slug: 'meetily/meetily',
+    category: 'AI',
+    license: 'MIT',
+    healthScore: 95,
+    healthBreakdown: { commitVelocity: 95, securityStructural: 94, communityDocs: 96 },
+    stars: '6.8k',
+    lastSyncEtag: 'W/"meetily-ai-v1"',
+    description: 'Asistente de transcripción y minutas de reuniones con IA auto-hospedado. Alternativa privada a Granola ($14/mes) que procesa audio localmente sin enviar datos a terceros.',
+    dockerCommand: 'docker run -d --name meetily-app -p 3010:3000 -v meetily_data:/app/data meetily/meetily:latest',
+    integrationDifficulty: 'Baja',
+    triggers: ['Meeting Audio Stream', 'Whisper Transcription Hook', 'Executive Summary Webhook'],
+    dependencies: ['Docker Engine', 'Whisper Local / API', 'FFmpeg'],
+    rrfBaseRank: 5,
+    selfHostedSavingsB2B: 'Ahorro de $14 USD / mes vs Granola',
+  },
+  {
+    id: 'tool-openshorts',
+    name: 'OpenShorts Video AI Generator',
+    slug: 'openshorts/openshorts',
+    category: 'AI',
+    license: 'Apache-2.0',
+    healthScore: 95,
+    healthBreakdown: { commitVelocity: 96, securityStructural: 93, communityDocs: 95 },
+    stars: '9.2k',
+    lastSyncEtag: 'W/"openshorts-v1"',
+    description: 'Generador automatizado de clips cortos y shorts para redes a partir de videos largos con IA. Alternativa open-source a OpusClip ($15/mes) sin marcas de agua ni límites.',
+    dockerCommand: 'docker run -d --name openshorts -p 8085:8080 -v openshorts_media:/data/media openshorts/openshorts:latest',
+    integrationDifficulty: 'Media',
+    triggers: ['Video Ingestion Pipeline', 'Silence & Speaker Detection', 'Viral Moment Cropper'],
+    dependencies: ['Docker Engine', 'FFmpeg 6+', 'GPU CUDA / Apple Silicon Metal'],
+    rrfBaseRank: 6,
+    selfHostedSavingsB2B: 'Ahorro de $15 USD / mes vs OpusClip',
+  },
+  {
+    id: 'tool-presenton',
+    name: 'Presenton AI Slide Builder',
+    slug: 'presenton/presenton',
+    category: 'AI',
+    license: 'MIT',
+    healthScore: 94,
+    healthBreakdown: { commitVelocity: 92, securityStructural: 95, communityDocs: 94 },
+    stars: '5.4k',
+    lastSyncEtag: 'W/"presenton-v1"',
+    description: 'Generador de presentaciones interactivas y decks corporativos con IA. Alternativa a Gamma ($12/mes) con exportación nativa a PDF/HTML sin costo por créditos.',
+    dockerCommand: 'docker run -d --name presenton-app -p 3012:3000 -v presenton_decks:/app/decks presenton/presenton:latest',
+    integrationDifficulty: 'Baja',
+    triggers: ['Markdown Presentation Compile', 'Slide Outline AI Generation', 'Export Vector PDF'],
+    dependencies: ['Node.js 20+ / Docker', 'Chromium Headless / Puppeteer'],
+    rrfBaseRank: 7,
+    selfHostedSavingsB2B: 'Ahorro de $12 USD / mes vs Gamma',
+  },
+  {
+    id: 'tool-topview-3d',
+    name: 'TopView 3D Builder & Visualizer',
+    slug: 'topview/topview-3d-builder',
+    category: 'AI',
+    license: 'Apache-2.0',
+    healthScore: 93,
+    healthBreakdown: { commitVelocity: 91, securityStructural: 94, communityDocs: 93 },
+    stars: '4.3k',
+    lastSyncEtag: 'W/"topview-3d-v1"',
+    description: 'Motor de modelado, renderizado y visualización 3D interactiva para catálogos y arquitectura B2B. Alternativa a Spline y Meshy AI ($25/mes) basada en WebGL.',
+    dockerCommand: 'docker run -d --name topview-3d -p 8086:8080 -v topview_models:/models topview/topview-3d-builder:latest',
+    integrationDifficulty: 'Media',
+    triggers: ['GLTF/GLB Asset Ingestion', 'Procedural Mesh Generation', 'WebGL Canvas Stream'],
+    dependencies: ['Three.js / WebGL 2.0', 'Docker Engine'],
+    rrfBaseRank: 8,
+    selfHostedSavingsB2B: 'Ahorro de $25 USD / mes vs Spline 3D',
+  },
+  {
+    id: 'tool-voicestudio',
+    name: 'VoiceStudio AI Voice & TTS',
+    slug: 'voicestudio/voicestudio',
+    category: 'AI',
+    license: 'MIT',
+    healthScore: 96,
+    healthBreakdown: { commitVelocity: 97, securityStructural: 95, communityDocs: 96 },
+    stars: '11.8k',
+    lastSyncEtag: 'W/"voicestudio-v1"',
+    description: 'Estación de síntesis de voz, texto a voz (TTS) ultrarrealista y clonación vocal con IA. Alternativa open-source a ElevenLabs ($22/mes) sin límites de caracteres.',
+    dockerCommand: 'docker run -d --name voicestudio -p 7860:7860 -v voicestudio_models:/models voicestudio/voicestudio:latest',
+    integrationDifficulty: 'Media',
+    triggers: ['TTS Synthesis Stream', 'Voice Clone Reference Sampling', 'Audio Normalization Hook'],
+    dependencies: ['Python 3.10+ / PyTorch', 'CUDA 12+ / Apple Silicon Metal', 'Docker'],
+    rrfBaseRank: 9,
+    selfHostedSavingsB2B: 'Ahorro de $22 USD / mes vs ElevenLabs',
+  },
+  {
+    id: 'tool-copilotkit',
+    name: 'CopilotKit Embedded AI Agents',
+    slug: 'copilotkit/copilotkit',
+    category: 'AI',
+    license: 'MIT',
+    healthScore: 98,
+    healthBreakdown: { commitVelocity: 99, securityStructural: 96, communityDocs: 98 },
+    stars: '16.4k',
+    lastSyncEtag: 'W/"copilotkit-v1"',
+    description: 'Framework para integrar copilotos y agentes contextuales con IA directamente en aplicaciones React/Next.js. Alternativa a suscripciones individuales de ChatGPT Pro ($200/mes).',
+    dockerCommand: 'docker run -d --name copilotkit-runtime -p 4000:4000 -e OPENAI_API_KEY=your_key copilotkit/runtime:latest',
+    integrationDifficulty: 'Baja',
+    triggers: ['DOM State Context Sync', 'Tool Calling Execution', 'In-App Generative UI Render'],
+    dependencies: ['React 18/19', 'Next.js 14/15', 'Node.js 20+'],
+    rrfBaseRank: 10,
+    selfHostedSavingsB2B: 'Ahorro de $200 USD / mes vs ChatGPT Pro',
+  },
+  {
+    id: 'tool-opennotebook',
+    name: 'OpenNotebook AI Knowledge Vault',
+    slug: 'opennotebook/opennotebook',
+    category: 'AI',
+    license: 'Apache-2.0',
+    healthScore: 94,
+    healthBreakdown: { commitVelocity: 94, securityStructural: 95, communityDocs: 94 },
+    stars: '7.9k',
+    lastSyncEtag: 'W/"opennotebook-v1"',
+    description: 'Cuaderno de investigación aumentada y RAG de documentos multi-formato auto-hospedado. Alternativa privada a Google NotebookLM y Notion AI ($15/mes).',
+    dockerCommand: 'docker run -d --name opennotebook -p 8087:8080 -v opennotebook_docs:/data/vault opennotebook/opennotebook:latest',
+    integrationDifficulty: 'Baja',
+    triggers: ['PDF Document Parsing', 'Vector Embedding Ingestion', 'Cross-Reference Question Answering'],
+    dependencies: ['Docker Engine', 'PostgreSQL / pgvector', 'Tesseract OCR'],
+    rrfBaseRank: 11,
+    selfHostedSavingsB2B: 'Ahorro de $15 USD / mes vs NotebookLM',
+  },
+  {
+    id: 'tool-freellmapi',
+    name: 'FreeLLMAPI Unified Gateway',
+    slug: 'freellmapi/freellmapi',
+    category: 'AI',
+    license: 'MIT',
+    healthScore: 95,
+    healthBreakdown: { commitVelocity: 96, securityStructural: 95, communityDocs: 94 },
+    stars: '8.9k',
+    lastSyncEtag: 'W/"freellmapi-v1"',
+    description: 'Gateway de alta concurrencia y balanceador de proxies para múltiples modelos de lenguaje. Alternativa a licencias corporativas de Claude ($200/licencia) con failover automático.',
+    dockerCommand: 'docker run -d --name freellmapi -p 8000:8000 -v freellmapi_conf:/app/config freellmapi/gateway:latest',
+    integrationDifficulty: 'Media',
+    triggers: ['Model Fallback on 429', 'Token Usage Rate Limiting', 'Streaming SSE Router'],
+    dependencies: ['Docker Engine', 'Redis / Memory Cache'],
+    rrfBaseRank: 12,
+    selfHostedSavingsB2B: 'Ahorro de $200 USD / mes vs Claude Max',
+  },
+  {
+    id: 'tool-vane',
+    name: 'Vane Conversational AI Search',
+    slug: 'vane/vane',
+    category: 'AI',
+    license: 'MIT',
+    healthScore: 94,
+    healthBreakdown: { commitVelocity: 93, securityStructural: 94, communityDocs: 94 },
+    stars: '6.1k',
+    lastSyncEtag: 'W/"vane-search-v1"',
+    description: 'Buscador conversacional con citas académicas y extracción de fuentes en tiempo real. Alternativa auto-hospedada a Perplexity Pro ($20/mes) para intranet empresarial.',
+    dockerCommand: 'docker run -d --name vane-search -p 3014:3000 -v vane_cache:/app/cache vane/vane:latest',
+    integrationDifficulty: 'Baja',
+    triggers: ['Web Crawler Query Dispatch', 'Source Citation Synthesizer', 'Reranking Evaluation'],
+    dependencies: ['Node.js / Docker', 'SearXNG / Web Search API'],
+    rrfBaseRank: 13,
+    selfHostedSavingsB2B: 'Ahorro de $20 USD / mes vs Perplexity Pro',
+  },
+  {
+    id: 'tool-upscayl',
+    name: 'Upscayl AI Image Super-Resolution',
+    slug: 'upscayl/upscayl',
+    category: 'AI',
+    license: 'AGPL-3.0',
+    healthScore: 97,
+    healthBreakdown: { commitVelocity: 98, securityStructural: 96, communityDocs: 97 },
+    stars: '32.5k',
+    lastSyncEtag: 'W/"upscayl-v1"',
+    description: 'Escalador y mejorador de resolución de imágenes 4x/8x por IA mediante modelos Real-ESRGAN locales. Alternativa open-source a Topaz Labs ($29/mes).',
+    dockerCommand: 'docker run -d --name upscayl-core -p 8088:8080 -v upscayl_output:/data/output upscayl/upscayl-cli:latest',
+    integrationDifficulty: 'Baja',
+    triggers: ['Batch Image Upscaling Task', 'Vulkan/CUDA Tensor Acceleration', 'Sharpening Filter Hook'],
+    dependencies: ['Vulkan SDK / GPU Driver', 'Docker Engine'],
+    rrfBaseRank: 14,
+    selfHostedSavingsB2B: 'Ahorro de $29 USD / mes vs Topaz Labs',
+  },
+  {
+    id: 'tool-dyad',
+    name: 'Dyad Full-Stack App Builder',
+    slug: 'dyad/dyad',
+    category: 'AI',
+    license: 'Apache-2.0',
+    healthScore: 95,
+    healthBreakdown: { commitVelocity: 95, securityStructural: 94, communityDocs: 95 },
+    stars: '8.1k',
+    lastSyncEtag: 'W/"dyad-builder-v1"',
+    description: 'Constructor de aplicaciones full-stack y prototipado asistido por IA generativa. Alternativa a Lovable ($25/mes) con exportación libre de código React/Node.js.',
+    dockerCommand: 'docker run -d --name dyad-builder -p 3016:3000 -v dyad_workspaces:/workspaces dyad/dyad:latest',
+    integrationDifficulty: 'Media',
+    triggers: ['Full-Stack Scaffold Generation', 'Database Schema Migration', 'Live Preview Hot-Reload'],
+    dependencies: ['Node.js 20+', 'Docker Engine', 'PostgreSQL / SQLite'],
+    rrfBaseRank: 15,
+    selfHostedSavingsB2B: 'Ahorro de $25 USD / mes vs Lovable',
+  },
+  {
+    id: 'tool-treblo',
+    name: 'Treblo AI Music Generator',
+    slug: 'treblo/treblo',
+    category: 'AI',
+    license: 'MIT',
+    healthScore: 94,
+    healthBreakdown: { commitVelocity: 94, securityStructural: 94, communityDocs: 94 },
+    stars: '5.9k',
+    lastSyncEtag: 'W/"treblo-music-v1"',
+    description: 'Generador de música, instrumentales y paisajes sonoros comerciales por IA. Alternativa open-source a Suno ($10/mes) con derechos de uso y pistas multicanal libres.',
+    dockerCommand: 'docker run -d --name treblo-music -p 7862:7860 -v treblo_audio:/audio treblo/treblo:latest',
+    integrationDifficulty: 'Media',
+    triggers: ['Audio Stem Generation', 'MusicGen Transformer Inference', 'WAV/MP3 Export Pipeline'],
+    dependencies: ['PyTorch / AudioCraft', 'CUDA 12+ / Apple Silicon Metal', 'Docker'],
+    rrfBaseRank: 16,
+    selfHostedSavingsB2B: 'Ahorro de $10 USD / mes vs Suno',
   },
 ];
 
@@ -860,14 +1099,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           triggers: Array.isArray(row.triggers) ? row.triggers : [],
           dependencies: Array.isArray(row.dependencies) ? row.dependencies : [],
           rrfBaseRank: idx + 1,
-          selfHostedSavingsB2B:
-            row.category === 'AUTH'
-              ? '$2,400 USD / mes en licencias MAU B2B'
-              : row.category === 'DBS'
-              ? '$1,850 USD / mes vs Cloud Propietario'
-              : row.category === 'PAYMENTS'
-              ? 'Reducción de 1.4% en tarifas de fallo'
-              : '$1,200 USD / mes vs SaaS Propietario',
+          selfHostedSavingsB2B: getToolSavingsB2B(row.slug, row.category),
         }));
         setCatalogTools(mapped);
         setIsDbConnected(true);
@@ -1160,14 +1392,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             rrfScore: typeof row.rrf_score === 'number' ? row.rrf_score : Number(row.rrf_score),
             lexicalRank: row.lexical_rank != null ? Number(row.lexical_rank) : null,
             vectorRank: row.vector_rank != null ? Number(row.vector_rank) : null,
-            selfHostedSavingsB2B:
-              row.category === 'AUTH'
-                ? '$2,400 USD / mes en licencias MAU B2B'
-                : row.category === 'DBS'
-                ? '$1,850 USD / mes vs Cloud Propietario'
-                : row.category === 'PAYMENTS'
-                ? 'Reducción de 1.4% en tarifas de fallo'
-                : '$1,200 USD / mes vs SaaS Propietario',
+            selfHostedSavingsB2B: getToolSavingsB2B(row.slug, row.category),
           }));
           setHybridSearchResults(mapped);
         }
