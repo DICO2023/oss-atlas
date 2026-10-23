@@ -113,6 +113,10 @@ npm run dev
   - **Modal de Checkout & Planes B2B:** Precios, ciclos mensual/anual, descuentos, desglose tributario, métodos de pago (PayPal, Wenia USDW, Transferencia) y confirmación con token corporativo.
   - **Pie de Página (Footer):** Dictamen de auditoría y créditos oficiales de autoría.
 - Selector de idioma en el Header (**`🇪🇸 ES`** / **`🇺🇸 EN`**) con persistencia en `localStorage`. Al pulsar el botón, el 100% de la interfaz conmuta instantáneamente sin recargar la página.
+- **Traducción Dinámica de Herramientas y Telemetría B2B:**
+  - Diccionario integral `TOOL_DESCRIPTIONS_EN` en [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) para la totalidad de repositorios (`postgres/postgres`, `supabase/postgres-pgvector`, `qdrant/qdrant`, `keycloak/keycloak`, `zitadel/zitadel`, `casbin/casbin`, `openfga/openfga`, `goauthentik/authentik`, `ory/kratos`, `juspay/hyperswitch`, `killbill/killbill`, `getlago/lago`, `meilisearch/meilisearch`, `vllm-project/vllm`, `run-llama/llama_index`, `langchain-ai/langchain`).
+  - Funciones auxiliares `getToolDescription(slug, description, lang)`, `getDifficultyLabel(diff, lang)` (`Low` / `Medium` / `High`) y `getSavingsLabel(savings, lang)` (`USD / mo vs Proprietary Cloud`).
+  - Vinculación reactiva tanto en las tarjetas del catálogo como en el modal de previsualización y exportación Markdown de guías.
 
 ### 4.3. Depuración Visual y de Marca (Atención a Documento de Sugerencias)
 - **Página 1 del Documento:**
@@ -124,14 +128,17 @@ npm run dev
   - Se removió en su totalidad la sección de cronograma WBS de 32 días y matriz RACI (`#pmo-wbs-section`), así como el modal de protocolo de traspaso asíncrono.
 - **Página 3 del Documento:**
   - Pasarelas de pago adaptadas a PayPal y Wenia USDW.
-  - Plataforma completamente en español con selector de cambio a inglés.
+  - Plataforma completamente en español con selector de cambio a inglés (incluyendo descripciones de herramientas, métricas y telemetría de ahorro B2B).
 
 ### 4.4. Control de Versiones y Despliegue en Vivo
 - Commits subidos a GitHub (`https://github.com/DICO2023/oss-atlas.git` en rama `main`):
   - `39ec987`: *feat: release OSS Atlas v1.0 by EdisonPEÑA (Iotdico)*
   - `135e604`: *docs: registrar hito de commit inicial en ESTADO_PROYECTO.md*
   - `d654c83`: *feat(ui/checkout): apply document adjustments (remove PMO/tagline, add PayPal & Wenia USDW, ES/EN i18n)*
-- Despliegue automático activo en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
+  - `5912f7d`: *fix(i18n): bind complete bilingual translation dictionary to Hero, Categories, Catalog, Cards, RAG and Footer*
+  - `afdd577`: *fix(i18n): translate all tool descriptions, difficulty labels, and B2B savings to English*
+  - `afc6898`: *fix(i18n): refine savings label and update tool descriptions in production*
+- Despliegue automático y verificación en vivo activa en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
 
 ---
 
