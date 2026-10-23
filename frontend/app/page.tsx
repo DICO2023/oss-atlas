@@ -3,7 +3,13 @@
 // https://share.gemini.google/XnsITNsohkKp
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { TRANSLATIONS, type Language } from '@/lib/translations';
+import {
+  TRANSLATIONS,
+  type Language,
+  getToolDescription,
+  getDifficultyLabel,
+  getSavingsLabel,
+} from '@/lib/translations';
 
 export type CategoryId = 'ALL' | 'AUTH' | 'DBS' | 'PAYMENTS' | 'AI';
 
@@ -1853,7 +1859,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     </div>
 
                     {/* Description */}
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{tool.description}</p>
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      {getToolDescription(tool.slug, tool.description, lang)}
+                    </p>
 
                     {/* Health Breakdown Bars (15% Commits, 20% Security, 65% Docs/Community) */}
                     <div className="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800/90 space-y-2">
@@ -1897,7 +1905,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       <div className="flex items-center justify-between font-mono">
                         <span className="text-slate-400">{t.cardDifficulty}</span>
                         <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-200 font-semibold">
-                          {tool.integrationDifficulty}
+                          {getDifficultyLabel(tool.integrationDifficulty, lang)}
                         </span>
                       </div>
                       <div>
@@ -1919,7 +1927,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   {/* Card Footer: Docker Command & ETag Telemetry */}
                   <div className="mt-6 pt-4 border-t border-slate-800 space-y-3">
                     <div className="flex items-center justify-between text-[11px] font-mono">
-                      <span className="text-emerald-400 font-semibold">{tool.selfHostedSavingsB2B}</span>
+                      <span className="text-emerald-400 font-semibold">
+                        {getSavingsLabel(tool.selfHostedSavingsB2B, lang)}
+                      </span>
                       <span className="text-slate-500 truncate max-w-[150px]" title={tool.lastSyncEtag}>
                         ETag: {tool.lastSyncEtag}
                       </span>
@@ -3227,10 +3237,10 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   <span>{inspectedGuideTool.license}</span>
                 </div>
                 <h3 id="guide-modal-title" className="text-xl sm:text-2xl font-bold text-white mt-1.5">
-                  Guía de Integración: {inspectedGuideTool.name}
+                  {t.guideTitle} {inspectedGuideTool.name}
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Paso a paso técnico multiplataforma para entornos Windows (PowerShell/WSL2) y macOS (Homebrew/Zsh).
+                  {t.guideSubtitle}
                 </p>
               </div>
               <button
@@ -3238,23 +3248,23 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 onClick={() => setInspectedGuideTool(null)}
                 className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono cursor-pointer transition-colors"
               >
-                ✕ Cerrar [ESC]
+                ✕ {lang === 'es' ? 'Cerrar [ESC]' : 'Close [ESC]'}
               </button>
             </div>
 
             {/* Quick Architecture Details */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-400 block text-[10px]">Categoría B2B</span>
+                <span className="text-slate-400 block text-[10px]">{t.guideCategory}</span>
                 <span className="text-cyan-300 font-bold">{inspectedGuideTool.category}</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-400 block text-[10px]">Health Score</span>
+                <span className="text-slate-400 block text-[10px]">{t.guideHealthScore}</span>
                 <span className="text-emerald-400 font-bold">{inspectedGuideTool.healthScore}/100</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-400 block text-[10px]">Dificultad</span>
-                <span className="text-amber-300 font-bold">{inspectedGuideTool.integrationDifficulty}</span>
+                <span className="text-slate-400 block text-[10px]">{t.guideDifficulty}</span>
+                <span className="text-amber-300 font-bold">{getDifficultyLabel(inspectedGuideTool.integrationDifficulty, lang)}</span>
               </div>
             </div>
 
@@ -3263,7 +3273,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
               {/* Windows Section */}
               <div className="p-4 rounded-2xl bg-slate-950 border border-blue-500/30 space-y-2">
                 <div className="flex items-center justify-between text-blue-400 font-bold">
-                  <span>🪟 Paso a Paso para Windows (PowerShell / Docker Desktop)</span>
+                  <span>{t.guideWindowsStep}</span>
                   <span className="text-[10px] text-slate-500">WSL2 Ready</span>
                 </div>
                 <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 overflow-x-auto text-[11px] leading-relaxed">
@@ -3281,7 +3291,7 @@ docker ps --filter "ancestor=${inspectedGuideTool.dockerCommand.split(' ').pop()
               {/* Mac Section */}
               <div className="p-4 rounded-2xl bg-slate-950 border border-purple-500/30 space-y-2">
                 <div className="flex items-center justify-between text-purple-400 font-bold">
-                  <span>🍎 Paso a Paso para macOS (Terminal / Homebrew / Colima o OrbStack)</span>
+                  <span>{t.guideMacStep}</span>
                   <span className="text-[10px] text-slate-500">Apple Silicon & Intel</span>
                 </div>
                 <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 overflow-x-auto text-[11px] leading-relaxed">
@@ -3302,31 +3312,31 @@ docker logs -f $(docker ps -lq)`}</code>
             <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
               <span className="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
                 <span>✓</span>
-                <span>Descarga habilitada con tu plan Pro Architect</span>
+                <span>{t.guideProUnlocked}</span>
               </span>
 
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => {
-                    const mdContent = `# Guía de Integración B2B: ${inspectedGuideTool.name}
-**Plataforma:** OSS Atlas (https://ossatlas.iotdico.com)
-**Autor:** EdisonPEÑA (Iotdico)
-**Licencia:** ${inspectedGuideTool.license}
+                    const mdContent = `# ${lang === 'es' ? 'Guía de Integración B2B' : 'B2B Integration Guide'}: ${inspectedGuideTool.name}
+**${lang === 'es' ? 'Plataforma' : 'Platform'}:** OSS Atlas (https://ossatlas.iotdico.com)
+**${lang === 'es' ? 'Autor' : 'Author'}:** EdisonPEÑA (Iotdico)
+**${lang === 'es' ? 'Licencia' : 'License'}:** ${inspectedGuideTool.license}
 **Health Score:** ${inspectedGuideTool.healthScore}/100
 
 ---
 
-## 1. Descripción
-${inspectedGuideTool.description}
+## 1. ${lang === 'es' ? 'Descripción' : 'Description'}
+${getToolDescription(inspectedGuideTool.slug, inspectedGuideTool.description, lang)}
 
-## 2. Requisitos y Dependencias
-- Dependencias: ${inspectedGuideTool.dependencies.join(', ')}
-- Disparadores (Triggers): ${inspectedGuideTool.triggers.join(', ')}
+## 2. ${lang === 'es' ? 'Requisitos y Dependencias' : 'Requirements & Dependencies'}
+- ${lang === 'es' ? 'Dependencias' : 'Dependencies'}: ${inspectedGuideTool.dependencies.join(', ')}
+- ${lang === 'es' ? 'Disparadores (Triggers)' : 'Integration Triggers'}: ${inspectedGuideTool.triggers.join(', ')}
 
 ---
 
-## 3. Despliegue en Windows (PowerShell / Docker Desktop)
+## 3. ${lang === 'es' ? 'Despliegue en Windows (PowerShell / Docker Desktop)' : 'Deployment on Windows (PowerShell / Docker Desktop)'}
 \`\`\`powershell
 # Comprobar WSL2
 wsl --status
@@ -3337,7 +3347,7 @@ ${inspectedGuideTool.dockerCommand}
 
 ---
 
-## 4. Despliegue en macOS (Terminal / Colima / OrbStack)
+## 4. ${lang === 'es' ? 'Despliegue en macOS (Terminal / Colima / OrbStack)' : 'Deployment on macOS (Terminal / Colima / OrbStack)'}
 \`\`\`bash
 # Iniciar runtime
 colima start
@@ -3347,7 +3357,7 @@ ${inspectedGuideTool.dockerCommand}
 \`\`\`
 
 ---
-*Generado automáticamente por OSS Atlas Pro B2B — https://ossatlas.iotdico.com*`;
+*${lang === 'es' ? 'Generado automáticamente por OSS Atlas Pro B2B' : 'Automatically generated by OSS Atlas Pro B2B'} — https://ossatlas.iotdico.com*`;
 
                     const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
                     const url = URL.createObjectURL(blob);
@@ -3359,17 +3369,19 @@ ${inspectedGuideTool.dockerCommand}
                   }}
                   className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 transition-all cursor-pointer"
                 >
-                  <span>📥 Descargar .MD</span>
+                  <span>{t.guideDownloadMd}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => {
-                    alert(`Generación de PDF para ${inspectedGuideTool.name}: Se descargará el informe ejecutivo en la siguiente actualización del generador PDF.`);
+                    alert(lang === 'es'
+                      ? `Generación de PDF para ${inspectedGuideTool.name}: Se descargará el informe ejecutivo en la siguiente actualización del generador PDF.`
+                      : `PDF Generation for ${inspectedGuideTool.name}: Executive PDF report will be downloaded in the PDF generator update.`);
                   }}
                   className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 transition-all cursor-pointer shadow-md shadow-amber-500/20"
                 >
-                  <span>📥 Descargar .PDF</span>
+                  <span>{t.guideDownloadPdf}</span>
                 </button>
               </div>
             </div>

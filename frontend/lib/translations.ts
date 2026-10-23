@@ -363,3 +363,63 @@ export const TRANSLATIONS = {
     footerCreatedBy: 'Created by EdisonPEÑA (ossatlas.iotdico.com)',
   },
 };
+
+export const TOOL_DESCRIPTIONS_EN: Record<string, string> = {
+  'postgres/postgres':
+    "The world's most advanced open-source relational database engine. Strict ACID compliance, native extensions, and proven MVCC concurrency.",
+  'supabase/postgres-pgvector':
+    'BaaS platform on PostgreSQL with native support for HNSW indexes (m=16, ef_construction=64), 16-bit halfvec vectors reducing RAM usage by 50%, and simple lexical search.',
+  'qdrant/qdrant':
+    'Vector search engine and database with REST/gRPC API written in Rust. Supports payload-based filtering, scalar quantization, and distributed clustering.',
+  'keycloak/keycloak':
+    'Industry standard open-source Identity and Access Management (IAM). Provides enterprise SSO (SAML/OIDC), LDAP/Active Directory federation, and B2B multi-tenancy.',
+  'zitadel/zitadel':
+    'Cloud-native Identity and Access Management platform written in Go. Supports turnkey B2B multi-tenancy, OAuth2/OIDC, and event-driven audit logging.',
+  'casbin/casbin':
+    'High-performance, multi-language authorization library supporting ACL, RBAC, ABAC, and RESTful route enforcement with SQL adapters.',
+  'openfga/openfga':
+    'High-performance relationship-based access control (ReBAC) engine inspired by Google Zanzibar. Designed for granular multi-tenant B2B permissions.',
+  'goauthentik/authentik':
+    'Open-source Identity Provider focused on flexibility and versatility. Supports custom authentication flows, reverse-proxy outpost, and user self-service.',
+  'ory/kratos':
+    'Headless identity and user management server implementing registration, login, MFA, and recovery flows under a Zero-Trust architecture.',
+  'juspay/hyperswitch':
+    'High-performance open-source financial switch written in Rust for smart B2B payment routing, multi-acquirer fallbacks, and PCI-DSS compliance.',
+  'killbill/killbill':
+    'Enterprise subscription management and recurrent billing platform with automated invoicing and multi-gateway payment orchestration.',
+  'getlago/lago':
+    'Open-source metering and usage-based billing engine for SaaS and enterprise platforms. Real-time event ingestion and automated invoice generation.',
+  'meilisearch/meilisearch':
+    'Lightning-fast Rust search engine with sub-50ms hybrid retrieval, typo tolerance, instant indexing, and faceted SKU filtering.',
+  'vllm-project/vllm':
+    'High-throughput, low-latency LLM serving library with PagedAttention, achieving up to 24x higher throughput than standard Transformers.',
+  'run-llama/llama_index':
+    'Data framework connecting enterprise data sources to LLMs for precise contextual retrieval and structured RAG pipelines.',
+  'langchain-ai/langchain':
+    'Comprehensive framework for developing context-aware applications powered by language models, agents, and retrieval chains.',
+};
+
+export function getToolDescription(slug: string, fallbackDescription: string, lang: Language): string {
+  if (lang === 'es') return fallbackDescription;
+  const normalizedSlug = slug.toLowerCase().trim();
+  return TOOL_DESCRIPTIONS_EN[normalizedSlug] || fallbackDescription;
+}
+
+export function getDifficultyLabel(diff: string, lang: Language): string {
+  if (lang === 'es') return diff;
+  const d = diff.toLowerCase();
+  if (d.includes('baja') || d.includes('low')) return 'Low';
+  if (d.includes('media') || d.includes('medium')) return 'Medium';
+  if (d.includes('alta') || d.includes('high')) return 'High';
+  return diff;
+}
+
+export function getSavingsLabel(savings: string, lang: Language): string {
+  if (lang === 'es' || !savings) return savings;
+  return savings
+    .replace(/USD \/ mes vs Cloud Propietario/gi, 'USD / mo vs Proprietary Cloud')
+    .replace(/USD \/ mes en licencias MAU B2B/gi, 'USD / mo in B2B MAU licenses')
+    .replace(/USD \/ mes vs SaaS Search Engines/gi, 'USD / mo vs SaaS Search Engines')
+    .replace(/Reducción de 1\.4% en tasas de fallo transaccional/gi, '1.4% reduction in transactional failure rates');
+}
+
