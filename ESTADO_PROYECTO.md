@@ -202,9 +202,21 @@ Módulo técnico de generación y descarga de guías de integración para cada u
      - *Enterprise Multi-tenant Auth & IAM:* Síntesis en 153 ms de 4 capas: `Casbin` (Enforce Permission Check), `Zitadel` (OIDC User Registration), `Keycloak` (OIDC JWT Bearer Issuance), `Ory Kratos` (Self-service Registration Flow).
      - *AI Meeting Assistant & Voice Synthesis:* Síntesis en 156 ms: `VoiceStudio` (TTS Synthesis Stream), `Juspay`, `vLLM` (OpenAI Stream Request), `Meetily` (Meeting Audio Stream). Zero alucinaciones garantizadas contra el catálogo de 25 herramientas.
 3. **[COMPLETADO] Generación e Inspección Física de Guías Descargadas (.md y .pdf):**
-   - ✅ Generación Vectorial Client-Side con `jspdf`: Creados e inspeccionados físicamente los documentos PDF de herramientas principales.
-   - ✅ Corrección y Optimización de Contraste Tipográfico: Títulos y subtítulos ajustados a `#0f172a` (slate-900) y descripciones técnicas a `#334155` (slate-700), logrando una legibilidad y contraste nítido sobre papel blanco y lectores externos de PDF.
-   - ✅ Inspección Visual y OCR Aprobado: Cajas de terminal monoespaciadas oscuras con comandos PowerShell para Windows y Zsh para macOS, insignias de métricas (Health Score, Dificultad, Ahorro B2B), notas de Apple Silicon ARM64 (`--platform linux/amd64`) y pie de página con autoría de EdisonPEÑA (`https://ossatlas.iotdico.com`).
+   - ✅ **Generación Vectorial Multi-Página con `jspdf` y Markdown:**
+     - Generados y validados físicamente **32 documentos** (16 `.md` y 16 `.pdf` en español e inglés) en el directorio [frontend/generated_guides/](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/generated_guides).
+     - Cobertura transversal de las 4 capas B2B e IA:
+       - *DBS:* `PostgreSQL Relacional Core` (2 págs, 12.6 KB)
+       - *AUTH:* `Keycloak Enterprise IAM` (2 págs, 12.7 KB)
+       - *PAYMENTS:* `Juspay Hyperswitch B2B Router` (2 págs, 12.6 KB)
+       - *AI (Nuevas Herramientas):* `Meetily AI Meeting Assistant` (2 págs, 12.6 KB), `CopilotKit Embedded AI Agents` (2 págs, 12.6 KB), `VoiceStudio AI Voice & TTS` (2 págs, 12.6 KB), `Upscayl AI Image Super-Resolution` (2 págs, 12.6 KB), `Vane Conversational AI Search` (2 págs, 12.5 KB).
+   - ✅ **Optimización de Contraste Tipográfico y Cajas de Código:**
+     - Títulos y subtítulos en `#0f172a` (slate-900) y cuerpo descriptivo en `#334155` (slate-700) para nitidez garantizada en impresión y lectores PDF externos.
+     - Cajas de terminal monoespaciadas oscuras (`#050811`) con comandos sintácticos en verde esmeralda (`#34d399`) para Windows PowerShell y lavanda (`#a78bfa`) para macOS Zsh.
+   - ✅ **Validación de Pasos por Plataforma:**
+     - **Windows:** Validación de kernel WSL2 (`wsl --status`), persistencia en `$HOME\oss-atlas-data\...`, `$env:...` y healthcheck con `Invoke-RestMethod`.
+     - **macOS:** Preparación con Homebrew y Colima (`colima start --cpu 4 --memory 4`), compatibilidad Apple Silicon ARM64, `export ...` y healthcheck con `curl`.
+   - ✅ **Checklist de Seguridad y Créditos de Autoría:**
+     - Aislamiento de red puente, permisos estrictos `chmod 600` en `.env`, políticas de respaldos y pie de página oficial de `EdisonPEÑA (https://ossatlas.iotdico.com)`.
 4. **Resiliencia de Ingesta Continua (ETags):**
    - Probar sincronización con respuesta `HTTP 304 Not Modified` para preservar los rate limits de GitHub.
    - Probar ingesta de repositorios adicionales con cálculo de Health Score ponderado y vectorización `halfvec`.
