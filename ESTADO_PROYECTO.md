@@ -118,6 +118,11 @@ npm run dev
   - Funciones auxiliares `getToolDescription(slug, description, lang)`, `getDifficultyLabel(diff, lang)` (`Low` / `Medium` / `High`) y `getSavingsLabel(savings, lang)` (`USD / mo vs Proprietary Cloud`).
   - Vinculación reactiva tanto en las tarjetas del catálogo como en el modal de previsualización y exportación Markdown de guías.
 
+- **Traducción Integral de Escenarios RAG y Planes de Precios B2B:**
+  - **Asistente RAG B2B:** Traducción dinámica de los 3 casos de uso preconfigurados (`scenario-logistics-b2b`, `scenario-fintech-compliance`, `scenario-saas-ai-copilot`) incluyendo prompts de negocio, resúmenes ejecutivos, nombres de capas de arquitectura (`Layer 1..4`), justificaciones técnicas y triggers de integración mediante [`getScenarioContent`](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts).
+  - **Burbuja de Conversación CTO:** Encabezados traducidos (`Consulta de Arquitectura B2B` / `B2B Architecture Query`, `Dominio` / `Domain`).
+  - **Planes B2B (Pricing Cards):** Traducción del 100% de insignias (`OPEN-CORE FREE`, `RECOMMENDED B2B • MOST POPULAR`, `ARCHITECTURE & PRO GUIDES`, `TEAMS & ENTERPRISE`), descripciones de planes, frecuencias de cobro (`USD / mo`, `USD / yr (equiv. $15.8/mo)`), y todos los puntos de características (features) para Community, Pro Architecture y Enterprise Hub.
+
 ### 4.3. Depuración Visual y de Marca (Atención a Documento de Sugerencias)
 - **Página 1 del Documento:**
   - Se eliminó el subtítulo técnico redundante del logo (`pgvector 0.7+ (halfvec) • RRF (k=60) • RAGAS Verified • ossatlas.iotdico.com`).
@@ -138,6 +143,8 @@ npm run dev
   - `5912f7d`: *fix(i18n): bind complete bilingual translation dictionary to Hero, Categories, Catalog, Cards, RAG and Footer*
   - `afdd577`: *fix(i18n): translate all tool descriptions, difficulty labels, and B2B savings to English*
   - `afc6898`: *fix(i18n): refine savings label and update tool descriptions in production*
+  - `4f57e17`: *docs: sync bilingual tool description completion in ESTADO_PROYECTO.md*
+  - `5a2f460`: *feat(guides): implement multi-platform downloadable guide generator in .md and .pdf for Windows and macOS*
 - Despliegue automático y verificación en vivo activa en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
 
 ---

@@ -9,6 +9,7 @@ import {
   getToolDescription,
   getDifficultyLabel,
   getSavingsLabel,
+  getScenarioContent,
 } from '@/lib/translations';
 import {
   downloadMarkdownGuide,
@@ -724,7 +725,7 @@ const getScenarioTitle = (scenarioId: string, lang: Language) => {
   const t = TRANSLATIONS[lang];
   if (scenarioId === 'scenario-logistics-b2b') return t.scenario1;
   if (scenarioId === 'scenario-fintech-compliance') return t.scenario2;
-  if (scenarioId === 'scenario-rag-copilot') return t.scenario3;
+  if (scenarioId === 'scenario-saas-ai-copilot' || scenarioId === 'scenario-rag-copilot') return t.scenario3;
   return scenarioId;
 };
 
@@ -1190,10 +1191,16 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   // Active RAG scenario computation
   const currentScenario = useMemo<B2BScenario>(() => {
     if (liveRagResponse) return liveRagResponse;
-    return (
-      B2B_RAG_SCENARIOS.find((scenario: B2BScenario) => scenario.id === activeScenarioId) || B2B_RAG_SCENARIOS[0]
-    );
-  }, [liveRagResponse, activeScenarioId]);
+    const base =
+      B2B_RAG_SCENARIOS.find((scenario: B2BScenario) => scenario.id === activeScenarioId) || B2B_RAG_SCENARIOS[0];
+    const localized = getScenarioContent(base.id, base.promptText, base.executiveSummary, base.nodes, lang);
+    return {
+      ...base,
+      promptText: localized.promptText,
+      executiveSummary: localized.executiveSummary,
+      nodes: localized.nodes,
+    };
+  }, [liveRagResponse, activeScenarioId, lang]);
 
   // Request live architecture synthesis from /api/v1/rag/architecture
   const requestRagArchitecture = async (promptText: string) => {
@@ -1508,9 +1515,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     key={scenario.id}
                     type="button"
                     onClick={() => {
-                      setHeroPromptInput(scenario.promptText);
                       setActiveScenarioId(scenario.id);
-                      setCustomBusinessQuery(scenario.promptText);
+                      setCustomBusinessQuery('');
                     }}
                     className={`px-3 py-1 rounded-lg text-xs font-mono border transition-all ${
                       activeScenarioId === scenario.id
@@ -2073,7 +2079,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                           setLiveRagResponse(null);
                           setIsSynthesizingRag(true);
                           setActiveScenarioId(scen.id);
-                          setCustomBusinessQuery(scen.promptText);
+                          setCustomBusinessQuery('');
                           setTimeout(() => setIsSynthesizingRag(false), 200);
                         }}
                         className={`w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer ${
@@ -2109,7 +2115,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-xs font-mono">
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                   <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
                     <span className="text-slate-400 block text-[11px]">Context Precision</span>
                     <span className="text-lg font-bold text-cyan-300">
@@ -2153,8 +2159,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 </div>
                 <div className="flex-1 rounded-2xl rounded-tl-none bg-slate-900 border border-slate-800 p-4">
                   <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-1">
-                    <span>Consulta de Arquitectura B2B</span>
-                    <span>Dominio: {currentScenario.businessDomain}</span>
+                    <span>{t.ragQueryHeader}</span>
+                    <span>{t.ragDomainLabel}: {currentScenario.businessDomain}</span>
                   </div>
                   <p className="text-sm text-slate-100 font-mono">
                     &ldquo;{customBusinessQuery || currentScenario.promptText}&rdquo;
@@ -2332,42 +2338,42 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <div className="rounded-2xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-slate-800 text-slate-300">
-                  OPEN-CORE LIBRE
+                  {t.pricingTier1Badge}
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">Community</h3>
                   <p className="text-xs text-slate-400 mt-1">
-                    Para desarrolladores independientes que buscan explorar herramientas open source evaluadas.
+                    {t.pricingTier1Desc}
                   </p>
                 </div>
                 <div className="pt-2 flex items-baseline gap-1">
                   <span className="text-4xl font-extrabold text-white font-mono">$0</span>
-                  <span className="text-xs text-slate-400 font-mono">USD / siempre libre</span>
+                  <span className="text-xs text-slate-400 font-mono">{t.pricingTier1Freq}</span>
                 </div>
                 <ul className="space-y-2.5 text-xs text-slate-300 pt-4 border-t border-slate-800">
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Acceso al Catálogo de 13 herramientas curadas</span>
+                    <span>{t.pricingTier1F1}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Búsqueda Híbrida RRF (FTS + vectores halfvec)</span>
+                    <span>{t.pricingTier1F2}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Cálculo transparente de Health Score ponderado</span>
+                    <span>{t.pricingTier1F3}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Comandos Docker Run listos para ejecutar</span>
+                    <span>{t.pricingTier1F4}</span>
                   </li>
                   <li className="flex items-start gap-2 text-slate-500">
                     <span>✕</span>
-                    <span>3 consultas diarias al Arquitecto RAG</span>
+                    <span>{t.pricingTier1F5}</span>
                   </li>
                   <li className="flex items-start gap-2 text-slate-500">
                     <span>✕</span>
-                    <span>Guías descargables en Markdown y PDF</span>
+                    <span>{t.pricingTier1F6}</span>
                   </li>
                 </ul>
               </div>
@@ -2384,17 +2390,17 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             {/* Tier 2: Pro Architecture (Most Popular B2B) */}
             <div className="relative rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border-2 border-amber-400/80 p-6 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xl shadow-amber-950/40">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-[10px] font-mono font-extrabold text-slate-950 shadow-md">
-                ⭐ RECOMENDADO B2B • MÁS POPULAR
+                {t.pricingTier2Recommended}
               </div>
 
               <div className="space-y-4">
                 <div className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                  ARQUITECTURA & GUÍAS PRO
+                  {t.pricingTier2Badge}
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">Pro Architecture</h3>
                   <p className="text-xs text-slate-300 mt-1">
-                    Para arquitectos de software, tech leads y consultores B2B que necesitan integrar herramientas rápidamente.
+                    {t.pricingTier2Desc}
                   </p>
                 </div>
                 <div className="pt-2 flex items-baseline gap-1">
@@ -2402,29 +2408,29 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     ${pricingCycle === 'annual' ? '190' : '19'}
                   </span>
                   <span className="text-xs text-slate-400 font-mono">
-                    USD / {pricingCycle === 'annual' ? 'año (equiv. $15.8/mes)' : 'mes'}
+                    USD / {pricingCycle === 'annual' ? t.pricingTier2FreqYear : t.pricingTier2FreqMonth}
                   </span>
                 </div>
                 <ul className="space-y-2.5 text-xs text-slate-200 pt-4 border-t border-slate-800">
                   <li className="flex items-start gap-2 text-amber-200 font-semibold bg-amber-500/10 p-2 rounded-lg border border-amber-500/30">
                     <span className="text-amber-400 font-bold">★</span>
-                    <span>Descarga de Guías de Integración (.md y .pdf) paso a paso para Windows y macOS</span>
+                    <span>{t.pricingTier2F1}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Consultas ilimitadas al Arquitecto RAG sin límites diarios</span>
+                    <span>{t.pricingTier2F2}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Generador de manifiestos unificados (Docker Compose & Terraform)</span>
+                    <span>{t.pricingTier2F3}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Acceso prioritario al Pipeline de Ingesta Continua (ETags en vivo)</span>
+                    <span>{t.pricingTier2F4}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Soporte asíncrono de arquitectura con SLA &lt; 12h</span>
+                    <span>{t.pricingTier2F5}</span>
                   </li>
                 </ul>
               </div>
@@ -2444,12 +2450,12 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <div className="rounded-2xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-violet-500/20 text-violet-300 border border-violet-500/40">
-                  EQUIPOS & ENTERPRISE
+                  {t.pricingTier3Badge}
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">Enterprise Hub</h3>
                   <p className="text-xs text-slate-400 mt-1">
-                    Para empresas y factorías de software con múltiples células que requieren gobernanza y cumplimiento.
+                    {t.pricingTier3Desc}
                   </p>
                 </div>
                 <div className="pt-2 flex items-baseline gap-1">
@@ -2457,33 +2463,33 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     ${pricingCycle === 'annual' ? '490' : '49'}
                   </span>
                   <span className="text-xs text-slate-400 font-mono">
-                    USD / {pricingCycle === 'annual' ? 'año (equiv. $40.8/mes)' : 'mes'}
+                    USD / {pricingCycle === 'annual' ? t.pricingTier3FreqYear : t.pricingTier3FreqMonth}
                   </span>
                 </div>
                 <ul className="space-y-2.5 text-xs text-slate-300 pt-4 border-t border-slate-800">
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Todo lo incluido en Pro Architecture</span>
+                    <span>{t.pricingTier3F1}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Licencia multi-asiento para hasta 10 arquitectos</span>
+                    <span>{t.pricingTier3F2}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Auditorías automáticas de cumplimiento (PCI-DSS, SOC2, HIPAA)</span>
+                    <span>{t.pricingTier3F3}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Conectores directos a pipelines CI/CD (GitHub / GitLab)</span>
+                    <span>{t.pricingTier3F4}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Facturación corporativa con RUT / Tax ID / NIT</span>
+                    <span>{t.pricingTier3F5}</span>
                   </li>
                   <li className="flex items-start gap-2 text-violet-300 font-medium">
                     <span className="text-violet-400 font-bold">✓</span>
-                    <span>Sesión 1-on-1 de revisión arquitectónica con EdisonPEÑA (Iotdico)</span>
+                    <span>{t.pricingTier3F6}</span>
                   </li>
                 </ul>
               </div>

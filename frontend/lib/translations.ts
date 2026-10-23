@@ -125,6 +125,43 @@ export const TRANSLATIONS = {
     pricingInvoiceNotice: 'Factura legal B2B para deducción tributaria.',
     pricingInstantNotice: 'Activación inmediata con token de acceso corporativo.',
 
+    // Pricing Cards
+    pricingTier1Badge: 'OPEN-CORE LIBRE',
+    pricingTier1Desc: 'Para desarrolladores independientes que buscan explorar herramientas open source evaluadas.',
+    pricingTier1Freq: 'USD / siempre libre',
+    pricingTier1F1: 'Acceso al Catálogo de 13 herramientas curadas',
+    pricingTier1F2: 'Búsqueda Híbrida RRF (FTS + vectores halfvec)',
+    pricingTier1F3: 'Cálculo transparente de Health Score ponderado',
+    pricingTier1F4: 'Comandos Docker Run listos para ejecutar',
+    pricingTier1F5: '3 consultas diarias al Arquitecto RAG',
+    pricingTier1F6: 'Guías descargables en Markdown y PDF',
+
+    pricingTier2Recommended: '⭐ RECOMENDADO B2B • MÁS POPULAR',
+    pricingTier2Badge: 'ARQUITECTURA & GUÍAS PRO',
+    pricingTier2Desc: 'Para arquitectos de software, tech leads y consultores B2B que necesitan integrar herramientas rápidamente.',
+    pricingTier2FreqMonth: 'USD / mes',
+    pricingTier2FreqYear: 'USD / año (equiv. $15.8/mes)',
+    pricingTier2F1: 'Descarga de Guías de Integración (.md y .pdf) paso a paso para Windows y macOS',
+    pricingTier2F2: 'Consultas ilimitadas al Arquitecto RAG sin límites diarios',
+    pricingTier2F3: 'Generador de manifiestos unificados (Docker Compose & Terraform)',
+    pricingTier2F4: 'Acceso prioritario al Pipeline de Ingesta Continua (ETags en vivo)',
+    pricingTier2F5: 'Soporte asíncrono de arquitectura con SLA < 12h',
+
+    pricingTier3Badge: 'EQUIPOS & ENTERPRISE',
+    pricingTier3Desc: 'Para empresas y factorías de software con múltiples células que requieren gobernanza y cumplimiento.',
+    pricingTier3FreqMonth: 'USD / mes',
+    pricingTier3FreqYear: 'USD / año (equiv. $40.8/mes)',
+    pricingTier3F1: 'Todo lo incluido en Pro Architecture',
+    pricingTier3F2: 'Licencia multi-asiento para hasta 10 arquitectos',
+    pricingTier3F3: 'Auditorías automáticas de cumplimiento (PCI-DSS, SOC2, HIPAA)',
+    pricingTier3F4: 'Conectores directos a pipelines CI/CD (GitHub / GitLab)',
+    pricingTier3F5: 'Facturación corporativa con RUT / Tax ID / NIT',
+    pricingTier3F6: 'Sesión 1-on-1 de revisión arquitectónica con EdisonPEÑA (Iotdico)',
+
+    // RAG bubble labels
+    ragQueryHeader: 'Consulta de Arquitectura B2B',
+    ragDomainLabel: 'Dominio',
+
     // Checkout Modal
     checkoutTitle: 'CHECKOUT SEGURO B2B',
     checkoutSsl: 'SSL 256-BIT ENCRIPTADO',
@@ -309,6 +346,43 @@ export const TRANSLATIONS = {
     pricingInvoiceNotice: 'Official B2B invoice for tax deduction.',
     pricingInstantNotice: 'Immediate activation with corporate access token.',
 
+    // Pricing Cards
+    pricingTier1Badge: 'OPEN-CORE FREE',
+    pricingTier1Desc: 'For independent developers exploring evaluated open-source tools.',
+    pricingTier1Freq: 'USD / free forever',
+    pricingTier1F1: 'Access to curated catalog of 13+ tools',
+    pricingTier1F2: 'Hybrid Search RRF (FTS + halfvec vectors)',
+    pricingTier1F3: 'Transparent weighted Health Score calculation',
+    pricingTier1F4: 'Ready-to-run Docker commands',
+    pricingTier1F5: '3 daily queries to RAG Architect',
+    pricingTier1F6: 'Downloadable Markdown and PDF guides',
+
+    pricingTier2Recommended: '⭐ RECOMMENDED B2B • MOST POPULAR',
+    pricingTier2Badge: 'ARCHITECTURE & PRO GUIDES',
+    pricingTier2Desc: 'For software architects, tech leads, and B2B consultants needing rapid tool integration.',
+    pricingTier2FreqMonth: 'USD / mo',
+    pricingTier2FreqYear: 'USD / yr (equiv. $15.8/mo)',
+    pricingTier2F1: 'Download step-by-step Integration Guides (.md & .pdf) for Windows and macOS',
+    pricingTier2F2: 'Unlimited daily queries to RAG Architect',
+    pricingTier2F3: 'Unified manifest generator (Docker Compose & Terraform)',
+    pricingTier2F4: 'Priority access to Continuous Ingestion Pipeline (live ETags)',
+    pricingTier2F5: 'Asynchronous architecture support with < 12h SLA',
+
+    pricingTier3Badge: 'TEAMS & ENTERPRISE',
+    pricingTier3Desc: 'For enterprises and software factories with multiple squads requiring governance and compliance.',
+    pricingTier3FreqMonth: 'USD / mo',
+    pricingTier3FreqYear: 'USD / yr (equiv. $40.8/mo)',
+    pricingTier3F1: 'Everything in Pro Architecture included',
+    pricingTier3F2: 'Multi-seat license for up to 10 architects',
+    pricingTier3F3: 'Automated compliance audits (PCI-DSS, SOC2, HIPAA)',
+    pricingTier3F4: 'Direct connectors to CI/CD pipelines (GitHub / GitLab)',
+    pricingTier3F5: 'Corporate invoicing with Tax ID / RUT / VAT',
+    pricingTier3F6: '1-on-1 architectural review session with EdisonPEÑA (Iotdico)',
+
+    // RAG bubble labels
+    ragQueryHeader: 'B2B Architecture Query',
+    ragDomainLabel: 'Domain',
+
     // Checkout Modal
     checkoutTitle: 'SECURE B2B CHECKOUT',
     checkoutSsl: '256-BIT ENCRYPTED SSL',
@@ -427,5 +501,139 @@ export function getSavingsLabel(savings: string, lang: Language): string {
     .replace('USD / mes en licencias MAU B2B', 'USD / mo in B2B MAU licenses')
     .replace('USD / mes vs SaaS Search Engines', 'USD / mo vs SaaS Search Engines')
     .replace('Reducción de 1.4% en tasas de fallo transaccional', '1.4% reduction in transactional failure rates');
+}
+
+export interface RagScenarioTranslation {
+  promptText: string;
+  executiveSummary: string;
+  nodes: {
+    layer: string;
+    rationale: string;
+    integrationTrigger: string;
+  }[];
+}
+
+export const RAG_SCENARIOS_TRANSLATIONS_EN: Record<string, RagScenarioTranslation> = {
+  'scenario-logistics-b2b': {
+    promptText:
+      'I need to design a B2B logistics-oriented e-commerce platform with exact SKU-9941A part search, SSO for corporate fleets, and self-hosted multi-gateway billing.',
+    executiveSummary:
+      'Zero-hallucination architecture verified via Reciprocal Rank Fusion (RRF k=60). Destructive Snowball stemming is prevented using PostgreSQL "simple" dictionary to preserve alphanumeric cargo IDs like "SKU-9941A" while HNSW (halfvec) captures logistic routing semantics.',
+    nodes: [
+      {
+        layer: 'Layer 1: Multi-Tenant Federated Identity (Auth)',
+        rationale:
+          'Allows authenticating logistics operators, suppliers, and enterprise clients via OIDC and SAML 2.0 with no monthly active user (MAU) fees.',
+        integrationTrigger: 'FastAPI middleware validates RS256 JWT issued by corporate realm.',
+      },
+      {
+        layer: 'Layer 2: Catalog Persistence & Hybrid Search (DBs)',
+        rationale:
+          'Combines FTS with "simple" dictionary for exact SKU codes and halfvec vectors with HNSW index (m=16, ef_construction=64) sustaining P95 latency < 190ms.',
+        integrationTrigger: 'PostgreSQL RPC function executes RRF (1/(60+rank_fts) + 1/(60+rank_vec)).',
+      },
+      {
+        layer: 'Layer 3: Instant Indexing & Technical Assistant (AI)',
+        rationale:
+          'Orchestrates natural language inquiries from B2B buyers and injects verified technical context with strict RAGAS faithfulness threshold = 1.00.',
+        integrationTrigger: 'Python async worker synchronizes shipping manifests via webhooks.',
+      },
+      {
+        layer: 'Layer 4: Financial Routing & B2B Billing (Payments)',
+        rationale:
+          'Directs payments across multiple card acquirers with automated fallbacks, reducing transaction rejection rates by 1.4%.',
+        integrationTrigger: 'Idempotency key checked on Redis cluster before executing payment intent.',
+      },
+    ],
+  },
+  'scenario-fintech-compliance': {
+    promptText:
+      'Open-source architecture for a B2B Fintech payment switch with real-time transaction auditing, fraud prevention, strong MFA authentication, and zero vendor lock-in.',
+    executiveSummary:
+      'Hardened stack for high financial availability. Saves 15 to 20 hours of architectural research by replacing expensive SaaS with auditable containers under permissive Apache-2.0 and MIT licenses.',
+    nodes: [
+      {
+        layer: 'Layer 1: Core Transactional Orchestrator (Payments)',
+        rationale:
+          'Isolates financial token handling in Rust with sub-millisecond latency and native multi-currency reconciliation support.',
+        integrationTrigger: 'HMAC-SHA256 signed webhook dispatched to PostgreSQL general ledger.',
+      },
+      {
+        layer: 'Layer 2: Strong Authentication & IAM Policies (Auth)',
+        rationale:
+          'Supports Financial-grade API (FAPI) security profiles, WebAuthn/Passkeys hardware tokens, and granular access control.',
+        integrationTrigger: 'OAuth2 token introspection validation at API Gateway prior to signing payments.',
+      },
+      {
+        layer: 'Layer 3: Relational Store & Vector Audit (DBs)',
+        rationale:
+          'Ensures strict ACID compliance for accounting balances and anomaly detection via cosine similarity on payment history.',
+        integrationTrigger: 'Row-Level Security (RLS) enforced per corporate tenant_id.',
+      },
+      {
+        layer: 'Layer 4: Regulatory Compliance Copilot (AI)',
+        rationale:
+          'Queries compliance regulations and audit logs with forced cosine similarity threshold to prevent speculative answers.',
+        integrationTrigger: 'FastAPI pipeline evaluates Faithfulness metric before generating compliance report.',
+      },
+    ],
+  },
+  'scenario-saas-ai-copilot': {
+    promptText:
+      'We want to launch a B2B SaaS for document management and contract intelligence with hybrid semantic + lexical search, ingestion from GitHub/S3, and RAM cost controls.',
+    executiveSummary:
+      'Design optimized to mitigate Risk R5 (PostgreSQL shared_buffers exhaustion) by implementing halfvec vectors in pgvector 0.7+ alongside resilient Token Bucket & ETag-controlled ingestion.',
+    nodes: [
+      {
+        layer: 'Layer 1: Hybrid Vector + FTS Search Engine (DBs)',
+        rationale:
+          'Compresses embeddings into 50% less RAM with zero recall degradation, holding HNSW indexes (m=16, ef_construction=64) in memory.',
+        integrationTrigger: 'Incremental indexing triggered upon HTTP 304/200 ETag validation.',
+      },
+      {
+        layer: 'Layer 2: RAG Orchestration & Continuous Evaluation (AI)',
+        rationale:
+          'Evaluates Context Precision, Context Recall, Faithfulness, and Answer Relevance in real time to safeguard enterprise responses.',
+        integrationTrigger: 'FastAPI Streaming Endpoint with circuit-breaker cutoff if cosine similarity < 0.78.',
+      },
+      {
+        layer: 'Layer 3: Multi-Organization IAM & SSO (Auth)',
+        rationale:
+          'Segregates permissions by corporate firm or department, integrating directly with each B2B client active directory.',
+        integrationTrigger: 'JWT claims synchronized with Supabase Row-Level Security policies.',
+      },
+    ],
+  },
+};
+
+export function getScenarioContent(
+  scenarioId: string,
+  defaultPrompt: string,
+  defaultSummary: string,
+  defaultNodes: any[],
+  lang: Language
+) {
+  if (lang === 'es') {
+    return { promptText: defaultPrompt, executiveSummary: defaultSummary, nodes: defaultNodes };
+  }
+  const tr = RAG_SCENARIOS_TRANSLATIONS_EN[scenarioId];
+  if (!tr) {
+    return { promptText: defaultPrompt, executiveSummary: defaultSummary, nodes: defaultNodes };
+  }
+  const translatedNodes = defaultNodes.map((node, i) => {
+    const nodeTr = tr.nodes[i];
+    if (!nodeTr) return node;
+    return {
+      ...node,
+      layer: nodeTr.layer || node.layer,
+      rationale: nodeTr.rationale || node.rationale,
+      integrationTrigger: nodeTr.integrationTrigger || node.integrationTrigger,
+    };
+  });
+  return {
+    promptText: tr.promptText || defaultPrompt,
+    executiveSummary: tr.executiveSummary || defaultSummary,
+    nodes: translatedNodes,
+  };
 }
 
