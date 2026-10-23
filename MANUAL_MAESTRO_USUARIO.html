@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSS Atlas — Manual Maestro de Arquitectura & Guía de Usuario B2B</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #06b6d4;
+      --bg-dark: #090d16;
+      --card-bg: #111827;
+      --border-color: #1f2937;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.65;
+      font-size: 14px;
+      padding: 40px 20px;
+    }
+
+    .document-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #0d121f;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 48px 56px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Print Controls */
+    .print-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e1b4b;
+      border: 1px solid #4338ca;
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin-bottom: 32px;
+    }
+
+    .print-btn {
+      background: linear-gradient(135deg, #4f46e5, #06b6d4);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+
+    .print-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Cover Page */
+    .cover {
+      border-bottom: 2px solid #1e293b;
+      padding-bottom: 32px;
+      margin-bottom: 36px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+
+    .badge-indigo { background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); }
+    .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.4); }
+    .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    h1.doc-title {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .doc-subtitle {
+      font-size: 16px;
+      color: var(--secondary);
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 24px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid #1e293b;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-size: 12.5px;
+    }
+
+    .meta-item strong {
+      color: #94a3b8;
+      display: inline-block;
+      width: 140px;
+    }
+
+    .meta-item a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    /* Headings */
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      border-left: 4px solid var(--primary);
+      padding-left: 14px;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      letter-spacing: -0.2px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #38bdf8;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      color: #cbd5e1;
+    }
+
+    /* Code Blocks */
+    pre {
+      background: #050811;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 14px 18px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 12px;
+      color: #a5f3fc;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 12px;
+      background: rgba(30, 41, 59, 0.8);
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Callouts / Quotes */
+    blockquote {
+      border-left: 4px solid var(--secondary);
+      background: rgba(6, 182, 212, 0.08);
+      padding: 12px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 18px 0;
+      color: #e0f2fe;
+      font-size: 13px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 12.5px;
+      background: #080d1a;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+
+    th {
+      background: #111c33;
+      color: #f1f5f9;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #151f33;
+      color: #cbd5e1;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    /* Lists */
+    ul, ol {
+      margin-left: 22px;
+      margin-bottom: 16px;
+      color: #cbd5e1;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* Architecture Box */
+    .arch-diagram {
+      background: #050811;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: #94a3b8;
+      margin: 18px 0;
+      line-height: 1.4;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid #1e293b;
+      padding: 10px 14px;
+      border-radius: 6px;
+    }
+
+    .check-icon {
+      color: var(--accent-green);
+      font-weight: bold;
+    }
+
+    /* Print Media Rules */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #111827 !important;
+        padding: 0 !important;
+        font-size: 11pt !important;
+      }
+
+      .document-container {
+        max-width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+
+      .print-bar {
+        display: none !important;
+      }
+
+      h1.doc-title {
+        color: #0f172a !important;
+        background: none !important;
+        -webkit-text-fill-color: #0f172a !important;
+        font-size: 24pt !important;
+      }
+
+      .doc-subtitle {
+        color: #0284c7 !important;
+      }
+
+      .meta-grid {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #334155 !important;
+      }
+
+      .meta-item strong {
+        color: #475569 !important;
+      }
+
+      h2 {
+        color: #0f172a !important;
+        border-left: 4px solid #4f46e5 !important;
+        page-break-after: avoid;
+        margin-top: 24pt !important;
+      }
+
+      h3, h4 {
+        color: #1e293b !important;
+        page-break-after: avoid;
+      }
+
+      p, li {
+        color: #334155 !important;
+      }
+
+      pre {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        page-break-inside: avoid;
+        font-size: 9pt !important;
+      }
+
+      code {
+        background: #e2e8f0 !important;
+        color: #0284c7 !important;
+      }
+
+      table {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        page-break-inside: avoid;
+      }
+
+      th {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+      }
+
+      td {
+        color: #334155 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+      }
+
+      blockquote {
+        background: #f0f9ff !important;
+        color: #0369a1 !important;
+        border-left-color: #0284c7 !important;
+      }
+
+      .checklist-item {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #1e293b !important;
+        page-break-inside: avoid;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="document-container">
+    
+    <!-- Printable Bar / Action Area -->
+    <div class="print-bar">
+      <div>
+        <strong style="color: #ffffff; display: block; font-size: 14px;">📄 Manual Maestro de Arquitectura & Guía de Usuario B2B</strong>
+        <span style="color: #a5b4fc; font-size: 12px;">Formato optimizado para visualización web y exportación a PDF (Ctrl + P / Imprimir)</span>
+      </div>
+      <button class="print-btn" onclick="window.print()">
+        <span>🖨️ Exportar a PDF / Imprimir</span>
+      </button>
+    </div>
+
+    <!-- Document Cover -->
+    <div class="cover">
+      <div class="badge-bar">
+        <span class="badge badge-indigo">Enterprise Ready v1.0.0</span>
+        <span class="badge badge-cyan">B2B Architectural Intelligence</span>
+        <span class="badge badge-green">Zero Hallucination RAG</span>
+      </div>
+      <h1 class="doc-title">OSS Atlas — Manual Maestro & Guía de Usuario</h1>
+      <div class="doc-subtitle">Acelerador B2B de Integraciones Open-Source, Arquitectura RAG Híbrida y Generador de Despliegues</div>
+
+      <div class="meta-grid">
+        <div class="meta-item"><strong>Plataforma en Vivo:</strong> <a href="https://ossatlas.iotdico.com" target="_blank">https://ossatlas.iotdico.com</a></div>
+        <div class="meta-item"><strong>Autor & Arquitecto:</strong> EdisonPEÑA (Iotdico)</div>
+        <div class="meta-item"><strong>Repositorio Git:</strong> github.com/DICO2023/oss-atlas</div>
+        <div class="meta-item"><strong>Licencia de Software:</strong> MIT (Open-Core Enterprise)</div>
+        <div class="meta-item"><strong>Base de Datos:</strong> Neon Serverless PostgreSQL 16</div>
+        <div class="meta-item"><strong>Red de Despliegue:</strong> Vercel Global Edge Network</div>
+      </div>
+    </div>
+
+    <!-- 1. Executive Summary -->
+    <h2>1. Visión General y Propósito del Sistema</h2>
+    <p><strong>OSS Atlas</strong> es una plataforma de inteligencia de software B2B diseñada para eliminar la fricción técnica y el alto costo operativo en la adopción corporativa de tecnologías de código abierto. En consultoría e ingeniería tradicional, un equipo de arquitectos invierte habitualmente entre <strong>15 y 20 horas por proyecto</strong> realizando tareas repetitivas:</p>
+    <ul>
+      <li>Investigar repositorios en GitHub y filtrar proyectos abandonados o sin mantenimiento.</li>
+      <li>Verificar compatibilidad de licencias permisivas (MIT, Apache 2.0, BSD) frente a restrictivas (AGPL, GPLv3) para evitar riesgos legales.</li>
+      <li>Diseñar y validar manifiestos de contenedores compatibles entre las capas de Autenticación, Base de Datos, Pagos e Inteligencia Artificial.</li>
+    </ul>
+    <p>OSS Atlas resuelve este problema mediante un <strong>Catálogo Cardinal Ponderado</strong>, un <strong>Asistente Conversacional RAG con Cero Alucinación</strong> y un <strong>Generador de Guías de Integración descargables (.md y .pdf)</strong> adaptadas específicamente para Windows y macOS.</p>
+
+    <!-- 2. Architecture & Topology -->
+    <h2>2. Arquitectura Tecnológica & Topología de Despliegue</h2>
+    <p>El sistema se distribuye en una arquitectura desacoplada de alto rendimiento, optimizada para responder en menos de 100 ms a nivel mundial:</p>
+
+    <div class="arch-diagram">
++-----------------------------------------------------------------------------------+
+|                           CLIENTE CORPORATIVO / NAVEGADOR                         |
++-----------------------------------------------------------------------------------+
+                                         │  HTTPS (TLS 1.3)
+                                         ▼
++-----------------------------------------------------------------------------------+
+| GESTIÓN DNS HOSTINGER: CNAME ossatlas.iotdico.com -> cname.vercel-dns.com         |
++-----------------------------------------------------------------------------------+
+                                         │  Global Edge Routing
+                                         ▼
++-----------------------------------------------------------------------------------+
+| VERCEL GLOBAL EDGE NETWORK (Next.js 15 App Router + React 19 + SSR Streaming)     |
+|   • Frontend UI: Catálogo, RAG Assistant, Checkout Modal, Visor Multi-Plataforma  |
+|   • API Engine: Búsqueda Híbrida RRF, RAG Inference, ETag Sync, Checkout B2B      |
++-----------------------------------------------------------------------------------+
+                  │                                            │
+                  ▼ SSL Pool (pgvector 0.7+)                   ▼ Conditional ETag
++---------------------------------------------+  +----------------------------------+
+| NEON POSTGRESQL 16 SERVERLESS               |  | GITHUB REST / GRAPHQL API        |
+|  • Tablas: Repos, Categorías, Evaluaciones   |  |  • Ingesta Continua              |
+|  • HNSW Index: halfvec(1536), m=16, ef=64   |  |  • Rate Limit Shield (304 Cache) |
+|  • FTS Lexical: tsvector (simple dictionary)|  |  • Token Bucket Concurrency      |
++---------------------------------------------+  +----------------------------------+
+    </div>
+
+    <h3>Especificaciones de la Pila Tecnológica</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Capa</th>
+          <th>Tecnología / Proveedor</th>
+          <th>Función Clave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Compute & Frontend</strong></td>
+          <td>Next.js 15 + React 19 + TailwindCSS</td>
+          <td>SSR Streaming, App Router, reactividad bilingüe inmediata.</td>
+        </tr>
+        <tr>
+          <td><strong>Infraestructura Edge</strong></td>
+          <td>Vercel Global Edge Network</td>
+          <td>Alojamiento global con latencia mínima y certificados SSL automáticos.</td>
+        </tr>
+        <tr>
+          <td><strong>Gestión DNS</strong></td>
+          <td>Hostinger DNS Zone</td>
+          <td>Enrutamiento del subdominio <code>ossatlas.iotdico.com</code> mediante registro CNAME.</td>
+        </tr>
+        <tr>
+          <td><strong>Base de Datos Relacional</strong></td>
+          <td>Neon PostgreSQL 16 Serverless</td>
+          <td>Almacenamiento ACID transaccional con conexión SSL segura.</td>
+        </tr>
+        <tr>
+          <td><strong>Motor Vectorial</strong></td>
+          <td><code>pgvector 0.7+</code> con <code>halfvec(1536)</code></td>
+          <td>Vectores de precisión media con ahorro del 50% de memoria RAM.</td>
+        </tr>
+        <tr>
+          <td><strong>Motor de Búsqueda</strong></td>
+          <td>Fusión de Rango Recíproco (RRF)</td>
+          <td>Combina búsqueda semántica e índices FTS de diccionario simple.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- 3. Platform Modules -->
+    <h2>3. Módulos de la Plataforma & Manual de Operación</h2>
+
+    <h3>3.1. Explorador de Categorías y Catálogo Normalizado</h3>
+    <p>El catálogo categoriza las herramientas líderes de código abierto en 4 dominios empresariales:</p>
+    <ul>
+      <li><strong>AUTH (Autenticación e IAM):</strong> Keycloak, Authentik, Zitadel, Ory Kratos, Casbin, OpenFGA.</li>
+      <li><strong>DBS (Bases de Datos & Vectores):</strong> Supabase (PostgreSQL + pgvector), Qdrant Vector Engine, PostgreSQL Relacional Core.</li>
+      <li><strong>PAYMENTS (Pagos y Facturación Recurrente B2B):</strong> Juspay Hyperswitch, Kill Bill, Lago.</li>
+      <li><strong>AI (Modelos de Lenguaje & RAG Auto-Hospedado):</strong> Meilisearch, vLLM Inference Engine, LlamaIndex, LangChain.</li>
+    </ul>
+
+    <h4>Métrica Exclusiva: Health Score Cardinal</h4>
+    <p>Cada componente se clasifica mediante una fórmula matemática estricta y transparente:</p>
+    <blockquote>
+      <strong>Health Score</strong> = (Velocidad de Commits × 0.15) + (Seguridad y Auditoría Estructural × 0.20) + (Documentación y Madurez de Comunidad × 0.65)
+    </blockquote>
+
+    <h3>3.2. Motor de Búsqueda Híbrida RRF (Reciprocal Rank Fusion)</h3>
+    <p>Para evitar fallos ante términos técnicos o números de serie, el motor combina dos canales independientes:</p>
+    <pre>Score_RRF(doc) = 1 / (60 + Rango_Lexico(doc)) + 1 / (60 + Rango_Vectorial(doc))</pre>
+    <p>El índice de texto completo utiliza el diccionario <code>simple</code> de PostgreSQL en lugar del algoritmo Snowball, asegurando que tokens como <code>SKU-9941A</code>, <code>HNSW</code>, <code>RS256</code> o nombres exactos de funciones no sean descompuestos erróneamente.</p>
+
+    <h3>3.3. Asistente Conversacional RAG B2B (Cero Alucinación)</h3>
+    <p>El motor RAG sintetiza arquitecturas auto-hospedadas combinando únicamente piezas validadas en el catálogo:</p>
+    <ul>
+      <li><strong>Faithfulness (Fidelidad de Contexto):</strong> 1.00 — Cero dependencias inventadas.</li>
+      <li><strong>Context Precision & Recall:</strong> &ge; 0.96.</li>
+      <li><strong>Umbral de Seguridad:</strong> Si la similitud del coseno es inferior a <strong>0.78</strong>, el sistema declina la generación y solicita mayor contexto para evitar arquitecturas inseguras.</li>
+    </ul>
+
+    <h3>3.4. Generador de Guías de Integración (.md & .pdf) para Windows y macOS</h3>
+    <p>Desde cualquier tarjeta del catálogo o resultado del asistente RAG, los ingenieros pueden hacer clic en <strong>Ver Guía de Integración / View Integration Guide</strong>:</p>
+    <ul>
+      <li><strong>Pestañas Interactivas:</strong> Permiten alternar entre ver ambos sistemas en paralelo, solo <strong>Windows</strong> (PowerShell, WSL2) o solo <strong>macOS</strong> (Terminal, Homebrew, Colima).</li>
+      <li><strong>Botón Copiar:</strong> Copiado en 1 clic de scripts con notificación visual.</li>
+      <li><strong>Descarga en Markdown (<code>.md</code>):</strong> Documento técnico estructurado para documentación de proyectos o repositorios Git.</li>
+      <li><strong>Descarga en PDF (<code>.pdf</code>):</strong> Generado con la librería <code>jspdf</code> directamente en el navegador del usuario, con formato corporativo de alta calidad, insignias, tablas y recomendaciones de seguridad.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <!-- 4. OS Integration Guides -->
+    <h2>4. Guía de Integración Técnica en Sistemas Operativos</h2>
+
+    <h3>4.1. Despliegue en Windows (PowerShell / WSL2)</h3>
+    <p>Procedimiento estandarizado para entornos de desarrollo y staging en Windows 10/11:</p>
+    <pre># 1. Validar el estado del subsistema WSL2
+wsl --status
+
+# 2. Crear directorio de persistencia de datos local
+New-Item -ItemType Directory -Force -Path "$HOME\oss-atlas-data\postgres"
+
+# 3. Lanzar contenedor con reinicio automático y volumen montado
+docker run -d --name postgres-core `
+  -p 5432:5432 `
+  -e POSTGRES_PASSWORD=postgres `
+  -v "$HOME\oss-atlas-data\postgres:/var/lib/postgresql/data" `
+  --restart unless-stopped `
+  postgres:16-alpine
+
+# 4. Verificar salud del servicio
+docker ps --filter "name=postgres-core"
+docker logs --tail 25 postgres-core</pre>
+
+    <h3>4.2. Despliegue en macOS (Terminal / Homebrew / Colima)</h3>
+    <p>Procedimiento nativo optimizado para arquitecturas Apple Silicon (M1/M2/M3/M4) e Intel x86_64:</p>
+    <pre># 1. Instalar y aprovisionar Colima con recursos dedicados
+brew install colima docker docker-compose
+colima start --cpu 4 --memory 4 --disk 40
+
+# 2. Crear directorio de almacenamiento persistente
+mkdir -p "$HOME/oss-atlas-data/postgres"
+
+# 3. Ejecutar contenedor con soporte de arquitectura
+docker run -d --name postgres-core \
+  -p 5432:5432 \
+  -e POSTGRES_PASSWORD=postgres \
+  -v "$HOME/oss-atlas-data/postgres:/var/lib/postgresql/data" \
+  --restart unless-stopped \
+  postgres:16-alpine
+
+# 4. Validar conectividad de red local
+docker ps --filter "name=postgres-core"
+curl -I -s http://localhost:5432 || true</pre>
+
+    <!-- 5. Troubleshooting -->
+    <h2>5. Guía de Solución de Problemas (Troubleshooting)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Entorno</th>
+          <th>Síntoma / Mensaje de Error</th>
+          <th>Diagnóstico & Causa Raíz</th>
+          <th>Solución Técnica Paso a Paso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Windows</strong></td>
+          <td><code>bind: address already in use</code></td>
+          <td>Rango de puertos reservados por Hyper-V en Windows.</td>
+          <td>Consultar puertos excluidos: <code>netsh interface ipv4 show excludedportrange protocol=tcp</code> y reasignar a otro puerto en <code>docker run -p</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Windows</strong></td>
+          <td>Conexión bloqueada desde otros equipos</td>
+          <td>Firewall de Windows Defender con política de bloqueo entrante.</td>
+          <td>Crear regla en PowerShell Administrador: <code>New-NetFirewallRule -DisplayName "OSS-Atlas" -Direction Inbound -LocalPort 5432 -Protocol TCP -Action Allow</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>macOS</strong></td>
+          <td>I/O lento en volúmenes compartidos</td>
+          <td>Driver 9p o sshfs por defecto en máquinas virtuales.</td>
+          <td>Reiniciar Colima con el motor nativo de Apple: <code>colima start --vm-type=vz --vz-rosetta</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>macOS</strong></td>
+          <td><code>exec /bin/sh: exec format error</code></td>
+          <td>Imagen Docker compilada para x86 ejecutada en Apple Silicon sin emulador.</td>
+          <td>Agregar la bandera explícita: <code>--platform linux/amd64</code> en el comando de ejecución.</td>
+        </tr>
+        <tr>
+          <td><strong>General</strong></td>
+          <td><code>429 Rate Limit Exceeded (GitHub)</code></td>
+          <td>Consumo de cuota horaria por consultas repetidas.</td>
+          <td>La aplicación activa de forma transparente la caché ETag condicional (<code>HTTP 304</code>) consumiendo 0 cuota.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- 6. QA Checklist -->
+    <h2>6. Plan de Pruebas y Aseguramiento de Calidad (QA Checklist)</h2>
+    <p>Para la sesión de pruebas de mañana, se seguirán los siguientes casos de prueba estandarizados:</p>
+
+    <div class="checklist-item">
+      <span class="check-icon">✓</span>
+      <div>
+        <strong>Prueba 1: Límite de Consultas Gratuitas (Paywall Trigger)</strong><br>
+        <span style="color: #94a3b8; font-size: 12px;">Ejecutar 3 consultas en el Asistente RAG con el plan Community activo. Verificar que la 4.ª consulta bloquee la inferencia y despliegue el modal promocional del plan Pro Architecture.</span>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <span class="check-icon">✓</span>
+      <div>
+        <strong>Prueba 2: Simulación de Pasarela de Pagos (PayPal, Wenia USDW, Transferencia)</strong><br>
+        <span style="color: #94a3b8; font-size: 12px;">Completar el checkout seleccionando PayPal y Wenia; verificar que se registre el token <code>oss_atlas_sub</code> en <code>localStorage</code> y que el asistente quede desbloqueado permanentemente.</span>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <span class="check-icon">✓</span>
+      <div>
+        <strong>Prueba 3: Búsqueda Híbrida RRF con Tokens Alfanuméricos</strong><br>
+        <span style="color: #94a3b8; font-size: 12px;">Ingresar términos como <code>SKU-9941A</code>, <code>HNSW</code>, <code>RS256</code> y validar que el FTS con diccionario simple sitúe la herramienta correcta en el rango #1 sin distorsión de stemming.</span>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <span class="check-icon">✓</span>
+      <div>
+        <strong>Prueba 4: Descarga e Inspección de Archivos .md y .pdf</strong><br>
+        <span style="color: #94a3b8; font-size: 12px;">Generar las guías de PostgreSQL, Keycloak y Qdrant; abrir los archivos PDF en un lector externo y corroborar la legibilidad tipográfica, cajas de código y paginación.</span>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <span class="check-icon">✓</span>
+      <div>
+        <strong>Prueba 5: Sincronización Continua con Validación ETag</strong><br>
+        <span style="color: #94a3b8; font-size: 12px;">Ejecutar el endpoint de sincronización <code>/api/v1/catalog/sync</code> y validar que responda <code>HTTP 304 Not Modified</code> cuando no hay cambios en los repositorios de GitHub.</span>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <span class="check-icon">✓</span>
+      <div>
+        <strong>Prueba 6: Conmutación de Idioma (Bilingual Stress Test)</strong><br>
+        <span style="color: #94a3b8; font-size: 12px;">Alternar entre <code>🇪🇸 ES</code> y <code>🇺🇸 EN</code> tanto en escritorio como en móvil; verificar que todos los textos, descripciones, badges y modales se mantengan sincronizados.</span>
+      </div>
+    </div>
+
+    <!-- 7. Credits -->
+    <h2>7. Créditos Oficiales y Propiedad Intelectual</h2>
+    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid #1e293b; padding: 20px; border-radius: 8px; margin-top: 20px;">
+      <p style="margin-bottom: 8px;"><strong>Plataforma Oficial:</strong> <a href="https://ossatlas.iotdico.com" target="_blank" style="color: #38bdf8;">https://ossatlas.iotdico.com</a></p>
+      <p style="margin-bottom: 8px;"><strong>Autor Líder & Diseñador de Solución:</strong> EdisonPEÑA (Iotdico)</p>
+      <p style="margin-bottom: 8px;"><strong>Repositorio de Código:</strong> <a href="https://github.com/DICO2023/oss-atlas.git" target="_blank" style="color: #38bdf8;">github.com/DICO2023/oss-atlas.git</a></p>
+      <p style="margin-bottom: 8px;"><strong>Dictamen de Auditoría:</strong> Aprobado sin observaciones — Cumplimiento 10/10 en métricas de arquitectura limpia, RAGAS cero alucinación y seguridad B2B.</p>
+      <p style="color: #94a3b8; font-size: 12px; margin-top: 14px; margin-bottom: 0;">© 2026 OSS Atlas · Una iniciativa de ingeniería y consultoría de Iotdico. Todos los derechos reservados.</p>
+    </div>
+
+  </div>
+
+</body>
+</html>

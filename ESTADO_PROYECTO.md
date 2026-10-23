@@ -145,6 +145,7 @@ npm run dev
   - `afc6898`: *fix(i18n): refine savings label and update tool descriptions in production*
   - `4f57e17`: *docs: sync bilingual tool description completion in ESTADO_PROYECTO.md*
   - `5a2f460`: *feat(guides): implement multi-platform downloadable guide generator in .md and .pdf for Windows and macOS*
+  - `0ca9428`: *fix(i18n): translate RAG scenarios blueprint and pricing cards to English*
 - Despliegue automático y verificación en vivo activa en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
 
 ---
@@ -171,11 +172,32 @@ Se ha implementado el módulo técnico de generación y descarga de guías de in
 
 ---
 
+## 🧪 6. Plan de Pruebas y Validación para la Próxima Sesión (QA Checklist)
+
+1. **Límites de Uso y Flujo de Monetización (Free vs. Pro):**
+   - Probar el contador de 3 consultas diarias en el Asistente RAG para usuarios con plan Community.
+   - Validar la activación del paywall invitando al plan Pro Architecture al alcanzar la 4.ª consulta.
+   - Simular compras en el Checkout con **PayPal**, **Wenia (USDW)** y **Transferencia Bancaria**, validando la persistencia del token de acceso (`oss_atlas_sub` en `localStorage`) y la eliminación de límites.
+2. **Consultas Complejas en Búsqueda Híbrida y RAG:**
+   - Validar búsquedas con códigos alfanuméricos (`SKU-9941A`, `HNSW`, `RS256`) verificando la no degradación por stemming Snowball.
+   - Evaluar prompts en lenguaje natural para arquitecturas multi-tenant y fintech.
+3. **Inspección Física de Guías Descargadas (.md y .pdf):**
+   - Descarga y verificación visual de los PDFs generados de PostgreSQL, Keycloak y Qdrant.
+   - Validación de la ejecución de los comandos copiables en PowerShell (Windows) y Terminal (macOS).
+4. **Resiliencia de Ingesta Continua (ETags):**
+   - Probar sincronización con respuesta `HTTP 304 Not Modified` para preservar los rate limits de GitHub.
+   - Probar ingesta de repositorios adicionales con cálculo de Health Score ponderado y vectorización `halfvec`.
+5. **Auditoría Responsiva Multi-Dispositivo:**
+   - Validación en viewports móviles (375px / 390px) frente a pantallas de escritorio (1080p / 2K).
+
+---
+
 ## 📂 Archivos Clave del Desarrollo
 
+- [MANUAL_MAESTRO_USUARIO.md](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/MANUAL_MAESTRO_USUARIO.md) — Documento maestro y guía completa de usuario para arquitectos y desarrolladores.
 - [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos para Windows y Mac.
 - [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma y Modal de Guías).
-- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) con descripciones de herramientas y etiquetas de guías.
+- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) con descripciones de herramientas, escenarios RAG y planes.
 - [route.ts (Checkout API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/checkout/route.ts) — Backend de monetización con soporte para PayPal, Wenia USDW y facturas proforma B2B.
 - [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Ingesta continua con Health Score ponderado y vectorización `halfvec(1536)`.
 - [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores semánticos.
