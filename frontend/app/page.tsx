@@ -1516,15 +1516,52 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const [isSynthesizingRag, setIsSynthesizingRag] = useState<boolean>(false);
   const [showSqlQueryModal, setShowSqlQueryModal] = useState<boolean>(false);
 
-  // Filtered tools computation
+  // Filtered tools computation (Strict match on query terms: single or comma-separated, clearing restores all tools)
   const filteredCatalogTools = useMemo<OpenSourceTool[]>(() => {
-    const baseTools = hybridSearchResults !== null ? hybridSearchResults : catalogTools;
-    return baseTools.filter((tool: OpenSourceTool) => {
+    const trimmed = catalogSearchQuery.trim();
+
+    // When no search query is present, return all catalog tools filtered by category and license
+    if (!trimmed) {
+      return catalogTools.filter((tool: OpenSourceTool) => {
+        const matchesCategory = selectedCategory === 'ALL' || tool.category === selectedCategory;
+        const matchesLicense = selectedLicenseFilter === 'ALL' || tool.license === selectedLicenseFilter;
+        return matchesCategory && matchesLicense;
+      });
+    }
+
+    // Support comma-separated queries (e.g. "qdrant, zitadel") or space-separated terms
+    const rawTokens = trimmed.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean);
+    const tokens = rawTokens.length > 0 ? rawTokens : [trimmed.toLowerCase()];
+
+    // Base search list: if hybrid search returned results, use them; otherwise search against catalogTools
+    const candidatePool = hybridSearchResults !== null ? hybridSearchResults : catalogTools;
+
+    return candidatePool.filter((tool: OpenSourceTool) => {
       const matchesCategory = selectedCategory === 'ALL' || tool.category === selectedCategory;
       const matchesLicense = selectedLicenseFilter === 'ALL' || tool.license === selectedLicenseFilter;
-      return matchesCategory && matchesLicense;
+      if (!matchesCategory || !matchesLicense) return false;
+
+      const toolName = (tool.name || '').toLowerCase();
+      const toolSlug = (tool.slug || '').toLowerCase();
+      const toolDesc = (tool.description || '').toLowerCase();
+      const toolCat = (tool.category || '').toLowerCase();
+      const toolTriggers = (tool.triggers || []).map((t) => t.toLowerCase()).join(' ');
+
+      // Check if ANY of the comma-separated tokens match this tool strictly
+      const matchesQuery = tokens.some((token) => {
+        return (
+          toolName.includes(token) ||
+          toolSlug.includes(token) ||
+          toolDesc.includes(token) ||
+          toolCat.includes(token) ||
+          toolTriggers.includes(token)
+        );
+      });
+
+      // If user provided a specific search, ONLY tools matching the search terms are returned
+      return matchesQuery;
     });
-  }, [catalogTools, hybridSearchResults, selectedCategory, selectedLicenseFilter]);
+  }, [catalogTools, hybridSearchResults, catalogSearchQuery, selectedCategory, selectedLicenseFilter]);
 
   // Live RAG generation state
   const [liveRagResponse, setLiveRagResponse] = useState<B2BScenario | null>(null);
@@ -1675,8 +1712,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
         }}
       />
 
-      {/* Sticky Top Navbar */}
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-xl">
+      {/* Fixed Top Navbar (Permanent during scroll) */}
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/90 bg-slate-950/95 backdrop-blur-xl shadow-xl shadow-slate-950/50">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand Logo */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -1815,8 +1852,8 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
         </div>
       </header>
 
-      {/* Main Content Container */}
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 space-y-20">
+      {/* Main Content Container with offset for fixed header */}
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-24 space-y-20">
         {}
         <section className="relative rounded-3xl border border-slate-800/90 bg-gradient-to-b from-slate-900/90 via-slate-950 to-slate-900/70 p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden">
           <div className="max-w-4xl mx-auto text-center space-y-6">
@@ -2352,6 +2389,36 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             </div>
           </div>
 
+          {/* Community Health & Curation Notice Banner (Tool Aging & Status Notifications) */}
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900/80 to-cyan-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0 text-base">
+                🛡️
+              </div>
+              <div className="text-xs font-mono space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-amber-300">
+                    {lang === 'es' ? 'Vigilancia Continua de Calidad & Deslistado Automático' : 'Continuous Quality Vigilance & Automated Delisting'}
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-200 text-[10px] border border-amber-500/40">
+                    Auto-Audit ETag
+                  </span>
+                </div>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  {lang === 'es'
+                    ? 'Los repositorios son auditados periódicamente contra la API de GitHub. Si una herramienta cae bajo el umbral de salud (<80%), acumula más de 180 días sin actividad o cambia su licencia a propietaria, el sistema emite un aviso a la comunidad, la marca en estado CONDICIONAL o la retira del catálogo activo explicando el motivo.'
+                    : 'Repositories are periodically audited against GitHub API. If a tool falls below health threshold (<80%), accumulates >180 days without commits, or changes license to proprietary, the system issues a community alert, flags it as CONDITIONAL or delists it with full rationale.'}
+                </p>
+              </div>
+            </div>
+            <div className="shrink-0">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>26 {lang === 'es' ? 'evaluadas' : 'audited'} (1 {lang === 'es' ? 'condicional' : 'conditional'})</span>
+              </span>
+            </div>
+          </div>
+
           {/* Featured Tools Grid (Live Catalog from PostgreSQL 16) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {filteredCatalogTools.length === 0 ? (
@@ -2789,7 +2856,101 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       {currentScenario.executiveSummary}
                     </p>
 
-                    {/* Emitted Architecture Nodes */}
+                    {/* Interactive Visual Flow Diagram (Bloques, Conectores & Capas de Arquitectura) */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-cyan-500/30 space-y-4 shadow-xl">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+                          <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-300">
+                            {lang === 'es' ? 'Diagrama de Flujo & Bloques de Arquitectura' : 'Architecture Flow & Block Blueprint'}
+                          </h4>
+                        </div>
+                        <span className="text-[10px] font-mono text-slate-400">
+                          {lang === 'es' ? 'Topología: Pipeline B2B Multi-Capa' : 'Topology: Multi-Layer B2B Pipeline'}
+                        </span>
+                      </div>
+
+                      {/* Desktop Horizontal Flow / Mobile Vertical Flow with Connectors */}
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 relative">
+                        {currentScenario.nodes.map((node: RagArchitectureNode, idx: number) => {
+                          const layerColors = {
+                            0: { border: 'border-cyan-500/50', bg: 'bg-cyan-500/10', text: 'text-cyan-300', tag: 'AUTH / IAM' },
+                            1: { border: 'border-emerald-500/50', bg: 'bg-emerald-500/10', text: 'text-emerald-300', tag: 'DBS & VEC' },
+                            2: { border: 'border-amber-500/50', bg: 'bg-amber-500/10', text: 'text-amber-300', tag: 'PAYMENTS' },
+                            3: { border: 'border-violet-500/50', bg: 'bg-violet-500/10', text: 'text-violet-300', tag: 'AI & RAG' },
+                          }[idx] || { border: 'border-slate-700', bg: 'bg-slate-900', text: 'text-slate-300', tag: 'NODE' };
+
+                          return (
+                            <div key={`flow-node-${node.toolName}-${idx}`} className="flex flex-col relative group">
+                              {/* Flow block card */}
+                              <div className={`p-3.5 rounded-xl bg-slate-900/90 border ${layerColors.border} shadow-lg transition-all hover:scale-[1.02] space-y-2 relative overflow-hidden flex flex-col justify-between h-full`}>
+                                {/* Subtle top glow */}
+                                <div className={`absolute top-0 left-0 right-0 h-1 ${layerColors.bg}`} />
+
+                                <div>
+                                  <div className="flex items-center justify-between gap-1 text-[10px] font-mono mb-1">
+                                    <span className={`px-1.5 py-0.5 rounded ${layerColors.bg} ${layerColors.text} font-bold`}>
+                                      PASO {idx + 1}
+                                    </span>
+                                    <span className="text-slate-400 font-semibold">{node.license}</span>
+                                  </div>
+
+                                  <div className="text-xs font-mono font-semibold text-slate-400 truncate" title={node.layer}>
+                                    {node.layer}
+                                  </div>
+
+                                  <div className="text-sm font-extrabold text-white mt-0.5 flex items-center justify-between">
+                                    <span className="truncate">{node.toolName}</span>
+                                    <span className="text-[10px] font-mono px-1 rounded bg-slate-950 text-emerald-400 shrink-0">
+                                      {node.healthScore}%
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="pt-2 border-t border-slate-800/80 text-[10px] font-mono space-y-1">
+                                  <div className="text-slate-400 truncate" title={node.integrationTrigger}>
+                                    ⚡ <span className="text-amber-300">{node.integrationTrigger.split(' ')[0]}</span> {node.integrationTrigger.substring(node.integrationTrigger.indexOf(' ') + 1, 35)}...
+                                  </div>
+                                  <div className="text-slate-500 flex justify-between">
+                                    <span>RRF: {node.rrfScore.toFixed(3)}</span>
+                                    <span className="text-cyan-400 font-semibold">{node.vectorCosine} cos</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Flow direction indicator (desktop horizontal arrow / mobile downward arrow) */}
+                              {idx < currentScenario.nodes.length - 1 && (
+                                <div className="my-1.5 md:my-0 flex items-center justify-center md:absolute md:-right-2 md:top-1/2 md:-translate-y-1/2 z-10">
+                                  <div className="w-5 h-5 rounded-full bg-slate-950 border border-cyan-500/60 text-cyan-400 flex items-center justify-center text-xs font-bold shadow-md shadow-cyan-950/50">
+                                    <span className="hidden md:inline">→</span>
+                                    <span className="md:hidden">↓</span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Architecture Data Flow Telemetry Bar */}
+                      <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-400 gap-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-emerald-400">●</span>
+                          <span>{lang === 'es' ? 'Canal de Comunicación:' : 'Communication Bus:'}</span>
+                          <span className="text-slate-200 font-semibold">gRPC / REST / Webhooks / pgvector halfvec</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/40">
+                            Latency &lt; 250ms
+                          </span>
+                          <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">
+                            100% Zero-Lock-In
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Emitted Architecture Nodes Detailed Specs */}
                     <div className="space-y-3">
                       {currentScenario.nodes.map((node: RagArchitectureNode, idx: number) => (
                         <div

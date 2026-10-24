@@ -162,6 +162,21 @@ npm run dev
 - **Caso Piloto Validado en Neon Cloud:**
   - Ingesta exitosa de `Imgbot/Imgbot` (Health Score 80.05/100, Licencia MIT, 1,353 estrellas, inactividad 633 días) bajo estado `CONDITIONAL`.
 
+### 4.6. Mejoras de Usabilidad, Búsqueda Estricta, Diagrama Visual RAG y Vigilancia Continua
+- **1. Header Superior Fijo y Permanente en Scroll (`Fixed Navbar`):**
+  - Se sustituyó `position: sticky` por `fixed top-0 left-0 right-0 z-50` con `backdrop-blur-xl` y `shadow-xl`, resolviendo el problema de desaparición del menú al desplazarse hacia abajo.
+  - Se ajustó el espaciado superior del contenedor principal (`pt-24 sm:pt-28`) para evitar superposiciones con el Hero.
+- **2. Filtrado Estricto de Búsqueda y Soporte Multitérmino por Comas (`Strict Search Filter`):**
+  - La búsqueda en el catálogo ahora aplica un filtrado estricto en el cliente sobre los resultados: si se busca una herramienta (p. ej. `qdrant`), **únicamente** se muestran las herramientas coincidentes, eliminando el comportamiento anterior donde las no coincidentes quedaban al final.
+  - Soporte nativo para búsquedas separadas por coma (ej. `qdrant, zitadel`): el motor descompone los términos y muestra exclusivamente las herramientas que coincidan con cualquiera de ellos.
+  - Al limpiar la búsqueda (botón `✕ Limpiar` o borrando el campo), se restablece de inmediato la totalidad del catálogo (las 26 herramientas).
+- **3. Diagrama Visual Interactivo de Arquitectura en Asistente RAG (`Architecture Visual Flow Blueprint`):**
+  - Se implementó un componente interactivo de diagrama de bloques conectado justo encima del desglose detallado de microservicios en la síntesis RAG.
+  - Visualiza las 4 capas interconectadas con colores temáticos (`AUTH / IAM` en cian, `DBS & VEC` en esmeralda, `PAYMENTS` en ámbar, `AI & RAG` en violeta).
+  - Incluye conectores direccionales (flechas horizontales en desktop y verticales en mobile), triggers de integración, puntuaciones de salud, licencias, métricas RRF/coseno y barra de telemetría de bus de comunicación (`gRPC / REST / Webhooks / halfvec`, latencia < 250ms).
+- **4. Vigilancia Continua de Calidad & Deslistado Automático de la Comunidad (`Health & Curation Notice`):**
+  - Se integró un banner informativo permanente de curaduría en la cabecera del catálogo: explica con total claridad el ciclo de vida de las herramientas frente a cambios en GitHub, avisos automáticos ante degradación de salud (<80%), inactividad (>180 días) o cambios de licencia a privativa (notificación comunitaria y paso a estado `CONDITIONAL` o retiro del catálogo).
+
 - Despliegue automático y verificación en vivo activa en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
 
 ---
