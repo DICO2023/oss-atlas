@@ -385,8 +385,41 @@ export async function POST(request: NextRequest) {
       ingestedRecord = rows[0];
     }
 
+    const evaluationPayload = {
+      status: auditSummary.status,
+      statusReason: auditSummary.reasons.join(". "),
+      healthScore: auditSummary.metrics.weightedHealthScore,
+      breakdown: {
+        commitVelocity: auditSummary.metrics.commitVelocityScore,
+        securityStructural: auditSummary.metrics.securityScore,
+        communityDocs: auditSummary.metrics.docsScore,
+      },
+      metrics: {
+        stars: auditSummary.stars,
+        daysSinceLastPush: auditSummary.lastPushDaysAgo,
+        licenseSpdx: auditSummary.license,
+        hasDockerSupport: auditSummary.hasDockerfile,
+        openIssues: auditSummary.openIssues,
+      },
+      suggestedCategory: auditSummary.category,
+      b2bSavingsEstimate: auditSummary.selfHostedSavingsB2B,
+    };
+
+    const repoDataPayload = {
+      name: auditSummary.name,
+      slug: auditSummary.slug,
+      description: auditSummary.description,
+      category: auditSummary.category,
+      license: auditSummary.license,
+      dockerCommand: auditSummary.suggestedDockerCommand,
+      triggers: auditSummary.triggers,
+      dependencies: auditSummary.dependencies,
+    };
+
     return NextResponse.json({
       audit: auditSummary,
+      evaluation: evaluationPayload,
+      repoData: repoDataPayload,
       ingested: ingestedRecord,
       message: ingestedRecord
         ? `Repositorio '${auditSummary.name}' evaluado exitosamente e incorporado al catálogo.`
