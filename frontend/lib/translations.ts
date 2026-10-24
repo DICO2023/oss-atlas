@@ -267,6 +267,14 @@ export const TRANSLATIONS = {
     auditBtnIngest: '⚡ Incorporar al Catálogo y Generar Guías (.md & .pdf)',
     auditBtnIngesting: '⏳ Guardando y Calculando Vectores...',
     auditSuccessNotice: '¡Herramienta auditada e incorporada exitosamente al catálogo en vivo!',
+    auditConditionalTitle: '⚠️ ATENCIÓN DE MANTENIMIENTO B2B',
+    auditConditionalWarning: 'Esta herramienta presenta observaciones técnicas (inactividad superior a 180 días o ausencia de Docker nativo). Al incorporarla, quedará registrada con la etiqueta pública CONDICIONAL y el Asistente RAG advertirá a los arquitectos sobre su estado de mantenimiento.',
+    auditConditionalCheckbox: 'Entiendo que esta herramienta presenta inactividad o advertencias técnicas y asumo conscientemente los riesgos de mantenimiento en mi arquitectura.',
+    auditConditionalRequired: 'Debes aceptar la advertencia técnica arriba para habilitar la incorporación al catálogo.',
+    auditStatusRejectedDisabled: '❌ No elegible para incorporación (Rechazado)',
+    catalogBadgeConditional: 'CONDICIONAL',
+    catalogNoteConditional: 'Nota B2B: Esta herramienta cuenta con observaciones técnicas (inactividad o sin Docker nativo). Evaluar antes de producción.',
+    ragNodeConditionalWarning: 'Advertencia de Mantenimiento: Esta herramienta fue incorporada con estado condicional (en observación).',
 
     // Footer
     footerAudit: 'DICTAMEN AUDITORÍA PMO & FRONTEND: APROBADO SIN RESERVAS (10/10 Checkpoints)',
@@ -540,6 +548,14 @@ export const TRANSLATIONS = {
     auditBtnIngest: '⚡ Ingest into Catalog & Generate Guides (.md & .pdf)',
     auditBtnIngesting: '⏳ Saving & Computing Vectors...',
     auditSuccessNotice: 'Tool successfully audited and integrated into the live catalog!',
+    auditConditionalTitle: '⚠️ B2B MAINTENANCE CAVEAT',
+    auditConditionalWarning: 'This tool has technical caveats (inactivity > 180 days or no native Dockerfile). Upon ingestion, it will be labeled publicly as CONDITIONAL and the RAG Architect will warn architects about its maintenance status.',
+    auditConditionalCheckbox: 'I understand this tool has inactivity or technical caveats and I consciously accept the maintenance risks in my architecture.',
+    auditConditionalRequired: 'You must accept the technical warning above to enable ingestion into the catalog.',
+    auditStatusRejectedDisabled: '❌ Ineligible for ingestion (Rejected)',
+    catalogBadgeConditional: 'CONDITIONAL',
+    catalogNoteConditional: 'B2B Note: This tool has technical caveats (inactivity or no native Docker). Review before production.',
+    ragNodeConditionalWarning: 'Maintenance Caveat: This tool was ingested under conditional status (under observation).',
 
     // Footer
     footerAudit: 'PMO & FRONTEND AUDIT: APPROVED WITHOUT RESERVATION (10/10 Checkpoints)',

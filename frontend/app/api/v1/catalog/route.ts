@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     `SELECT id, name, slug, category, license, health_score,
             commit_velocity_score, security_score, docs_score,
             stars, description, docker_command, integration_difficulty,
-            triggers, dependencies, etag
+            triggers, dependencies, etag, COALESCE(status, 'APPROVED') AS status
      FROM oss_repositories
      ${conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""}
      ORDER BY health_score DESC LIMIT $${values.length}`,

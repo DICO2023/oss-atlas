@@ -59,6 +59,7 @@ export interface OpenSourceTool {
   lexicalRank?: number | null;
   vectorRank?: number | null;
   selfHostedSavingsB2B: string;
+  status?: 'APPROVED' | 'CONDITIONAL' | 'REJECTED';
 }
 
 export interface RagArchitectureNode {
@@ -71,6 +72,7 @@ export interface RagArchitectureNode {
   vectorCosine: number;
   rationale: string;
   integrationTrigger: string;
+  status?: 'APPROVED' | 'CONDITIONAL' | 'REJECTED';
 }
 
 export interface RagasMetrics {
@@ -1054,6 +1056,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const [auditResult, setAuditResult] = useState<any | null>(null);
   const [isIngestingFromAudit, setIsIngestingFromAudit] = useState<boolean>(false);
   const [auditError, setAuditError] = useState<string | null>(null);
+  const [auditConditionalAccepted, setAuditConditionalAccepted] = useState<boolean>(false);
 
   const [customRepoForm, setCustomRepoForm] = useState({
     name: '',
@@ -1107,6 +1110,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           dependencies: Array.isArray(row.dependencies) ? row.dependencies : [],
           rrfBaseRank: idx + 1,
           selfHostedSavingsB2B: getToolSavingsB2B(row.slug, row.category),
+          status: (row.status as 'APPROVED' | 'CONDITIONAL' | 'REJECTED') || 'APPROVED',
         }));
         setCatalogTools(mapped);
         setIsDbConnected(true);
@@ -1221,6 +1225,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
     setIsAuditing(true);
     setAuditError(null);
     setAuditResult(null);
+    setAuditConditionalAccepted(false);
     try {
       const res = await fetch('/api/v1/github/evaluate', {
         method: 'POST',
@@ -2394,13 +2399,22 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     {/* Header: Category, License Badge & Health Score */}
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
                             {tool.category}
                           </span>
                           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-950 text-emerald-300 border border-emerald-500/30">
                             {lang === 'es' ? 'Licencia:' : 'License:'} {tool.license}
                           </span>
+                          {tool.status === 'CONDITIONAL' && (
+                            <span
+                              title={t.catalogNoteConditional}
+                              className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center gap-1"
+                            >
+                              <span>⚠️</span>
+                              <span>{t.catalogBadgeConditional}</span>
+                            </span>
+                          )}
                         </div>
                         <h3 className="text-xl font-bold text-white mt-2">{tool.name}</h3>
                         <p className="text-xs font-mono text-slate-400 flex items-center gap-1.5 mt-0.5">
@@ -2427,6 +2441,14 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                       {getToolDescription(tool.slug, tool.description, lang)}
                     </p>
+
+                    {/* Conditional Warning Note if tool has CONDITIONAL status */}
+                    {tool.status === 'CONDITIONAL' && (
+                      <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] font-mono text-amber-200/90 flex items-start gap-2">
+                        <span className="text-amber-400 font-bold shrink-0">⚠️</span>
+                        <span className="leading-relaxed">{t.catalogNoteConditional}</span>
+                      </div>
+                    )}
 
                     {/* Health Breakdown Bars (15% Commits, 20% Security, 65% Docs/Community) */}
                     <div className="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800/90 space-y-2">
@@ -2810,6 +2832,18 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                             <span>🔗 {lang === 'es' ? 'Trigger de Integración:' : 'Integration Trigger:'}</span>
                             <span className="text-slate-300">{node.integrationTrigger}</span>
                           </div>
+
+                          {/* Warning if tool in this node has CONDITIONAL status */}
+                          {catalogTools.find(
+                            (t) =>
+                              t.name.toLowerCase() === node.toolName.toLowerCase() ||
+                              t.slug.toLowerCase().includes(node.toolName.toLowerCase())
+                          )?.status === 'CONDITIONAL' && (
+                            <div className="mt-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[10px] font-mono text-amber-300 flex items-center gap-1.5">
+                              <span>⚠️</span>
+                              <span>{t.ragNodeConditionalWarning}</span>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -3381,30 +3415,71 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       </div>
                     )}
 
+                    {/* Enfoque 2: Advertencia de Mantenimiento B2B y Checkbox de Confirmación */}
+                    {auditResult.evaluation.status === 'CONDITIONAL' && (
+                      <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/40 text-xs font-mono space-y-3">
+                        <div className="flex items-center gap-2 font-bold text-amber-300">
+                          <span>{t.auditConditionalTitle}</span>
+                        </div>
+                        <p className="text-amber-200/90 leading-relaxed">
+                          {t.auditConditionalWarning}
+                        </p>
+                        <label className="flex items-start gap-2.5 pt-1 text-slate-200 cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={auditConditionalAccepted}
+                            onChange={(e) => setAuditConditionalAccepted(e.target.checked)}
+                            className="mt-0.5 rounded border-amber-500 text-amber-500 focus:ring-amber-400 bg-slate-900 cursor-pointer"
+                          />
+                          <span className="text-[11px] text-amber-100 font-medium leading-relaxed">
+                            {t.auditConditionalCheckbox}
+                          </span>
+                        </label>
+                      </div>
+                    )}
+
                     {/* Ingest Action Button */}
-                    <div className="pt-2">
+                    <div className="pt-2 space-y-2">
                       {catalogTools.some(
                         (t) => t.slug.toLowerCase() === (auditResult.repoData?.slug || '').toLowerCase()
                       ) ? (
                         <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono text-center">
                           ✓ Esta herramienta ya forma parte del catálogo activo en PostgreSQL.
                         </div>
+                      ) : auditResult.evaluation.status === 'REJECTED' ? (
+                        <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono text-center">
+                          {t.auditStatusRejectedDisabled}
+                        </div>
                       ) : (
-                        <button
-                          type="button"
-                          disabled={isIngestingFromAudit || auditResult.evaluation.status === 'REJECTED'}
-                          onClick={handleIngestFromAudit}
-                          className="w-full py-3 px-4 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 disabled:opacity-50 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10"
-                        >
-                          {isIngestingFromAudit ? (
-                            <>
-                              <span className="w-3.5 h-3.5 rounded-full border-2 border-slate-950 border-t-transparent animate-spin" />
-                              <span>{t.auditBtnIngesting}</span>
-                            </>
-                          ) : (
-                            <span>{t.auditBtnIngest}</span>
+                        <>
+                          <button
+                            type="button"
+                            disabled={
+                              isIngestingFromAudit ||
+                              (auditResult.evaluation.status === 'CONDITIONAL' && !auditConditionalAccepted)
+                            }
+                            onClick={handleIngestFromAudit}
+                            className={`w-full py-3 px-4 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg ${
+                              auditResult.evaluation.status === 'CONDITIONAL' && !auditConditionalAccepted
+                                ? 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
+                                : 'bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 shadow-emerald-500/10'
+                            }`}
+                          >
+                            {isIngestingFromAudit ? (
+                              <>
+                                <span className="w-3.5 h-3.5 rounded-full border-2 border-slate-950 border-t-transparent animate-spin" />
+                                <span>{t.auditBtnIngesting}</span>
+                              </>
+                            ) : (
+                              <span>{t.auditBtnIngest}</span>
+                            )}
+                          </button>
+                          {auditResult.evaluation.status === 'CONDITIONAL' && !auditConditionalAccepted && (
+                            <p className="text-[11px] text-amber-400/90 text-center font-mono">
+                              {t.auditConditionalRequired}
+                            </p>
                           )}
-                        </button>
+                        </>
                       )}
                     </div>
                   </div>

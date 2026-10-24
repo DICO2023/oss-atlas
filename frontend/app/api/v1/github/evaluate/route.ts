@@ -333,12 +333,12 @@ export async function POST(request: NextRequest) {
           name, slug, category, license, stars, health_score,
           commit_velocity_score, security_score, docs_score,
           description, content, docker_command, integration_difficulty,
-          triggers, dependencies, etag, embedding_halfvec, updated_at
+          triggers, dependencies, etag, embedding_halfvec, status, updated_at
         ) VALUES (
           $1, $2, $3, $4, $5, $6,
           $7, $8, $9,
           $10, $11, $12, $13,
-          $14, $15, $16, $17::halfvec(1536), now()
+          $14, $15, $16, $17::halfvec(1536), $18, now()
         )
         ON CONFLICT (slug) DO UPDATE SET
           name = EXCLUDED.name,
@@ -357,8 +357,9 @@ export async function POST(request: NextRequest) {
           dependencies = EXCLUDED.dependencies,
           etag = EXCLUDED.etag,
           embedding_halfvec = EXCLUDED.embedding_halfvec,
+          status = EXCLUDED.status,
           updated_at = now()
-        RETURNING id, name, slug, category, license, health_score, etag;
+        RETURNING id, name, slug, category, license, health_score, status, etag;
       `;
 
       const values = [
@@ -379,6 +380,7 @@ export async function POST(request: NextRequest) {
         auditSummary.dependencies,
         etag,
         vectorStr,
+        auditSummary.status,
       ];
 
       const { rows } = await pool.query(query, values);

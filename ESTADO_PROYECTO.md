@@ -146,6 +146,22 @@ npm run dev
   - Botón de navegación `Alcance de Servicios 💡` / `Scope of Services 💡` en el menú principal.
   - Pestaña de `🔍 Auditoría On-Demand GitHub` como vista principal del modal de sincronización, con chips de prueba rápida (`qdrant/qdrant`, `CopilotKit/CopilotKit`, `zitadel/zitadel`, `supabase/realtime`, `hoppscotch/hoppscotch`).
 
+### 4.5. Implementación del Enfoque 2: Ingesta Condicional con Advertencia Explícita y Trazabilidad
+- **Mecanismo de Salvaguarda en Modal de Auditoría:**
+  - Si un repositorio recibe dictamen `CONDITIONAL` (p. ej. inactividad de commits > 180 días como `Imgbot/Imgbot`), el sistema despliega una caja de advertencia destacada en amarillo: `⚠️ ATENCIÓN DE MANTENIMIENTO B2B`.
+  - El botón de ingesta se deshabilita hasta que el usuario marque conscientemente la casilla de verificación:
+    > *"Entiendo que esta herramienta presenta inactividad o advertencias técnicas y asumo conscientemente los riesgos de mantenimiento en mi arquitectura."*
+  - Si el repositorio es `REJECTED` (archivado, sin licencia OSI o score < 80), la ingesta queda bloqueada permanentemente.
+- **Trazabilidad en Neon PostgreSQL 16:**
+  - Migración exitosa de la tabla `oss_repositories` con la nueva columna: `status TEXT NOT NULL DEFAULT 'APPROVED'`.
+  - `POST /api/v1/github/evaluate` almacena el valor de `status` ('APPROVED' o 'CONDITIONAL').
+  - `GET /api/v1/catalog` propaga `status` hacia todo el frontend y búsquedas híbridas.
+- **Visibilidad en el Catálogo Público y en el Asistente RAG:**
+  - En las fichas del catálogo, las herramientas condicionales exhiben una insignia permanente `⚠️ CONDICIONAL` con nota de advertencia al pie de la descripción.
+  - En el Asistente RAG, los planos arquitectónicos que incluyan herramientas condicionales añaden una nota de advertencia de mantenimiento por microservicio.
+- **Caso Piloto Validado en Neon Cloud:**
+  - Ingesta exitosa de `Imgbot/Imgbot` (Health Score 80.05/100, Licencia MIT, 1,353 estrellas, inactividad 633 días) bajo estado `CONDITIONAL`.
+
 - Despliegue automático y verificación en vivo activa en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
 
 ---
