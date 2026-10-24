@@ -11,7 +11,7 @@
 
 | Componente | Configuración / Puerto | Estado Actual |
 | :--- | :--- | :--- |
-| **Base de Datos Cloud** | Neon Serverless PostgreSQL 16 (`pgvector` 0.7+ con `halfvec`) en AWS US-East-2 | **Activa 24/7 en la nube** (25 herramientas indexadas con vectores semánticos) |
+| **Base de Datos Cloud** | Neon Serverless PostgreSQL 16 (`pgvector` 0.7+ con `halfvec`) en AWS US-East-2 | **Activa 24/7 en la nube** (26 herramientas indexadas con vectores semánticos, 25 aprobadas + 1 condicional) |
 | **Frontend / API** | Next.js 15 App Router en `http://localhost:3000` | Operativo con Neon Cloud (`npm run dev`) sin errores |
 | **Build Producción** | Next.js 15 compilado (`npm run build`) | **Verificado 100% exitoso** (0 errores de tipos / lint) |
 | **Contenedor Producción** | Imagen Docker `acelerador-frontend:latest` (347 MB en Alpine Linux) | Compilada y lista |
@@ -127,8 +127,13 @@ npm run dev
   - `0ca9428`: *fix(i18n): translate RAG scenarios blueprint and pricing cards to English*
   - `7173793`: *docs: sync project state, add Master User Guide in Markdown and PDF-exportable HTML*
   - `9bbe69a`: *feat(paywall): enforce 3 daily free RAG queries with Pro checkout modal trigger and protected guide downloads*
-  - `3d080ac`: *test(qa): complete free vs pro paywall validation and optimize PDF high-contrast typography*
-  - `7e7a1b1`: *feat(catalog): ingest and index 12 AI tools (Meetily, OpenShorts, Presenton, TopView, VoiceStudio, CopilotKit, OpenNotebook, FreeLLMAPI, Vane, Upscayl, Dyad, Treblo) in Neon PostgreSQL with halfvec embeddings, live catalog and guide generator*
+  - `7e7a1b1`: *feat(catalog): ingest and index 12 AI tools in Neon PostgreSQL with halfvec embeddings, live catalog and guide generator*
+  - `4ed9d6b`: *test(qa): complete responsive multi-device audit across 5 viewports with zero horizontal overflow*
+  - `0130bb2`: *feat(evaluator): implement on-demand github evaluation module and services scope section*
+  - `78bb828`: *fix(evaluator): guarantee compatibility between audit and evaluation payloads and add auto-scroll to result card*
+  - `bc637e9`: *feat(evaluator): implement Approach 2 for conditional tools with confirmation checkbox, db status tracking, catalog badge and rag caveat*
+  - `0354e08`: *feat(ui): fix navbar on scroll, add strict multi-term search, visual architecture diagram, and community health notice*
+
 ### 4.4. Módulo de Evaluación On-Demand de GitHub & Sección Explicativa de Alcance de Servicios
 - **Evaluador On-Demand de GitHub (`POST /api/v1/github/evaluate`):**
   - Permite a usuarios y arquitectos someter cualquier URL o slug de GitHub (`https://github.com/org/repo` o `org/repo`) a auditoría automatizada en tiempo real.
