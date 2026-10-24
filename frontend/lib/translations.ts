@@ -4,6 +4,7 @@ export const TRANSLATIONS = {
   es: {
     brandTag: 'Iotdico B2B',
     navCatalog: 'Catálogo & Categorías',
+    navScope: 'Alcance de Servicios 💡',
     navRag: 'Arquitecto RAG B2B',
     navPricing: 'Planes B2B ⭐',
     navProActive: 'Pro Architecture (Activo)',
@@ -213,13 +214,59 @@ export const TRANSLATIONS = {
     ragDailyLimitReachedNotice: 'Has alcanzado el límite de 3 consultas diarias del Plan Community. Desbloquea consultas ilimitadas y generación de guías B2B actualizando a Pro Architecture.',
     guideDownloadProNotice: 'La descarga de guías ejecutivas en PDF y Markdown está disponible con el plan Pro Architecture. Puedes revisar las instrucciones completas en pantalla o desbloquear la descarga en 1 clic.',
 
-    // Ingest Modal
-    ingestModalTitle: 'Módulo de Ingesta Continua & Resiliencia ETag',
-    ingestModalSubtitle: 'Gestión atómica de repositorios, sincronización de metadatos y generación de vectores semánticos en PostgreSQL 16.',
+    // Services Scope Section (Propuesta de Valor y Alcance)
+    scopeBadge: 'Propuesta de Valor & Transparencia B2B',
+    scopeTitle: 'Alcance de los Servicios OSS Atlas',
+    scopeSubtitle: 'Conoce por qué no somos un simple buscador de GitHub, qué cubre cada nivel de servicio y cómo garantizamos cero código abandonado y cero alucinaciones.',
+    scopePillar1Badge: 'Curaduría & Seguridad',
+    scopePillar1Title: '1. Curaduría Técnica & Filtro Anti-Abandonware',
+    scopePillar1Desc: 'Evaluamos rigurosamente cada herramienta: solo ingresan proyectos con licencias OSI permisivas, actividad de commits continua, soporte de contenedores Docker y ausencia de CVEs críticos.',
+    scopePillar1Point1: 'Cero proyectos abandonados (inspección de commits < 90 días)',
+    scopePillar1Point2: 'Garantía legal: MIT, Apache-2.0, PostgreSQL, AGPL-3.0',
+    scopePillar1Point3: 'Health Score ponderado transparente (15% Commits, 20% Seguridad, 65% Docs)',
+
+    scopePillar2Badge: 'Vectores HNSW & Ahorro',
+    scopePillar2Title: '2. Búsqueda Híbrida RRF & Telemetría de Ahorro',
+    scopePillar2Desc: 'Fusión de Rango Recíproco con vectores halfvec(1536) en PostgreSQL 16 y FTS sin degradación. Descubre alternativas open source y calcula ahorros reales frente a SaaS comerciales.',
+    scopePillar2Point1: 'Ahorro cuantificado ($14 a $2,400 USD/mes vs nubes propietarias)',
+    scopePillar2Point2: 'Recuperación semántica sub-200ms por significado y concepto',
+    scopePillar2Point3: 'Telemetría de afinidad léxica y vectorial visible en cada ficha',
+
+    scopePillar3Badge: 'Zero Alucinación',
+    scopePillar3Title: '3. Arquitecto RAG Multi-Capa con Cero Alucinaciones',
+    scopePillar3Desc: 'Generador de planos arquitectónicos basado estrictamente en el contexto recuperado de nuestra base de datos. Ensambla capas acopladas (Auth, DBs, Payments, AI) con disparadores de integración probados.',
+    scopePillar3Point1: '100% de fidelidad evaluada (RAGAS Verified)',
+    scopePillar3Point2: 'Plano técnico con triggers de integración por microservicio',
+    scopePillar3Point3: 'Manifiestos unificados y comandos Docker listos para producción',
+
+    scopePillar4Badge: 'Multiplataforma & On-Demand',
+    scopePillar4Title: '4. Guías (.md & .pdf) y Auditoría On-Demand de GitHub',
+    scopePillar4Desc: 'Manuales de despliegue paso a paso para Windows (WSL2/PowerShell) y macOS (Colima/Apple Silicon). Además, somete cualquier repositorio de GitHub a nuestra auditoría automatizada en segundos.',
+    scopePillar4Point1: 'Descarga vectorial de informes PDF ejecutivos y Markdown',
+    scopePillar4Point2: 'Evaluador On-Demand: pega un enlace de GitHub y audítalo en vivo',
+    scopePillar4Point3: 'Ingesta inmediata al catálogo si cumple los criterios de calidad B2B',
+
+    // Ingest Modal & GitHub On-Demand Audit
+    ingestModalTitle: 'Módulo de Ingesta Continua & Auditoría On-Demand',
+    ingestModalSubtitle: 'Gestión atómica de repositorios, auditoría de GitHub en vivo y generación de vectores semánticos en PostgreSQL 16.',
+    ingestTabAudit: '🔍 Auditoría On-Demand GitHub',
     ingestTabPresets: 'Presets Curados B2B',
     ingestTabCustom: 'Ingesta Personalizada',
     ingestTabReindex: 'Reindexación Global',
     ingestClose: 'Cerrar',
+
+    // Audit Tab strings
+    auditInputLabel: 'URL o Repositorio de GitHub a Auditar:',
+    auditInputPlaceholder: 'Ej: https://github.com/supabase/realtime o qdrant/qdrant',
+    auditBtnRun: '⚡ Auditar Repositorio en GitHub',
+    auditBtnRunning: '⏳ Auditando con API de GitHub...',
+    auditExamples: 'Ejemplos para probar:',
+    auditStatusApproved: '✅ APROBADO B2B (Elegible)',
+    auditStatusConditional: '⚠️ CONDICIONAL (Requiere Revisión)',
+    auditStatusRejected: '❌ RECHAZADO (No Cumple Criterios)',
+    auditBtnIngest: '⚡ Incorporar al Catálogo y Generar Guías (.md & .pdf)',
+    auditBtnIngesting: '⏳ Guardando y Calculando Vectores...',
+    auditSuccessNotice: '¡Herramienta auditada e incorporada exitosamente al catálogo en vivo!',
 
     // Footer
     footerAudit: 'DICTAMEN AUDITORÍA PMO & FRONTEND: APROBADO SIN RESERVAS (10/10 Checkpoints)',
@@ -230,6 +277,7 @@ export const TRANSLATIONS = {
   en: {
     brandTag: 'Iotdico B2B',
     navCatalog: 'Catalog & Categories',
+    navScope: 'Scope of Services 💡',
     navRag: 'B2B RAG Architect',
     navPricing: 'B2B Plans ⭐',
     navProActive: 'Pro Architecture (Active)',
@@ -439,13 +487,59 @@ export const TRANSLATIONS = {
     ragDailyLimitReachedNotice: 'You have reached the 3 daily query limit of the Community Plan. Unlock unlimited queries and B2B integration guides by upgrading to Pro Architecture.',
     guideDownloadProNotice: 'Executive PDF and Markdown downloads are available with the Pro Architecture plan. You can view full instructions on screen or unlock downloads in 1 click.',
 
-    // Ingest Modal
-    ingestModalTitle: 'Continuous Ingestion & ETag Resilience Module',
-    ingestModalSubtitle: 'Atomic repository management, metadata synchronization and semantic vector generation on PostgreSQL 16.',
+    // Services Scope Section (Value Proposition & Transparency)
+    scopeBadge: 'B2B Value Proposition & Transparency',
+    scopeTitle: 'OSS Atlas Scope of Services',
+    scopeSubtitle: 'Learn why we are not a simple GitHub search, what each tier covers, and how we guarantee zero abandonware and zero hallucination.',
+    scopePillar1Badge: 'Curation & Security',
+    scopePillar1Title: '1. Technical Curation & Anti-Abandonware Filtering',
+    scopePillar1Desc: 'We strictly vet each repository: only projects with OSI-approved licenses, active commit velocity, Docker container support, and zero critical CVEs are admitted.',
+    scopePillar1Point1: 'Zero abandoned repos (commit recency verified < 90 days)',
+    scopePillar1Point2: 'Legal compliance: MIT, Apache-2.0, PostgreSQL, AGPL-3.0',
+    scopePillar1Point3: 'Transparent weighted Health Score (15% Commits, 20% Security, 65% Docs)',
+
+    scopePillar2Badge: 'HNSW Vectors & Savings',
+    scopePillar2Title: '2. Hybrid Search RRF & Savings Telemetry',
+    scopePillar2Desc: 'Reciprocal Rank Fusion with halfvec(1536) vectors on PostgreSQL 16 and non-degrading FTS. Discover open-source alternatives and calculate verified savings vs commercial SaaS.',
+    scopePillar2Point1: 'Quantified savings ($14 to $2,400 USD/mo vs proprietary cloud)',
+    scopePillar2Point2: 'Sub-200ms semantic retrieval by meaning and concept',
+    scopePillar2Point3: 'Lexical and vector affinity telemetry visible on every card',
+
+    scopePillar3Badge: 'Zero Hallucination',
+    scopePillar3Title: '3. Multi-Layer RAG Architect with Zero Hallucination',
+    scopePillar3Desc: 'Architecture blueprint generator strictly grounded on context retrieved from our database. Assembles coupled layers (Auth, DBs, Payments, AI) with verified integration triggers.',
+    scopePillar3Point1: '100% faithfulness score (RAGAS Verified)',
+    scopePillar3Point2: 'Technical blueprint with microservice integration triggers',
+    scopePillar3Point3: 'Unified manifests and production-ready Docker run commands',
+
+    scopePillar4Badge: 'Multi-Platform & On-Demand',
+    scopePillar4Title: '4. Guides (.md & .pdf) and On-Demand GitHub Audit',
+    scopePillar4Desc: 'Step-by-step deployment manuals for Windows (WSL2/PowerShell) and macOS (Colima/Apple Silicon). Plus, submit any GitHub repo to our automated auditor in seconds.',
+    scopePillar4Point1: 'Vectorized executive PDF reports and Markdown downloads',
+    scopePillar4Point2: 'On-Demand Evaluator: paste any GitHub URL and audit it live',
+    scopePillar4Point3: 'Instant catalog ingestion if it meets B2B quality standards',
+
+    // Ingest Modal & GitHub On-Demand Audit
+    ingestModalTitle: 'Continuous Ingestion & On-Demand Audit Module',
+    ingestModalSubtitle: 'Atomic repository management, live GitHub audit, and semantic vector generation on PostgreSQL 16.',
+    ingestTabAudit: '🔍 On-Demand GitHub Audit',
     ingestTabPresets: 'Curated B2B Presets',
     ingestTabCustom: 'Custom Ingestion',
     ingestTabReindex: 'Global Reindexing',
     ingestClose: 'Close',
+
+    // Audit Tab strings
+    auditInputLabel: 'GitHub URL or Repository to Audit:',
+    auditInputPlaceholder: 'E.g., https://github.com/supabase/realtime or qdrant/qdrant',
+    auditBtnRun: '⚡ Audit Repository on GitHub',
+    auditBtnRunning: '⏳ Auditing via GitHub API...',
+    auditExamples: 'Try these examples:',
+    auditStatusApproved: '✅ B2B APPROVED (Eligible)',
+    auditStatusConditional: '⚠️ CONDITIONAL (Requires Review)',
+    auditStatusRejected: '❌ REJECTED (Does Not Qualify)',
+    auditBtnIngest: '⚡ Ingest into Catalog & Generate Guides (.md & .pdf)',
+    auditBtnIngesting: '⏳ Saving & Computing Vectors...',
+    auditSuccessNotice: 'Tool successfully audited and integrated into the live catalog!',
 
     // Footer
     footerAudit: 'PMO & FRONTEND AUDIT: APPROVED WITHOUT RESERVATION (10/10 Checkpoints)',

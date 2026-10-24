@@ -984,7 +984,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   };
 
   // Navigation & CTA states (Simplified public interface)
-  const [activeNavTab, setActiveNavTab] = useState<'CATALOG' | 'RAG_ARCHITECT' | 'PRICING_B2B'>('CATALOG');
+  const [activeNavTab, setActiveNavTab] = useState<'CATALOG' | 'SERVICES_SCOPE' | 'RAG_ARCHITECT' | 'PRICING_B2B'>('CATALOG');
   const [isPipelineSyncActive, setIsPipelineSyncActive] = useState<boolean>(true);
 
   // B2B Monetization & Checkout states
@@ -1040,13 +1040,20 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
   // Pipeline Sync states (Paso 5 - Ingesta Continua & Sincronización)
   const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
-  const [syncTab, setSyncTab] = useState<'PRESETS' | 'CUSTOM' | 'MAINTENANCE'>('PRESETS');
+  const [syncTab, setSyncTab] = useState<'AUDIT' | 'PRESETS' | 'CUSTOM' | 'MAINTENANCE'>('AUDIT');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [syncFeedback, setSyncFeedback] = useState<{
     type: 'success' | 'error';
     message: string;
     repoName?: string;
   } | null>(null);
+
+  // GitHub On-Demand Evaluation states
+  const [auditRepoInput, setAuditRepoInput] = useState<string>('qdrant/qdrant');
+  const [isAuditing, setIsAuditing] = useState<boolean>(false);
+  const [auditResult, setAuditResult] = useState<any | null>(null);
+  const [isIngestingFromAudit, setIsIngestingFromAudit] = useState<boolean>(false);
+  const [auditError, setAuditError] = useState<string | null>(null);
 
   const [customRepoForm, setCustomRepoForm] = useState({
     name: '',
@@ -1206,6 +1213,59 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
   const handleRequestIntegrationGuide = (tool: OpenSourceTool) => {
     setInspectedGuideTool(tool);
+  };
+
+  const handleEvaluateGitHub = async (targetUrl?: string) => {
+    const query = (targetUrl !== undefined ? targetUrl : auditRepoInput).trim();
+    if (!query) return;
+    setIsAuditing(true);
+    setAuditError(null);
+    setAuditResult(null);
+    try {
+      const res = await fetch('/api/v1/github/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: query }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAuditError(data.error || 'Error al evaluar el repositorio en GitHub.');
+      } else {
+        setAuditResult(data);
+      }
+    } catch (err: any) {
+      setAuditError(err.message || 'Error de conexión con el motor de evaluación.');
+    } finally {
+      setIsAuditing(false);
+    }
+  };
+
+  const handleIngestFromAudit = async () => {
+    if (!auditResult?.repoData?.slug) return;
+    setIsIngestingFromAudit(true);
+    setAuditError(null);
+    try {
+      const res = await fetch('/api/v1/github/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: auditResult.repoData.slug, autoIngest: true }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ingested) {
+        setSyncFeedback({
+          type: 'success',
+          message: `${t.auditSuccessNotice} (${data.repoData.name} - Score ${data.evaluation.healthScore}/100)`,
+          repoName: data.repoData.name,
+        });
+        await refreshCatalog();
+      } else {
+        setAuditError(data.error || 'No se pudo incorporar la herramienta al catálogo.');
+      }
+    } catch (err: any) {
+      setAuditError(err.message || 'Error al persistir en la base de datos.');
+    } finally {
+      setIsIngestingFromAudit(false);
+    }
   };
 
   const handleSyncPreset = async (presetSlug: string) => {
@@ -1613,6 +1673,20 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <button
               type="button"
               onClick={() => {
+                setActiveNavTab('SERVICES_SCOPE');
+                document.getElementById('services-scope-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeNavTab === 'SERVICES_SCOPE'
+                  ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              {t.navScope}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
                 setActiveNavTab('RAG_ARCHITECT');
                 document.getElementById('rag-assistant-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
@@ -1826,6 +1900,181 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 <p className="text-xs font-mono text-slate-400">{t.heroMetricRagasTitle}</p>
                 <p className="text-xl font-bold text-emerald-400 mt-0.5">{t.heroMetricRagasVal}</p>
                 <p className="text-[11px] text-amber-400 font-mono">{t.heroMetricRagasSub}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sección Explicativa: Alcance de los Servicios & Propuesta de Valor B2B */}
+        <section id="services-scope-section" className="space-y-8 scroll-mt-24">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-slate-900/90 via-slate-900/60 to-slate-950 border border-slate-800/80 p-6 sm:p-10 shadow-2xl">
+            {/* Subtle background glow */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
+
+            <div className="relative z-10 space-y-4 max-w-4xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/30">
+                <span className="w-2 h-2 rounded-full bg-purple-400 animate-ping" />
+                <span>{t.scopeBadge}</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+                {t.scopeTitle}
+              </h2>
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+                {t.scopeSubtitle}
+              </p>
+            </div>
+
+            {/* 4 Pillars Grid */}
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+              {/* Pillar 1: Curaduría & Anti-Abandonware */}
+              <div className="group rounded-2xl bg-slate-950/70 border border-slate-800 hover:border-cyan-500/50 p-6 space-y-4 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/5">
+                <div className="flex items-start justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
+                    🛡️
+                  </div>
+                  <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                    {t.scopePillar1Badge}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
+                    {t.scopePillar1Title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                    {t.scopePillar1Desc}
+                  </p>
+                </div>
+                <ul className="space-y-2 border-t border-slate-800/80 pt-3 text-xs text-slate-300 font-mono">
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400 font-bold">✓</span>
+                    <span>{t.scopePillar1Point1}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400 font-bold">✓</span>
+                    <span>{t.scopePillar1Point2}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400 font-bold">✓</span>
+                    <span>{t.scopePillar1Point3}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Pillar 2: Búsqueda Híbrida & Ahorro */}
+              <div className="group rounded-2xl bg-slate-950/70 border border-slate-800 hover:border-amber-500/50 p-6 space-y-4 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5">
+                <div className="flex items-start justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
+                    ⚡
+                  </div>
+                  <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                    {t.scopePillar2Badge}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
+                    {t.scopePillar2Title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                    {t.scopePillar2Desc}
+                  </p>
+                </div>
+                <ul className="space-y-2 border-t border-slate-800/80 pt-3 text-xs text-slate-300 font-mono">
+                  <li className="flex items-center gap-2">
+                    <span className="text-amber-400 font-bold">✓</span>
+                    <span>{t.scopePillar2Point1}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-amber-400 font-bold">✓</span>
+                    <span>{t.scopePillar2Point2}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-amber-400 font-bold">✓</span>
+                    <span>{t.scopePillar2Point3}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Pillar 3: Arquitecto RAG Multi-Capa */}
+              <div className="group rounded-2xl bg-slate-950/70 border border-slate-800 hover:border-violet-500/50 p-6 space-y-4 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/5">
+                <div className="flex items-start justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
+                    🧠
+                  </div>
+                  <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-violet-500/10 text-violet-300 border border-violet-500/30">
+                    {t.scopePillar3Badge}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white group-hover:text-violet-300 transition-colors">
+                    {t.scopePillar3Title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                    {t.scopePillar3Desc}
+                  </p>
+                </div>
+                <ul className="space-y-2 border-t border-slate-800/80 pt-3 text-xs text-slate-300 font-mono">
+                  <li className="flex items-center gap-2">
+                    <span className="text-violet-400 font-bold">✓</span>
+                    <span>{t.scopePillar3Point1}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-violet-400 font-bold">✓</span>
+                    <span>{t.scopePillar3Point2}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-violet-400 font-bold">✓</span>
+                    <span>{t.scopePillar3Point3}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Pillar 4: Guías & Auditoría On-Demand de GitHub */}
+              <div className="group rounded-2xl bg-slate-950/70 border border-slate-800 hover:border-emerald-500/50 p-6 space-y-4 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5">
+                <div className="flex items-start justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
+                    📦
+                  </div>
+                  <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                    {t.scopePillar4Badge}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                    {t.scopePillar4Title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                    {t.scopePillar4Desc}
+                  </p>
+                </div>
+                <ul className="space-y-2 border-t border-slate-800/80 pt-3 text-xs text-slate-300 font-mono">
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>{t.scopePillar4Point1}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>{t.scopePillar4Point2}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>{t.scopePillar4Point3}</span>
+                  </li>
+                </ul>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSyncModalOpen(true);
+                      setSyncTab('AUDIT');
+                      setSyncFeedback(null);
+                    }}
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-mono font-bold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                  >
+                    <span>⚡ Auditar un Repositorio de GitHub Ahora</span>
+                    <span>→</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -2864,41 +3113,268 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             )}
 
             {/* Tabs */}
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
+              <button
+                type="button"
+                onClick={() => setSyncTab('AUDIT')}
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  syncTab === 'AUDIT'
+                    ? 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+              >
+                {t.ingestTabAudit}
+              </button>
               <button
                 type="button"
                 onClick={() => setSyncTab('PRESETS')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   syncTab === 'PRESETS'
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                ⚡ Presets Curados B2B
+                ⚡ {t.ingestTabPresets}
               </button>
               <button
                 type="button"
                 onClick={() => setSyncTab('CUSTOM')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   syncTab === 'CUSTOM'
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                + Ingesta Personalizada
+                + {t.ingestTabCustom}
               </button>
               <button
                 type="button"
                 onClick={() => setSyncTab('MAINTENANCE')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   syncTab === 'MAINTENANCE'
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                ⚙️ Reindexación Global
+                ⚙️ {t.ingestTabReindex}
               </button>
             </div>
+
+            {/* Tab 0: AUDIT (On-Demand GitHub Evaluator) */}
+            {syncTab === 'AUDIT' && (
+              <div className="space-y-5 animate-fadeIn">
+                <div className="p-4 rounded-2xl bg-purple-950/30 border border-purple-500/30 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🔍</span>
+                    <h4 className="text-sm font-bold text-white">
+                      Auditoría Automatizada On-Demand de GitHub
+                    </h4>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Somete cualquier repositorio de GitHub a nuestra evaluación rigurosa: verifica licencias OSI, recencia de commits (&lt;90 días anti-abandonware), soporte de contenedores Docker y calcula el Health Score ponderado (15% Commits, 20% Seguridad, 65% Docs). Si califica, puedes incorporarlo al catálogo en 1 clic.
+                  </p>
+                </div>
+
+                {/* Form */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleEvaluateGitHub();
+                  }}
+                  className="space-y-3"
+                >
+                  <label className="block text-xs font-mono font-semibold text-slate-300">
+                    {t.auditInputLabel}
+                  </label>
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <input
+                      type="text"
+                      value={auditRepoInput}
+                      onChange={(e) => setAuditRepoInput(e.target.value)}
+                      placeholder={t.auditInputPlaceholder}
+                      className="flex-1 px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-cyan-400 text-sm text-white font-mono placeholder-slate-500 focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isAuditing || !auditRepoInput.trim()}
+                      className="px-5 py-2.5 rounded-xl font-mono text-xs font-bold bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 text-slate-950 disabled:opacity-50 transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 shadow-lg shadow-cyan-500/10"
+                    >
+                      {isAuditing ? (
+                        <>
+                          <span className="w-3.5 h-3.5 rounded-full border-2 border-slate-950 border-t-transparent animate-spin" />
+                          <span>{t.auditBtnRunning}</span>
+                        </>
+                      ) : (
+                        <span>{t.auditBtnRun}</span>
+                      )}
+                    </button>
+                  </div>
+                </form>
+
+                {/* Quick Example Chips */}
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className="text-slate-400 font-mono">{t.auditExamples}</span>
+                  {['qdrant/qdrant', 'CopilotKit/CopilotKit', 'zitadel/zitadel', 'supabase/realtime', 'hoppscotch/hoppscotch'].map((slug) => (
+                    <button
+                      key={slug}
+                      type="button"
+                      onClick={() => {
+                        setAuditRepoInput(slug);
+                        handleEvaluateGitHub(slug);
+                      }}
+                      className="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition-colors cursor-pointer"
+                    >
+                      {slug}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Audit Error Alert */}
+                {auditError && (
+                  <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/40 text-rose-300 text-xs font-mono">
+                    <strong>✕ Error:</strong> {auditError}
+                  </div>
+                )}
+
+                {/* Evaluation Result Card */}
+                {auditResult && auditResult.evaluation && (
+                  <div className="p-5 rounded-2xl bg-slate-950 border border-cyan-500/40 space-y-4 shadow-xl animate-fadeIn">
+                    {/* Header: Status and Score */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-white font-mono">
+                            {auditResult.repoData?.name || auditResult.repoData?.slug}
+                          </span>
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold border ${
+                              auditResult.evaluation.status === 'APPROVED'
+                                ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
+                                : auditResult.evaluation.status === 'CONDITIONAL'
+                                ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+                                : 'bg-rose-500/15 text-rose-300 border-rose-500/40'
+                            }`}
+                          >
+                            {auditResult.evaluation.status === 'APPROVED'
+                              ? t.auditStatusApproved
+                              : auditResult.evaluation.status === 'CONDITIONAL'
+                              ? t.auditStatusConditional
+                              : t.auditStatusRejected}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 mt-1 font-mono">
+                          {auditResult.evaluation.statusReason}
+                        </p>
+                      </div>
+
+                      {/* Health Score Gauge */}
+                      <div className="flex items-center gap-3 bg-slate-900 px-4 py-2 rounded-xl border border-slate-800 shrink-0">
+                        <div className="text-right">
+                          <span className="text-[10px] font-mono text-slate-400 uppercase block">Health Score</span>
+                          <span className="text-xl font-bold font-mono text-cyan-300">
+                            {auditResult.evaluation.healthScore}
+                            <span className="text-xs text-slate-500">/100</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Breakdown weights */}
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono">
+                      <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                        <span className="text-[10px] text-slate-400 block">Commits (15%)</span>
+                        <strong className="text-cyan-400 text-sm">{auditResult.evaluation.breakdown?.commitVelocity}/100</strong>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                        <span className="text-[10px] text-slate-400 block">Seguridad (20%)</span>
+                        <strong className="text-emerald-400 text-sm">{auditResult.evaluation.breakdown?.securityStructural}/100</strong>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                        <span className="text-[10px] text-slate-400 block">Docs & Com. (65%)</span>
+                        <strong className="text-purple-400 text-sm">{auditResult.evaluation.breakdown?.communityDocs}/100</strong>
+                      </div>
+                    </div>
+
+                    {/* Technical details grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-mono">
+                      <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                        <span className="text-[10px] text-slate-400 block">Estrellas</span>
+                        <span className="text-white font-bold">★ {Number(auditResult.evaluation.metrics?.stars || 0).toLocaleString()}</span>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                        <span className="text-[10px] text-slate-400 block">Recencia</span>
+                        <span className="text-emerald-400 font-bold">
+                          {auditResult.evaluation.metrics?.daysSinceLastPush === 0
+                            ? 'Activo hoy'
+                            : `Hace ${auditResult.evaluation.metrics?.daysSinceLastPush} días`}
+                        </span>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                        <span className="text-[10px] text-slate-400 block">Licencia</span>
+                        <span className="text-cyan-300 font-bold">{auditResult.evaluation.metrics?.licenseSpdx || 'N/A'}</span>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                        <span className="text-[10px] text-slate-400 block">Docker Ready</span>
+                        <span className={auditResult.evaluation.metrics?.hasDockerSupport ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                          {auditResult.evaluation.metrics?.hasDockerSupport ? '✓ Detectado' : '⚠️ Sin Docker'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Savings estimate & Category */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono">
+                      <div>
+                        <span className="text-slate-400">Ahorro B2B Estimado: </span>
+                        <strong className="text-emerald-300">{auditResult.evaluation.b2bSavingsEstimate}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400">Categoría Sugerida: </span>
+                        <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                          {auditResult.evaluation.suggestedCategory}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Docker command */}
+                    {auditResult.repoData?.dockerCommand && (
+                      <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                        <span className="text-[10px] font-mono text-slate-400 block">Comando Docker Recomendado:</span>
+                        <code className="text-xs font-mono text-cyan-300 block overflow-x-auto whitespace-pre">
+                          {auditResult.repoData.dockerCommand}
+                        </code>
+                      </div>
+                    )}
+
+                    {/* Ingest Action Button */}
+                    <div className="pt-2">
+                      {catalogTools.some(
+                        (t) => t.slug.toLowerCase() === (auditResult.repoData?.slug || '').toLowerCase()
+                      ) ? (
+                        <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono text-center">
+                          ✓ Esta herramienta ya forma parte del catálogo activo en PostgreSQL.
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={isIngestingFromAudit || auditResult.evaluation.status === 'REJECTED'}
+                          onClick={handleIngestFromAudit}
+                          className="w-full py-3 px-4 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 disabled:opacity-50 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10"
+                        >
+                          {isIngestingFromAudit ? (
+                            <>
+                              <span className="w-3.5 h-3.5 rounded-full border-2 border-slate-950 border-t-transparent animate-spin" />
+                              <span>{t.auditBtnIngesting}</span>
+                            </>
+                          ) : (
+                            <span>{t.auditBtnIngest}</span>
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Tab 1: PRESETS */}
             {syncTab === 'PRESETS' && (

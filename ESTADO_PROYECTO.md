@@ -129,6 +129,23 @@ npm run dev
   - `9bbe69a`: *feat(paywall): enforce 3 daily free RAG queries with Pro checkout modal trigger and protected guide downloads*
   - `3d080ac`: *test(qa): complete free vs pro paywall validation and optimize PDF high-contrast typography*
   - `7e7a1b1`: *feat(catalog): ingest and index 12 AI tools (Meetily, OpenShorts, Presenton, TopView, VoiceStudio, CopilotKit, OpenNotebook, FreeLLMAPI, Vane, Upscayl, Dyad, Treblo) in Neon PostgreSQL with halfvec embeddings, live catalog and guide generator*
+### 4.4. Módulo de Evaluación On-Demand de GitHub & Sección Explicativa de Alcance de Servicios
+- **Evaluador On-Demand de GitHub (`POST /api/v1/github/evaluate`):**
+  - Permite a usuarios y arquitectos someter cualquier URL o slug de GitHub (`https://github.com/org/repo` o `org/repo`) a auditoría automatizada en tiempo real.
+  - Valida licencias OSI permisivas (MIT, Apache-2.0, PostgreSQL, AGPL-3.0, BSD), actividad de commits reciente (< 90 días anti-abandonware), presencia de contenedor Docker (`Dockerfile` o `docker-compose.yml`) y estrellas de la comunidad.
+  - Calcula el Health Score ponderado: $(0.15 \times \text{Commits}) + (0.20 \times \text{Seguridad}) + (0.65 \times \text{Docs})$.
+  - Emite dictamen técnico: `APPROVED`, `CONDITIONAL` o `REJECTED`, sugiere categoría B2B (`AUTH`, `DBS`, `PAYMENTS`, `AI`), genera comando de despliegue Docker y estima ahorros B2B frente a SaaS propietarios.
+  - Soporta parámetro `autoIngest: true` para persistir la herramienta directamente en Neon Serverless PostgreSQL 16 con vector semántico `halfvec(1536)` e incorporar inmediatamente al catálogo activo y al generador de guías (.md y .pdf).
+- **Sección Explicativa: Alcance de los Servicios OSS Atlas (`#services-scope-section`):**
+  - Sección interactiva de alto impacto visual orientada a clientes B2B, explicando con total transparencia el valor diferencial frente a buscadores genéricos de GitHub:
+    1. *Curaduría Técnica & Filtro Anti-Abandonware* (garantía de commits recientes y licencias legales).
+    2. *Búsqueda Híbrida RRF & Telemetría de Ahorro* (recuperación sub-200ms y ahorro cuantificado de $14 a $2,400 USD/mes).
+    3. *Arquitecto RAG Multi-Capa con Cero Alucinaciones* (100% fidelidad RAGAS y triggers de integración).
+    4. *Guías (.md & .pdf) y Auditoría On-Demand de GitHub* (despliegue paso a paso Windows/macOS y auditoría en 1 clic).
+- **Integración en Navbar y Modal de Ingesta:**
+  - Botón de navegación `Alcance de Servicios 💡` / `Scope of Services 💡` en el menú principal.
+  - Pestaña de `🔍 Auditoría On-Demand GitHub` como vista principal del modal de sincronización, con chips de prueba rápida (`qdrant/qdrant`, `CopilotKit/CopilotKit`, `zitadel/zitadel`, `supabase/realtime`, `hoppscotch/hoppscotch`).
+
 - Despliegue automático y verificación en vivo activa en: **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
 
 ---
@@ -236,20 +253,30 @@ Módulo técnico de generación y descarga de guías de integración para cada u
        - **Mobile Modern (390x844 - iPhone 14/15 Pro):** `scrollWidth: 390px <= 390px` (0 px exceso). Captura: [Mobile_Modern_390px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Mobile_Modern_390px.png) (547 KB).
        - **Tablet Portrait (768x1024 - iPad):** `scrollWidth: 768px <= 768px` (0 px exceso). Captura: [Tablet_Portrait_768px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Tablet_Portrait_768px.png) (503 KB).
        - **Desktop FHD (1920x1080 - 1080p):** `scrollWidth: 1920px <= 1920px` (0 px exceso). Captura: [Desktop_FHD_1920px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Desktop_FHD_1920px.png) (266 KB).
-       - **Desktop 2K (2560x1440 - Wide Display):** `scrollWidth: 2560px <= 2560px` (0 px exceso). Contenido acotado en `max-w-7xl` con márgenes balanceados. Captura: [Desktop_2K_2560px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Desktop_2K_2560px.png) (402 KB).
-   - ✅ **Optimización Táctil en Navbar y Modales:**
-     - En pantallas compactas (< 640px), el botón de ingesta conmuta a insignia compacta `ETag` y el logo adapta padding (`px-3`, `gap-2`), impidiendo desbordes.
-     - Inspección táctil del **Modal de Guía de Integración** en viewport de 375px validada exitosamente. Captura: [Mobile_375px_Modal_Guia.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Mobile_375px_Modal_Guia.png) (112 KB).
+        - **Desktop 2K (2560x1440 - Wide Display):** scrollWidth: 2560px <= 2560px (0 px exceso). Contenido acotado en max-w-7xl con márgenes balanceados. Captura: [Desktop_2K_2560px.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Desktop_2K_2560px.png) (402 KB).
+    - ✅ **Optimización Táctil en Navbar y Modales:**
+      - En pantallas compactas (< 640px), el botón de ingesta conmuta a insignia compacta ETag y el logo adapta padding (px-3, gap-2), impidiendo desbordes.
+      - Inspección táctil del **Modal de Guía de Integración** en viewport de 375px validada exitosamente. Captura: [Mobile_375px_Modal_Guia.png](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/qa_audit_screenshots/Mobile_375px_Modal_Guia.png) (112 KB).
+6. **[COMPLETADO] Pruebas del Módulo de Evaluación y Auditoría On-Demand de GitHub:**
+   - ✅ **Evaluación Automatizada de Repositorios en Vivo:**
+     - Probado mediante el script [test_github_evaluator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/scripts/test_github_evaluator.ts) contra repositorios reales en GitHub:
+       - `qdrant/qdrant`: Dictamen `APPROVED`, Health Score `99.85/100`, Licencia `Apache-2.0`, Docker detectado (`Dockerfile`), latencia `828ms`.
+       - `CopilotKit/CopilotKit`: Dictamen `APPROVED`, Health Score `93.35/100`, Licencia `MIT`, latencia `894ms`.
+       - `zitadel/zitadel`: Dictamen `APPROVED`, Health Score `93.35/100`, Licencia `AGPL-3.0`, latencia `583ms`.
+   - ✅ **Ingesta Directa & Vectorización `halfvec(1536)` en Neon PostgreSQL:**
+     - Soporte verificado para el parámetro `autoIngest: true` que calcula el embedding semántico de 1536 dimensiones, persiste en Neon Serverless PostgreSQL y genera la guía técnica de integración (.md y .pdf) inmediatamente.
 
 ---
 
 ## 📂 Archivos Clave del Desarrollo
 
+- [route.ts (GitHub Evaluate API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/github/evaluate/route.ts) — Endpoint backend para evaluación técnica On-Demand de repositorios de GitHub con cálculo de Health Score, Docker y ahorro B2B.
+- [test_github_evaluator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/scripts/test_github_evaluator.ts) — Suite de validación y pruebas de estrés para el módulo de auditoría On-Demand de GitHub.
 - [MANUAL_MAESTRO_USUARIO.md](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/MANUAL_MAESTRO_USUARIO.md) — Documento maestro y guía completa de usuario para arquitectos y desarrolladores.
 - [ingest_12_tools.js](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/ingest_12_tools.js) — Script de ingesta masiva y vectorización `halfvec(1536)` para las 12 herramientas de IA en Neon PostgreSQL.
 - [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos para Windows y Mac.
-- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo de 25 herramientas, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma y Modal de Guías).
-- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) con 25 herramientas, escenarios RAG y planes de precios.
+- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo de 25 herramientas, Sección Explicativa de Servicios, Modal de Ingesta & Auditoría GitHub, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma y Modal de Guías).
+- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) con 25 herramientas, escenarios RAG, planes de precios, alcance de servicios y auditoría GitHub.
 - [route.ts (Checkout API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/checkout/route.ts) — Backend de monetización con soporte para PayPal, Wenia USDW y facturas proforma B2B.
 - [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Ingesta continua con Health Score ponderado y vectorización `halfvec(1536)`.
 - [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores semánticos.
