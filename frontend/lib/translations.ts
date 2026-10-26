@@ -2,13 +2,13 @@ export type Language = 'es' | 'en';
 
 export const TRANSLATIONS = {
   es: {
-    brandTag: 'Iotdico B2B',
+    brandTag: '100% Open Source',
     navCatalog: 'Catálogo & Categorías',
     navScope: 'Alcance de Servicios 💡',
     navRag: 'Arquitecto RAG B2B',
-    navPricing: 'Planes B2B ⭐',
-    navProActive: 'Pro Architecture (Activo)',
-    navUpgradePro: 'Mejorar a Pro',
+    navPricing: 'Comunidad & Manifiesto 🌟',
+    navProActive: '100% Libre & Abierto',
+    navUpgradePro: 'Star en GitHub ⭐',
     navSyncActive: 'INGESTA ETag: ACTIVA',
     navSyncCache: 'INGESTA: MODO CACHÉ',
 
@@ -89,7 +89,7 @@ export const TRANSLATIONS = {
     cardCopyDocker: 'Copiar Docker Run',
     cardInspect: 'Inspeccionar',
     cardIntegrationGuide: 'Guía Integración (.md & .pdf) [Win/Mac]',
-    cardProBadge: 'PRO B2B',
+    cardProBadge: 'OPEN SOURCE',
     cardDownloadBadge: 'DESCARGAR',
 
     // RAG Assistant Section
@@ -207,12 +207,12 @@ export const TRANSLATIONS = {
     guideGeneratingPdf: '⏳ Generando PDF...',
     guidePlatformTabsWin: 'Windows (PowerShell / WSL2)',
     guidePlatformTabsMac: 'macOS (Terminal / Homebrew)',
-    guideProUnlocked: '✓ Descarga habilitada con tu plan Pro Architect',
-    ragDailyQueriesBadge: 'Consultas Hoy:',
-    ragDailyQueriesLimit: '3 max (Plan Community)',
-    ragUnlimitedQueriesBadge: '⚡ Consultas Ilimitadas (Plan Pro)',
-    ragDailyLimitReachedNotice: 'Has alcanzado el límite de 3 consultas diarias del Plan Community. Desbloquea consultas ilimitadas y generación de guías B2B actualizando a Pro Architecture.',
-    guideDownloadProNotice: 'La descarga de guías ejecutivas en PDF y Markdown está disponible con el plan Pro Architecture. Puedes revisar las instrucciones completas en pantalla o desbloquear la descarga en 1 clic.',
+    guideProUnlocked: '✓ Descarga gratuita y libre para todos los desarrolladores',
+    ragDailyQueriesBadge: 'Acceso Comunitario:',
+    ragDailyQueriesLimit: '100% Libre',
+    ragUnlimitedQueriesBadge: '⚡ Consultas Ilimitadas (100% Open Source)',
+    ragDailyLimitReachedNotice: 'Consultas ilimitadas disponibles de forma abierta y gratuita.',
+    guideDownloadProNotice: 'Descarga libre de guías de integración ejecutivas en PDF y Markdown.',
 
     // Services Scope Section (Propuesta de Valor y Alcance)
     scopeBadge: 'Propuesta de Valor & Transparencia B2B',
@@ -283,13 +283,13 @@ export const TRANSLATIONS = {
   },
 
   en: {
-    brandTag: 'Iotdico B2B',
+    brandTag: '100% Open Source',
     navCatalog: 'Catalog & Categories',
     navScope: 'Scope of Services 💡',
     navRag: 'B2B RAG Architect',
-    navPricing: 'B2B Plans ⭐',
-    navProActive: 'Pro Architecture (Active)',
-    navUpgradePro: 'Upgrade to Pro',
+    navPricing: 'Community & Manifesto 🌟',
+    navProActive: '100% Free & Open',
+    navUpgradePro: 'Star on GitHub ⭐',
     navSyncActive: 'INGESTION ETag: ACTIVE',
     navSyncCache: 'INGESTION: CACHED MODE',
 
@@ -370,7 +370,7 @@ export const TRANSLATIONS = {
     cardCopyDocker: 'Copy Docker Run',
     cardInspect: 'Inspect',
     cardIntegrationGuide: 'Integration Guide (.md & .pdf) [Win/Mac]',
-    cardProBadge: 'PRO B2B',
+    cardProBadge: 'OPEN SOURCE',
     cardDownloadBadge: 'DOWNLOAD',
 
     // RAG Assistant Section
@@ -488,12 +488,12 @@ export const TRANSLATIONS = {
     guideGeneratingPdf: '⏳ Generating PDF...',
     guidePlatformTabsWin: 'Windows (PowerShell / WSL2)',
     guidePlatformTabsMac: 'macOS (Terminal / Homebrew)',
-    guideProUnlocked: '✓ Downloads enabled with your Pro Architect plan',
-    ragDailyQueriesBadge: "Today's Queries:",
-    ragDailyQueriesLimit: '3 max (Community Plan)',
-    ragUnlimitedQueriesBadge: '⚡ Unlimited Queries (Pro Plan)',
-    ragDailyLimitReachedNotice: 'You have reached the 3 daily query limit of the Community Plan. Unlock unlimited queries and B2B integration guides by upgrading to Pro Architecture.',
-    guideDownloadProNotice: 'Executive PDF and Markdown downloads are available with the Pro Architecture plan. You can view full instructions on screen or unlock downloads in 1 click.',
+    guideProUnlocked: '✓ Free & Open download for all developers',
+    ragDailyQueriesBadge: 'Community Access:',
+    ragDailyQueriesLimit: '100% Free',
+    ragUnlimitedQueriesBadge: '⚡ Unlimited Queries (100% Open Source)',
+    ragDailyLimitReachedNotice: 'Unlimited queries freely available for the community.',
+    guideDownloadProNotice: 'Free executive PDF and Markdown downloads for all developers.',
 
     // Services Scope Section (Value Proposition & Transparency)
     scopeBadge: 'B2B Value Proposition & Transparency',

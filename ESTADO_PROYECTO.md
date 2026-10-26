@@ -304,6 +304,26 @@ Módulo técnico de generación y descarga de guías de integración para cada u
 
 ---
 
+## 🚀 5. Hitos de Transición a 100% Open Source Comunitario (26 Octubre 2026)
+
+### 5.1. Fase 1: Limpieza de Pasarelas de Pago & Liberación 100% Open Source
+- **Eliminación Total de Barreras Comerciales y Paywalls:**
+  - Se retiró la sección de precios de pago (`PricingSection`), sustituyéndola por la sección **Comunidad & Manifiesto Open Source** (`#community-manifesto-section`), destacando la libertad tecnológica bajo licencia MIT y los 3 pilares comunitarios (Catálogo & Búsqueda Híbrida, Arquitecto RAG sin límites y Guías libres).
+  - Se eliminó completamente de la interfaz el modal de suscripción y facturación B2B (`CheckoutModal` de PayPal/Wenia).
+  - Se sustituyó el botón de suscripción Pro del Header por un botón comunitario directo de **Star en GitHub** hacia el repositorio oficial (`https://github.com/DICO2023/oss-atlas`).
+- **Liberación de Consultas y Descargas Sin Restricciones:**
+  - **Asistente RAG:** Se eliminó la restricción de 3 consultas diarias del plan gratuito. Ahora cualquier arquitecto o desarrollador puede consultar de forma ilimitada sin límites ni bloqueos.
+  - **Guías de Integración (.md y .pdf):** Se eliminó el requisito de suscripción Pro para descargar. Ambos formatos se generan y descargan libre e instantáneamente para entornos Windows y macOS.
+- **Actualización Integral del Diccionario Bilingüe (`translations.ts`):**
+  - Textos de badges actualizados de `PRO B2B` a `OPEN SOURCE` y `100% Libre & Abierto`.
+  - Badges de cuota actualizados a `⚡ Consultas Ilimitadas (100% Open Source)` / `⚡ Unlimited Queries (100% Open Source)`.
+- **Verificación y Compilación Exitosa:**
+  - `npm run typecheck` (`tsc --noEmit`): **0 errores de tipos**.
+  - `npm run lint`: **0 advertencias y 0 errores** de ESLint.
+  - `npm run build`: Compilación de producción en Next.js 15.5.28 completada con éxito en 34.6s.
+
+---
+
 ## 📂 Archivos Clave del Desarrollo
 
 - [route.ts (GitHub Evaluate API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/github/evaluate/route.ts) — Endpoint backend para evaluación técnica On-Demand de repositorios de GitHub con cálculo de Health Score, Docker y ahorro B2B.
@@ -311,11 +331,11 @@ Módulo técnico de generación y descarga de guías de integración para cada u
 - [MANUAL_MAESTRO_USUARIO.md](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/MANUAL_MAESTRO_USUARIO.md) — Documento maestro y guía completa de usuario para arquitectos y desarrolladores.
 - [ingest_12_tools.js](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/ingest_12_tools.js) — Script de ingesta masiva y vectorización `halfvec(1536)` para las 12 herramientas de IA en Neon PostgreSQL.
 - [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos para Windows y Mac.
-- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo de 25 herramientas, Sección Explicativa de Servicios, Modal de Ingesta & Auditoría GitHub, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma y Modal de Guías).
-- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) con 25 herramientas, escenarios RAG, planes de precios, alcance de servicios y auditoría GitHub.
-- [route.ts (Checkout API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/checkout/route.ts) — Backend de monetización con soporte para PayPal, Wenia USDW y facturas proforma B2B.
+- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal 100% Open Source (Hero, Catálogo de 25 herramientas, Sección Explicativa de Servicios, Modal de Ingesta & Auditoría GitHub, Asistente RAG Ilimitado, Manifiesto Comunitario, Selector de Idioma y Descarga Libre de Guías).
+- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) adaptado 100% a la filosofía comunitaria Open Source.
 - [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Ingesta continua con Health Score ponderado y vectorización `halfvec(1536)`.
 - [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores semánticos.
 - [rag.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/rag.ts) — Asistente de arquitectura con evaluación RAGAS de cero alucinaciones.
 - [icon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/icon.svg) & [favicon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/favicon.svg) — Favicon corporativo y assets visuales de pestaña.
 - [Dockerfile](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/Dockerfile) — Contenedor de producción Alpine Linux optimizado (347 MB).
+
