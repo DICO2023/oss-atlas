@@ -944,6 +944,38 @@ const IconGitHubRepo: React.FC<IconProps> = ({ className = 'w-5 h-5' }) => (
   </svg>
 );
 
+const IconMenuHamburger: React.FC<IconProps> = ({ className = 'w-5 h-5' }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <line x1="4" y1="12" x2="20" y2="12" />
+    <line x1="4" y1="18" x2="20" y2="18" />
+  </svg>
+);
+
+const IconCloseX: React.FC<IconProps> = ({ className = 'w-5 h-5' }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M18 6 6 18M6 6l12 12" />
+  </svg>
+);
+
 const getCategoryName = (catId: string, lang: Language) => {
   const t = TRANSLATIONS[lang];
   if (catId === 'AUTH') return t.catAuthName;
@@ -988,6 +1020,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   // Navigation & CTA states (Simplified public interface)
   const [activeNavTab, setActiveNavTab] = useState<'CATALOG' | 'SERVICES_SCOPE' | 'RAG_ARCHITECT' | 'COMMUNITY'>('CATALOG');
   const [isPipelineSyncActive, setIsPipelineSyncActive] = useState<boolean>(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   // Guide inspection & download states (100% Free & Open Source)
   const [inspectedGuideTool, setInspectedGuideTool] = useState<OpenSourceTool | null>(null);
@@ -1574,96 +1607,117 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
         }}
       />
 
-      {/* Fixed Top Navbar (Permanent during scroll) */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/90 bg-slate-950/95 backdrop-blur-xl shadow-xl shadow-slate-950/50">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 via-slate-900 to-emerald-500/20 border border-cyan-500/40 flex items-center justify-center shadow-lg shadow-cyan-500/10 shrink-0">
-              <IconCpuArchitecture className="w-5 h-5 text-cyan-400" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-extrabold tracking-tight text-base sm:text-lg text-white">
-                  OSS Atlas
-                </span>
-                <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                  {t.brandTag}
-                </span>
+      {/* Floating Island / Pill Navbar (Inspiration: navbar.gallery) */}
+      <header className="fixed top-3 sm:top-4 inset-x-0 mx-auto w-[95%] max-w-6xl z-50 transition-all duration-300">
+        <div className="relative rounded-full border border-white/10 bg-slate-950/80 backdrop-blur-2xl shadow-2xl shadow-cyan-950/30 px-3.5 sm:px-5 h-16 flex items-center justify-between gap-2 sm:gap-4 transition-all">
+          {/* Brand Logo & Live Open Source Pulse */}
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setActiveNavTab('CATALOG');
+              }}
+              className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer text-left focus:outline-none"
+            >
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-500/20 via-slate-900 to-emerald-500/30 border border-cyan-400/30 flex items-center justify-center shadow-md shadow-cyan-500/10 group-hover:border-cyan-400/60 group-hover:scale-105 transition-all">
+                <IconCpuArchitecture className="w-5 h-5 text-cyan-300 group-hover:rotate-6 transition-transform" />
               </div>
-            </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-extrabold tracking-tight text-base sm:text-lg text-white group-hover:text-cyan-300 transition-colors">
+                    OSS Atlas
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>v1.0 OSS</span>
+                  </span>
+                </div>
+              </div>
+            </button>
           </div>
 
-          {/* Nav Links */}
-          <nav aria-label="Navegación Principal" className="hidden md:flex items-center gap-1 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800">
+          {/* Central Segmented Pill Navigation (Desktop) */}
+          <nav
+            aria-label="Navegación Principal"
+            className="hidden lg:flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/[0.08] shadow-inner"
+          >
             <button
               type="button"
               onClick={() => {
                 setActiveNavTab('CATALOG');
                 document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 activeNavTab === 'CATALOG'
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 shadow-sm shadow-cyan-500/20 font-bold'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-white/[0.05]'
               }`}
             >
-              {t.navCatalog}
+              <span>🔍</span>
+              <span>{t.navCatalog}</span>
             </button>
+
             <button
               type="button"
               onClick={() => {
                 setActiveNavTab('SERVICES_SCOPE');
                 document.getElementById('services-scope-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 activeNavTab === 'SERVICES_SCOPE'
-                  ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-purple-500/20 text-purple-200 border border-purple-400/40 shadow-sm shadow-purple-500/20 font-bold'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-white/[0.05]'
               }`}
             >
-              {t.navScope}
+              <span>💡</span>
+              <span>{t.navScope}</span>
             </button>
+
             <button
               type="button"
               onClick={() => {
                 setActiveNavTab('RAG_ARCHITECT');
                 document.getElementById('rag-assistant-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 activeNavTab === 'RAG_ARCHITECT'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 shadow-sm shadow-emerald-500/20 font-bold'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-white/[0.05]'
               }`}
             >
-              {t.navRag}
+              <span>🤖</span>
+              <span>{t.navRag}</span>
             </button>
+
             <button
               type="button"
               onClick={() => {
                 setActiveNavTab('COMMUNITY');
                 document.getElementById('community-manifesto-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 activeNavTab === 'COMMUNITY'
-                  ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 border border-emerald-500/50 shadow-sm'
-                  : 'text-emerald-400/80 hover:text-emerald-300'
+                  ? 'bg-amber-500/20 text-amber-200 border border-amber-400/40 shadow-sm shadow-amber-500/20 font-bold'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-white/[0.05]'
               }`}
             >
-              {t.navPricing}
+              <span>🌟</span>
+              <span>{t.navPricing}</span>
             </button>
           </nav>
 
-          {/* CTA with Active State */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-            {/* Language Switcher ES / EN */}
+          {/* Right Action Hub (Human micro-interactions) */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            {/* Language Switcher Pill (ES / EN) */}
             <button
               type="button"
               onClick={toggleLanguage}
               title={lang === 'es' ? 'Switch to English' : 'Cambiar a Español'}
-              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-mono font-bold bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400 text-slate-200 transition-all cursor-pointer shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-cyan-400/50 text-slate-200 transition-all cursor-pointer shadow-xs"
             >
-              <span>{lang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN'}</span>
+              <span className="text-sm">{lang === 'es' ? '🇪🇸' : '🇺🇸'}</span>
+              <span className="text-[11px] font-bold">{lang === 'es' ? 'ES' : 'EN'}</span>
             </button>
 
             {/* GitHub Community Star Button */}
@@ -1671,14 +1725,18 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
               href="https://github.com/DICO2023/oss-atlas"
               target="_blank"
               rel="noopener noreferrer"
-              title={lang === 'es' ? 'Ver código fuente en GitHub & Dar Estrella' : 'View source on GitHub & Star'}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 sm:py-2.5 rounded-xl text-xs font-mono font-bold bg-slate-900/90 hover:bg-slate-800 border border-amber-500/40 hover:border-amber-400 text-amber-300 transition-all shadow-sm"
+              title={lang === 'es' ? 'Ver repositorio en GitHub & Dar Estrella' : 'View GitHub repository & Star'}
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-gradient-to-r from-amber-500/15 via-slate-900 to-orange-500/15 hover:from-amber-500/25 hover:to-orange-500/25 border border-amber-500/40 hover:border-amber-400 text-amber-300 transition-all cursor-pointer shadow-sm shadow-amber-950/20 group"
             >
-              <IconGitHubRepo className="w-4 h-4 text-amber-400 shrink-0" />
-              <span className="hidden sm:inline">Star en GitHub</span>
-              <span className="px-1.5 py-0.5 rounded-md bg-amber-400/20 text-[10px] text-amber-300 border border-amber-400/30 font-extrabold">⭐ OSS</span>
+              <IconGitHubRepo className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
+              <span className="hidden sm:inline font-semibold">GitHub</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-amber-400/20 text-[10px] text-amber-200 border border-amber-400/40 font-extrabold flex items-center gap-0.5">
+                <span>★</span>
+                <span>Star</span>
+              </span>
             </a>
 
+            {/* Ingestion Pipeline ETag Pill */}
             <button
               type="button"
               onClick={() => {
@@ -1686,30 +1744,119 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 setSyncFeedback(null);
               }}
               title="Abrir Pipeline de Ingesta Continua & Sincronización"
-              className={`group relative inline-flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-mono font-semibold border transition-all duration-200 cursor-pointer ${
+              className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-semibold border transition-all cursor-pointer ${
                 isPipelineSyncActive
-                  ? 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300 shadow-lg shadow-emerald-500/10 hover:border-emerald-400'
-                  : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-cyan-500/40'
+                  ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300 hover:border-emerald-400 hover:bg-emerald-500/20 shadow-xs'
+                  : 'bg-slate-900 border-slate-700 text-slate-300'
               }`}
             >
               <span
-                className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${
+                className={`w-2 h-2 rounded-full ${
                   isPipelineSyncActive ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'
                 }`}
               />
-              <span className="hidden sm:inline">
-                {isPipelineSyncActive ? t.navSyncActive : t.navSyncCache}
-              </span>
-              <span className="sm:hidden text-[11px]">
-                ETag
-              </span>
+              <span className="text-[11px]">{isPipelineSyncActive ? 'ETag Live' : 'Cache'}</span>
+            </button>
+
+            {/* Mobile Hamburger Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              aria-label="Abrir menú de navegación"
+              className="lg:hidden p-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer"
+            >
+              {isMobileMenuOpen ? (
+                <IconCloseX className="w-5 h-5 text-cyan-300" />
+              ) : (
+                <IconMenuHamburger className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Floating Glass Card */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden mt-2 rounded-3xl border border-white/10 bg-slate-950/95 backdrop-blur-2xl p-4 shadow-2xl shadow-cyan-950/40 space-y-2 animate-fadeIn">
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveNavTab('CATALOG');
+                  setIsMobileMenuOpen(false);
+                  document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="p-3 rounded-2xl bg-white/[0.03] hover:bg-cyan-500/10 border border-white/[0.05] hover:border-cyan-500/30 text-left text-slate-200 transition-all flex items-center gap-2"
+              >
+                <span>🔍</span>
+                <span>{t.navCatalog}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveNavTab('SERVICES_SCOPE');
+                  setIsMobileMenuOpen(false);
+                  document.getElementById('services-scope-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="p-3 rounded-2xl bg-white/[0.03] hover:bg-purple-500/10 border border-white/[0.05] hover:border-purple-500/30 text-left text-slate-200 transition-all flex items-center gap-2"
+              >
+                <span>💡</span>
+                <span>{t.navScope}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveNavTab('RAG_ARCHITECT');
+                  setIsMobileMenuOpen(false);
+                  document.getElementById('rag-assistant-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="p-3 rounded-2xl bg-white/[0.03] hover:bg-emerald-500/10 border border-white/[0.05] hover:border-emerald-500/30 text-left text-slate-200 transition-all flex items-center gap-2"
+              >
+                <span>🤖</span>
+                <span>{t.navRag}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveNavTab('COMMUNITY');
+                  setIsMobileMenuOpen(false);
+                  document.getElementById('community-manifesto-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="p-3 rounded-2xl bg-white/[0.03] hover:bg-amber-500/10 border border-white/[0.05] hover:border-amber-500/30 text-left text-slate-200 transition-all flex items-center gap-2"
+              >
+                <span>🌟</span>
+                <span>{t.navPricing}</span>
+              </button>
+            </div>
+
+            <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSyncModalOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-emerald-300 text-xs"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span>Ingesta & ETag</span>
+              </button>
+
+              <a
+                href="https://github.com/DICO2023/oss-atlas"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-bold"
+              >
+                <IconGitHubRepo className="w-3.5 h-3.5" />
+                <span>GitHub ⭐</span>
+              </a>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* Main Content Container with offset for fixed header */}
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-24 space-y-20">
+      {/* Main Content Container with offset for floating pill header */}
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-24 space-y-20">
         {}
         <section className="relative rounded-3xl border border-slate-800/90 bg-gradient-to-b from-slate-900/90 via-slate-950 to-slate-900/70 p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden">
           <div className="max-w-4xl mx-auto text-center space-y-6">
