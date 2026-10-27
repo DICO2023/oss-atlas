@@ -108,6 +108,8 @@ export const TRANSLATIONS = {
     ragAnswerRelevance: 'Answer Relevance: 0.98',
     ragArchitectureMap: 'Mapa de Arquitectura Sintetizado',
     ragRecommendedStack: 'Pila Recomendada',
+    ragTabSoftwareBlueprint: 'Capas 1-4: Arquitectura de Software',
+    ragTabHardwarePhysical: 'Capa 0: Hardware Recomendado & Diagrama Radar',
 
     // Pricing Section
     pricingBadge: '💎 MODELO OPEN-CORE & MONETIZACIÓN B2B',
@@ -389,6 +391,8 @@ export const TRANSLATIONS = {
     ragAnswerRelevance: 'Answer Relevance: 0.98',
     ragArchitectureMap: 'Synthesized Architecture Blueprint',
     ragRecommendedStack: 'Recommended Stack',
+    ragTabSoftwareBlueprint: 'Layers 1-4: Software Architecture',
+    ragTabHardwarePhysical: 'Layer 0: Recommended Hardware & Radar',
 
     // Pricing Section
     pricingBadge: '💎 OPEN-CORE MODEL & B2B MONETIZATION',

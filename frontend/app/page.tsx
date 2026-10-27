@@ -16,6 +16,7 @@ import {
   downloadPdfGuide,
   getPlatformGuides,
 } from '@/lib/guideGenerator';
+import HardwareRecommendationSheet from '@/components/HardwareRecommendationSheet';
 
 export type CategoryId = 'ALL' | 'AUTH' | 'DBS' | 'PAYMENTS' | 'AI';
 
@@ -1507,6 +1508,19 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
     };
   }, [liveRagResponse, activeScenarioId, lang]);
 
+  // Hardware Layer 0 View State
+  const [ragActiveView, setRagActiveView] = useState<'software' | 'hardware'>('software');
+
+  // Extract active tools across the 4 layers for Hardware Sizing
+  const activeLayersForHardware = useMemo(() => {
+    const nodes = currentScenario?.nodes || [];
+    const dbs = nodes.find((n: RagArchitectureNode) => (n.layer || '').toUpperCase().includes('DBS'))?.toolName;
+    const auth = nodes.find((n: RagArchitectureNode) => (n.layer || '').toUpperCase().includes('AUTH'))?.toolName;
+    const payments = nodes.find((n: RagArchitectureNode) => (n.layer || '').toUpperCase().includes('PAYMENT'))?.toolName;
+    const ai = nodes.find((n: RagArchitectureNode) => (n.layer || '').toUpperCase().includes('AI'))?.toolName;
+    return { dbsTool: dbs, authTool: auth, paymentsTool: payments, aiTool: ai };
+  }, [currentScenario?.nodes]);
+
   // Request live architecture synthesis from /api/v1/rag/architecture (100% Open Source - Unlimited)
   const requestRagArchitecture = async (promptText: string) => {
     setIsSynthesizingRag(true);
@@ -2849,6 +2863,38 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                       {currentScenario.executiveSummary}
                     </p>
 
+                    {/* Architecture View Sub-Tabs: Capas 1-4 Software vs Capa 0 Hardware Físico */}
+                    <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-950/80 rounded-2xl border border-slate-800">
+                      <button
+                        type="button"
+                        onClick={() => setRagActiveView('software')}
+                        className={`flex-1 min-w-[200px] py-2.5 px-4 rounded-xl text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                          ragActiveView === 'software'
+                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-md shadow-cyan-950/40'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                        }`}
+                      >
+                        <span>🖥️</span>
+                        <span>{t.ragTabSoftwareBlueprint}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRagActiveView('hardware')}
+                        className={`flex-1 min-w-[200px] py-2.5 px-4 rounded-xl text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 cursor-pointer relative ${
+                          ragActiveView === 'hardware'
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-400/50 shadow-md shadow-amber-950/40'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                        }`}
+                      >
+                        <span>🖲️</span>
+                        <span>{t.ragTabHardwarePhysical}</span>
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                      </button>
+                    </div>
+
+                    {ragActiveView === 'software' ? (
+                      <>
+
                     {/* Interactive Visual Flow Diagram (Bloques, Conectores & Capas de Arquitectura) */}
                     <div className="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-cyan-500/30 space-y-4 shadow-xl">
                       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
@@ -3001,6 +3047,12 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                         </div>
                       ))}
                     </div>
+                      </>
+                    ) : (
+                      <div className="pt-2">
+                        <HardwareRecommendationSheet layers={activeLayersForHardware} lang={lang} />
+                      </div>
+                    )}
                   </div>
 
                   {/* Interactive Prompt Input inside RAG Assistant */}
