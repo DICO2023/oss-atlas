@@ -338,6 +338,28 @@ Módulo técnico de generación y descarga de guías de integración para cada u
   - Verificado en navegador local (`http://localhost:3000`) y compilación `npm run build` completada con éxito (Exit Code 0).
   - Desplegado y versionado en GitHub `origin main` (commit `77201f0`).
 
+### 5.3. Fase 3: Hoja de Hardware Recomendado (Capa 0 Física), Diagrama Radar & Guías Tri-Plataforma (Linux, Windows, macOS)
+- **Modelado de Hardware Físico On-Premise ([hardwareCatalog.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/hardwareCatalog.ts)):**
+  - **Nivel 1 (Mini PC / Homelab Edge):** Ryzen 9 / i9, 64GB DDR5, 2TB NVMe PCIe 4.0, Dual 2.5 GbE (35W-65W TDP). Capex ~$780 USD, ROI en 3.2 meses.
+  - **Nivel 2 (Servidor Torre PYME):** Intel Xeon ECC / AMD EPYC 4004, 64-128GB ECC (anti-bitflip), RAID 1/10 (2x 2TB NVMe + 2x 4TB SATA), IPMI/iDRAC. Capex ~$1,850 USD, ROI en 3.5 meses.
+  - **Nivel 3 (Servidor Rackmount 1U/2U Enterprise):** Dual EPYC 9004 / Xeon Silver, 128-256GB ECC RDIMM, 4x 1.92TB NVMe U.3 Hot-Swap, Dual 10 GbE SFP+ Fibra. Capex ~$4,600 USD, ROI en 3.4 meses.
+  - **Nivel 4 (AI Inference & Agentic Workstation):** Ryzen 9 / i9, 128GB DDR5, 4TB NVMe, GPU NVIDIA RTX 4090 24GB VRAM (Tensor Cores / local LLMs). Capex ~$3,650 USD, ROI en 3.1 meses.
+- **Diagrama Radar de Rendimiento Físico Recharts ([HardwareRadarChart.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/components/HardwareRadarChart.tsx)):**
+  - Gráfico pentagonal en 5 dimensiones cardinales: Cómputo CPU, Memoria RAM & ECC, NVMe IOPS, Red & Ancho de Banda, y Eficiencia ROI/Costo.
+  - Modos conmutables: **🎯 Modo Enfocado** (analizar una máquina) vs **📊 Modo Comparar 4** (superposición multi-color simultánea).
+- **Integración Nativa en el Asistente B2B ([page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx)):**
+  - Pestañas superiores segmentadas: `🖥️ Capas 1-4: Arquitectura de Software` y `🖲️ Capa 0: Hardware Recomendado & Diagrama Radar`.
+  - Dimensionamiento dinámico reactivo: analiza las 4 capas activas en RAG y recomienda la máquina óptima justificando la inversión y el ahorro anual.
+  - Preparado para monetización ética desacoplada vía `NEXT_PUBLIC_AMAZON_AFFILIATE_TAG` con enlaces limpios en vivo a Amazon.
+- **Soporte Tri-Plataforma Nativo en Guías (.md & .pdf) e Interfaz:**
+  - Incorporado **🐧 Linux nativo (Ubuntu / Debian / RHEL / Docker Engine & systemd)** con comandos oficiales de instalación de Docker, optimización del kernel (sysctl: `vm.max_map_count`, `net.core.somaxconn`), permisos persistentes `/opt/oss-atlas-data`, reglas de cortafuegos UFW/Firewalld y políticas SELinux.
+  - Ficha de especificaciones de Hardware On-Premise incorporada en las descargas de guías `.md` y `.pdf` para presentación directa a equipos de compras y CTOs.
+- **Validación y Compilación de Producción:**
+  - `npm run typecheck` (`tsc --noEmit`): **0 errores de tipos**.
+  - `npm run lint`: **0 advertencias, 0 errores** de ESLint.
+  - `npm run build`: Compilación Next.js 15 exitosa (Exit Code 0).
+  - Versionado y desplegado en GitHub `origin main` (commits `5e2ecd0` y `74701c9`).
+
 ---
 
 ## 📂 Archivos Clave del Desarrollo
