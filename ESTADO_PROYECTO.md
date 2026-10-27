@@ -349,8 +349,7 @@ Módulo técnico de generación y descarga de guías de integración para cada u
   - Modos conmutables: **🎯 Modo Enfocado** (analizar una máquina) vs **📊 Modo Comparar 4** (superposición multi-color simultánea).
 - **Integración Nativa en el Asistente B2B ([page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx)):**
   - Pestañas superiores segmentadas: `🖥️ Capas 1-4: Arquitectura de Software` y `🖲️ Capa 0: Hardware Recomendado & Diagrama Radar`.
-  - Dimensionamiento dinámico reactivo: analiza las 4 capas activas en RAG y recomienda la máquina óptima justificando la inversión y el ahorro anual.
-  - Preparado para monetización ética desacoplada vía `NEXT_PUBLIC_AMAZON_AFFILIATE_TAG` con enlaces limpios en vivo a Amazon.
+  - Activado y verificado el programa de **Amazon Associates** con el ID único oficial `iotdico-20` (`NEXT_PUBLIC_AMAZON_AFFILIATE_TAG=iotdico-20`), inyectando automáticamente el parámetro `&tag=iotdico-20` en todos los enlaces y activando el descargo de transparencia legal en UI y guías.
 - **Soporte Tri-Plataforma Nativo en Guías (.md & .pdf) e Interfaz:**
   - Incorporado **🐧 Linux nativo (Ubuntu / Debian / RHEL / Docker Engine & systemd)** con comandos oficiales de instalación de Docker, optimización del kernel (sysctl: `vm.max_map_count`, `net.core.somaxconn`), permisos persistentes `/opt/oss-atlas-data`, reglas de cortafuegos UFW/Firewalld y políticas SELinux.
   - Ficha de especificaciones de Hardware On-Premise incorporada en las descargas de guías `.md` y `.pdf` para presentación directa a equipos de compras y CTOs.

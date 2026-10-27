@@ -41,7 +41,7 @@ export interface HardwareTier {
   radarScores: HardwareRadarScore;
 }
 
-export const AMAZON_AFFILIATE_TAG = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_TAG || "";
+export const AMAZON_AFFILIATE_TAG = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_TAG || "iotdico-20";
 
 export function hasAffiliateTag(): boolean {
   return typeof AMAZON_AFFILIATE_TAG === "string" && AMAZON_AFFILIATE_TAG.trim().length > 0;
