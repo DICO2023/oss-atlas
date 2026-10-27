@@ -1026,7 +1026,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   // Guide inspection & download states (100% Free & Open Source)
   const [inspectedGuideTool, setInspectedGuideTool] = useState<OpenSourceTool | null>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
-  const [activeGuideTab, setActiveGuideTab] = useState<'both' | 'windows' | 'mac'>('both');
+  const [activeGuideTab, setActiveGuideTab] = useState<'both' | 'windows' | 'mac' | 'linux'>('both');
   const [copiedStepCode, setCopiedStepCode] = useState<string | null>(null);
 
   // Hero Interactive Prompt Bar states (Checkpoint #7)
@@ -4074,6 +4074,17 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     >
                       🍎 macOS
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveGuideTab('linux')}
+                      className={`flex-1 py-1.5 px-3 rounded-lg font-semibold transition-all cursor-pointer text-center ${
+                        activeGuideTab === 'linux'
+                          ? 'bg-emerald-950/80 text-emerald-300 shadow-sm border border-emerald-500/40'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      🐧 Linux
+                    </button>
                   </div>
 
                   {/* Windows Section */}
@@ -4156,6 +4167,49 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                           💡 {lang === 'es' ? 'AVISO TÉCNICO MACOS / APPLE SILICON:' : 'MACOS / APPLE SILICON TECHNICAL ADVISORY:'}
                         </span>
                         {platformGuides.mac.notes.map((note, idx) => (
+                          <p key={idx} className="text-[10px] text-slate-300">• {note}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Linux Section */}
+                  {(activeGuideTab === 'both' || activeGuideTab === 'linux') && (
+                    <div className="p-5 rounded-2xl bg-slate-950 border border-emerald-500/30 space-y-4">
+                      <div className="flex items-center justify-between text-emerald-400 font-bold border-b border-emerald-500/20 pb-2">
+                        <span className="text-sm">{t.guideLinuxStep}</span>
+                        <span className="px-2 py-0.5 rounded bg-emerald-950 text-[10px] text-emerald-300 border border-emerald-500/40">Docker Engine & systemd</span>
+                      </div>
+
+                      {platformGuides.linux.steps.map((step, idx) => (
+                        <div key={idx} className="space-y-1.5">
+                          <div className="flex items-center justify-between text-slate-200 font-semibold text-xs">
+                            <span>{step.title}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(step.code);
+                                setCopiedStepCode(`linux-${idx}`);
+                                setTimeout(() => setCopiedStepCode(null), 2000);
+                              }}
+                              className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                            >
+                              {copiedStepCode === `linux-${idx}` ? (lang === 'es' ? '✓ Copiado' : '✓ Copied') : (lang === 'es' ? 'Copiar' : 'Copy')}
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-slate-400 leading-relaxed">{step.description}</p>
+                          <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-emerald-400 overflow-x-auto text-[11px] leading-relaxed">
+                            <code>{step.code}</code>
+                          </pre>
+                        </div>
+                      ))}
+
+                      {/* Linux Notes */}
+                      <div className="p-3 rounded-xl bg-slate-900/90 border border-emerald-500/30 space-y-1">
+                        <span className="text-emerald-400 font-bold text-[10px] block">
+                          🐧 {lang === 'es' ? 'AVISO TÉCNICO LINUX / SYSTEMD / SELINUX:' : 'LINUX / SYSTEMD / SELINUX TECHNICAL ADVISORY:'}
+                        </span>
+                        {platformGuides.linux.notes.map((note, idx) => (
                           <p key={idx} className="text-[10px] text-slate-300">• {note}</p>
                         ))}
                       </div>
