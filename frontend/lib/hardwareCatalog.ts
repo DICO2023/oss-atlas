@@ -417,3 +417,363 @@ export function getRadarComparisonData(lang: "es" | "en") {
     return item;
   });
 }
+
+export interface HardwareBrandModel {
+  id: string;
+  brand: "Minisforum" | "Beelink" | "Geekom" | "GMKtec" | "Bosgame" | "Bmax" | "Apple" | "NVIDIA" | "Microsoft";
+  model: string;
+  category: "minipc_x86" | "apple_silicon" | "nvidia_ai" | "mobile_workstation";
+  categoryLabel: { es: string; en: string };
+  badge: { es: string; en: string };
+  highlights: { es: string[]; en: string[] };
+  targetWorkload: { es: string; en: string };
+  specsSummary: string;
+  estimatedPriceUSD: string;
+  amazonSearchQuery: string;
+  amazonAffiliateUrl: string;
+  recommendedForTierId: "homelab_minipc" | "sme_tower" | "enterprise_rack" | "ai_workstation";
+}
+
+export const HARDWARE_BRAND_MODELS: HardwareBrandModel[] = [
+  // 1. Minisforum MS-01
+  {
+    id: "minisforum_ms01",
+    brand: "Minisforum",
+    model: "Minisforum MS-01 Workstation Mini",
+    category: "minipc_x86",
+    categoryLabel: { es: "Mini PC Homelab 10GbE", en: "10GbE Homelab Mini PC" },
+    badge: { es: "★ Estándar B2B Homelab", en: "★ B2B Homelab Standard" },
+    highlights: {
+      es: [
+        "Doble puerto 10G SFP+ (Fibra/DAC) + Doble 2.5 GbE RJ45",
+        "Intel Core i9-13900H / i9-12900H (14 Cores / 20 Threads)",
+        "3 ranuras M.2 NVMe PCIe 4.0 + 1 ranura PCIe x16 para GPU o RAID",
+      ],
+      en: [
+        "Dual 10G SFP+ ports (Fiber/DAC) + Dual 2.5 GbE RJ45",
+        "Intel Core i9-13900H / i9-12900H (14 Cores / 20 Threads)",
+        "3x M.2 NVMe PCIe 4.0 slots + 1x PCIe x16 expansion slot",
+      ],
+    },
+    targetWorkload: {
+      es: "Clústeres Proxmox/Kubernetes, cortafuegos pfSense/OPNsense y microservicios con red 10GbE.",
+      en: "Proxmox/Kubernetes clusters, pfSense/OPNsense firewalls, and microservices with 10GbE network.",
+    },
+    specsSummary: "Intel i9-13900H | Hasta 64GB DDR5 | 3x M.2 NVMe | 2x 10G SFP+ + 2x 2.5G LAN",
+    estimatedPriceUSD: "$650 - $920",
+    amazonSearchQuery: "Minisforum MS-01 Intel i9 64GB RAM 10GbE SFP+",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Minisforum MS-01 Intel i9 64GB RAM 10GbE SFP+"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 2. Minisforum UM790 Pro
+  {
+    id: "minisforum_um790",
+    brand: "Minisforum",
+    model: "Minisforum UM790 Pro",
+    category: "minipc_x86",
+    categoryLabel: { es: "Mini PC Zen 4 Alta Potencia", en: "High-Power Zen 4 Mini PC" },
+    badge: { es: "AMD Ryzen 9 Flagship", en: "AMD Ryzen 9 Flagship" },
+    highlights: {
+      es: [
+        "AMD Ryzen 9 7940HS (8C/16T, 5.2 GHz) con gráficos Radeon 780M RDNA3",
+        "Soporte hasta 64 GB DDR5 5600 MHz y 2x M.2 PCIe 4.0",
+        "Doble puerto USB4 40Gbps con soporte eGPU y LAN 2.5 GbE",
+      ],
+      en: [
+        "AMD Ryzen 9 7940HS (8C/16T, 5.2 GHz) with Radeon 780M RDNA3",
+        "Supports up to 64 GB DDR5 5600 MHz and 2x M.2 PCIe 4.0",
+        "Dual USB4 40Gbps with eGPU support and 2.5 GbE LAN",
+      ],
+    },
+    targetWorkload: {
+      es: "Servidor ágil de base de datos Postgres con pgvector, Docker multi-contenedor y APIs FastAPI/Next.js.",
+      en: "Agile Postgres server with pgvector, multi-container Docker, and FastAPI/Next.js APIs.",
+    },
+    specsSummary: "AMD Ryzen 9 7940HS | 64GB DDR5 | 2TB NVMe | 2x USB4 40G + 2.5GbE",
+    estimatedPriceUSD: "$560 - $780",
+    amazonSearchQuery: "Minisforum UM790 Pro Ryzen 9 7940HS 64GB RAM 2TB SSD",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Minisforum UM790 Pro Ryzen 9 7940HS 64GB RAM 2TB SSD"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 3. Beelink SER8
+  {
+    id: "beelink_ser8",
+    brand: "Beelink",
+    model: "Beelink SER8 (AMD Hawk Point)",
+    category: "minipc_x86",
+    categoryLabel: { es: "Mini PC Ultra Silenciosa", en: "Whisper-Quiet Mini PC" },
+    badge: { es: "Top Ventas Homelab", en: "Top Seller Homelab" },
+    highlights: {
+      es: [
+        "AMD Ryzen 7 8845HS con acelerador NPU de IA (38 TOPS plataforma)",
+        "Refrigeración por cámara de vapor ultra-silenciosa (32 dB bajo carga)",
+        "Chasis unibody de aleación metálica con protección anti-polvo",
+      ],
+      en: [
+        "AMD Ryzen 7 8845HS with AI NPU accelerator (38 TOPS platform)",
+        "Vapor chamber ultra-silent cooling (32 dB under sustained load)",
+        "Metal alloy unibody enclosure with built-in dust filter",
+      ],
+    },
+    targetWorkload: {
+      es: "Operación 24/7 en oficinas y consultorías donde el ruido cero y la eficiencia de consumo (54W) son vitales.",
+      en: "24/7 office run where zero acoustics and extreme energy efficiency (54W) are required.",
+    },
+    specsSummary: "AMD Ryzen 7 8845HS | 32GB/64GB DDR5 | 1TB/2TB NVMe | 2.5G LAN + Wi-Fi 6",
+    estimatedPriceUSD: "$520 - $720",
+    amazonSearchQuery: "Beelink SER8 AMD Ryzen 7 8845HS 32GB DDR5 1TB NVMe",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Beelink SER8 AMD Ryzen 7 8845HS 32GB DDR5 1TB NVMe"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 4. Beelink EQ12 / Mini S12
+  {
+    id: "beelink_eq12",
+    brand: "Beelink",
+    model: "Beelink EQ12 / S12 Pro (Intel N100)",
+    category: "minipc_x86",
+    categoryLabel: { es: "Micro-Servidor 15W TDP", en: "15W TDP Micro-Server" },
+    badge: { es: "Máxima Eficiencia Eléctrica", en: "Maximum Power Efficiency" },
+    highlights: {
+      es: [
+        "Procesador Intel N100 4 núcleos con consumo real de solo 6W a 15W",
+        "Doble puerto de red 2.5 GbE Intel i225-V para separar redes",
+        "Soporte de transcodificación de vídeo por hardware QuickSync AV1",
+      ],
+      en: [
+        "Intel N100 4-core CPU with real-world power draw of just 6W to 15W",
+        "Dual 2.5 GbE Intel i225-V ports for dedicated network segregation",
+        "Intel QuickSync AV1 hardware video transcode engine",
+      ],
+    },
+    targetWorkload: {
+      es: "Reverse proxy Traefik/Nginx, Keycloak ligero, servidor DNS Pi-hole y monitorización Prometheus.",
+      en: "Traefik/Nginx reverse proxy, lightweight Keycloak, DNS Pi-hole, and Prometheus monitoring.",
+    },
+    specsSummary: "Intel N100 4C | 16GB DDR5 | 500GB SSD | Dual 2.5GbE LAN (6W-15W)",
+    estimatedPriceUSD: "$190 - $280",
+    amazonSearchQuery: "Beelink EQ12 Intel N100 16GB RAM 500GB SSD Dual 2.5GbE",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Beelink EQ12 Intel N100 16GB RAM 500GB SSD Dual 2.5GbE"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 5. Geekom A8
+  {
+    id: "geekom_a8",
+    brand: "Geekom",
+    model: "Geekom A8 Flagship",
+    category: "minipc_x86",
+    categoryLabel: { es: "Mini PC Premium Ejecutiva", en: "Executive Premium Mini PC" },
+    badge: { es: "Chasis Aluminio CNC", en: "CNC Aluminum Chasis" },
+    highlights: {
+      es: [
+        "AMD Ryzen 9 8945HS (hasta 5.2 GHz) con NPU Ryzen AI integrada",
+        "Acabado en aluminio espacial con disipador IceFlow 1.5",
+        "Wi-Fi 7 + Bluetooth 5.4 + Red 2.5 GbE ultrarrápida",
+      ],
+      en: [
+        "AMD Ryzen 9 8945HS (up to 5.2 GHz) with integrated Ryzen AI NPU",
+        "Space-grade aluminum finish with IceFlow 1.5 cooling system",
+        "Wi-Fi 7 + Bluetooth 5.4 + ultra-fast 2.5 GbE Ethernet",
+      ],
+    },
+    targetWorkload: {
+      es: "Estación de compilación continua, microservicios Node/Go y despliegue rápido de agentes CopilotKit.",
+      en: "Continuous build station, Node/Go microservices, and rapid CopilotKit agent staging.",
+    },
+    specsSummary: "AMD Ryzen 9 8945HS | 32GB DDR5 | 2TB PCIe 4.0 | Wi-Fi 7 + 2.5G LAN",
+    estimatedPriceUSD: "$680 - $890",
+    amazonSearchQuery: "Geekom A8 AMD Ryzen 9 8945HS 32GB RAM 2TB SSD",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Geekom A8 AMD Ryzen 9 8945HS 32GB RAM 2TB SSD"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 6. GMKtec NucBox K8
+  {
+    id: "gmktec_k8",
+    brand: "GMKtec",
+    model: "GMKtec NucBox K8",
+    category: "minipc_x86",
+    categoryLabel: { es: "Mini PC Dual LAN 2.5G", en: "Dual 2.5G LAN Mini PC" },
+    badge: { es: "Excelente Relación Valor/Precio", en: "High Value-for-Money" },
+    highlights: {
+      es: [
+        "AMD Ryzen 7 8845HS con 8 núcleos y 16 hilos a 45W-65W TDP ajustable",
+        "Doble puerto 2.5 GbE LAN para separar VLANs internas y públicas",
+        "Soporte para 2x unidades M.2 PCIe 4.0 de hasta 8 TB en total",
+      ],
+      en: [
+        "AMD Ryzen 7 8845HS 8-core/16-thread with 45W-65W adjustable TDP",
+        "Dual 2.5 GbE LAN ports to segregate internal VLANs and public web",
+        "Supports 2x M.2 PCIe 4.0 SSD slots for up to 8 TB total storage",
+      ],
+    },
+    targetWorkload: {
+      es: "Servidor de integración continua, Supabase auto-hospedado y gateways de pago con Juspay.",
+      en: "CI/CD staging server, self-hosted Supabase, and payment gateways with Juspay.",
+    },
+    specsSummary: "AMD Ryzen 7 8845HS | 32GB/64GB DDR5 | 1TB NVMe | Dual 2.5G LAN",
+    estimatedPriceUSD: "$480 - $690",
+    amazonSearchQuery: "GMKtec K8 AMD Ryzen 7 8845HS 32GB RAM 1TB SSD Dual LAN",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("GMKtec K8 AMD Ryzen 7 8845HS 32GB RAM 1TB SSD Dual LAN"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 7. Bosgame & Bmax
+  {
+    id: "bosgame_b95",
+    brand: "Bosgame",
+    model: "Bosgame B95 / Bmax B8 Pro",
+    category: "minipc_x86",
+    categoryLabel: { es: "Mini PC Económica de Entrada", en: "Budget Entry Mini PC" },
+    badge: { es: "Costo Ultra Bajo (<$350)", en: "Ultra Budget (<$350)" },
+    highlights: {
+      es: [
+        "Intel Core i5 / i7 o Intel 12th Gen para arrancar con presupuesto mínimo",
+        "32 GB RAM DDR4/DDR5 y 1 TB NVMe incluidos de fábrica",
+        "Consumo eléctrico menor a 45W apto para despliegues perimetrales (Edge)",
+      ],
+      en: [
+        "Intel Core i5 / i7 or 12th Gen to launch on a shoestring hardware budget",
+        "32 GB DDR4/DDR5 RAM and 1 TB NVMe SSD factory pre-installed",
+        "Under 45W power draw ideal for distributed edge IoT and branch gateways",
+      ],
+    },
+    targetWorkload: {
+      es: "Gateways perimetrales, entornos de prueba para desarrolladores juniors y PoCs de bajo riesgo.",
+      en: "Branch edge gateways, staging testbeds for dev teams, and low-risk client PoCs.",
+    },
+    specsSummary: "Intel i5/i7 | 32GB RAM | 1TB NVMe | HDMI Dual + LAN 2.5G/1G",
+    estimatedPriceUSD: "$240 - $380",
+    amazonSearchQuery: "Bosgame Mini PC 32GB RAM 1TB SSD Intel Core i7",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Bosgame Mini PC 32GB RAM 1TB SSD Intel Core i7"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 8. Apple Mac mini M4
+  {
+    id: "apple_mac_mini_m4",
+    brand: "Apple",
+    model: "Apple Mac mini (Chip M4 / M4 Pro)",
+    category: "apple_silicon",
+    categoryLabel: { es: "Memoria Unificada de Alta Eficiencia", en: "Unified Memory High Efficiency" },
+    badge: { es: "★ Revolucionario en Consumo/Potencia", en: "★ Breakthrough Perf/Watt" },
+    highlights: {
+      es: [
+        "Chip Apple M4 / M4 Pro con hasta 64 GB de Memoria Unificada (hasta 273 GB/s)",
+        "Consumo ridículo de solo 15W a 40W en operación continua 24/7",
+        "Puertos Thunderbolt 5 (hasta 120 Gbps) y opción de red 10 GbE nativa",
+      ],
+      en: [
+        "Apple M4 / M4 Pro chip with up to 64 GB Unified Memory (up to 273 GB/s)",
+        "Whisper 15W to 40W real power draw during 24/7 non-stop operation",
+        "Thunderbolt 5 ports (up to 120 Gbps) and native 10 GbE Ethernet option",
+      ],
+    },
+    targetWorkload: {
+      es: "Base de datos pgvector, búsqueda semántica y servidores de API con Docker/Colima y costo eléctrico mínimo.",
+      en: "pgvector database, semantic search, and API microservices with Docker/Colima at minimal electric bill.",
+    },
+    specsSummary: "Apple M4 (10C CPU / 10C GPU) | 24GB-64GB Unificada | 512GB-2TB SSD | 10GbE Opción",
+    estimatedPriceUSD: "$599 - $1,399",
+    amazonSearchQuery: "Apple Mac mini M4 24GB RAM 512GB SSD",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Apple Mac mini M4 24GB RAM 512GB SSD"),
+    recommendedForTierId: "homelab_minipc",
+  },
+
+  // 9. Apple Mac Studio (M2/M4 Max / Ultra)
+  {
+    id: "apple_mac_studio",
+    brand: "Apple",
+    model: "Apple Mac Studio (M2 / M4 Max o Ultra)",
+    category: "apple_silicon",
+    categoryLabel: { es: "Inferencia LLM por Memoria Unificada", en: "Unified Memory LLM Inference" },
+    badge: { es: "★ Mejor Alternativa a GPUs de $10K", en: "★ Best Alternative to $10K GPUs" },
+    highlights: {
+      es: [
+        "64 GB, 96 GB o hasta 192 GB de Memoria Unificada compartida CPU/GPU",
+        "Ancho de banda colosal de 400 GB/s a 800 GB/s para cargar LLMs enteros en RAM",
+        "Ejecuta Llama 3 70B, Qwen y DeepSeek localmente sin cuelgues ni falta de VRAM",
+      ],
+      en: [
+        "64 GB, 96 GB or up to 192 GB Unified Memory shared between CPU and GPU",
+        "Colossal 400 GB/s to 800 GB/s bandwidth to load whole LLMs into RAM",
+        "Runs Llama 3 70B, Qwen, and DeepSeek locally without out-of-VRAM panics",
+      ],
+    },
+    targetWorkload: {
+      es: "Inferencia local de modelos de lenguaje grandes (Ollama / llama.cpp / vLLM-metal) con privacidad 100% estricta.",
+      en: "Local inference of large language models (Ollama / llama.cpp / vLLM-metal) with 100% strict data privacy.",
+    },
+    specsSummary: "Apple M2/M4 Max/Ultra | 64GB-192GB Unificada (400-800 GB/s) | 10GbE LAN + 6x Thunderbolt",
+    estimatedPriceUSD: "$1,999 - $3,999",
+    amazonSearchQuery: "Apple Mac Studio M2 Max 64GB Unified Memory 1TB SSD",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Apple Mac Studio M2 Max 64GB Unified Memory 1TB SSD"),
+    recommendedForTierId: "ai_workstation",
+  },
+
+  // 10. NVIDIA Jetson AGX Orin / GX Spark Workstation
+  {
+    id: "nvidia_orin_workstation",
+    brand: "NVIDIA",
+    model: "NVIDIA Jetson AGX Orin & RTX AI Station",
+    category: "nvidia_ai",
+    categoryLabel: { es: "Cómputo Tensor & CUDA Nativo", en: "Native CUDA & Tensor Compute" },
+    badge: { es: "Hasta 275 TOPS IA", en: "Up to 275 AI TOPS" },
+    highlights: {
+      es: [
+        "Arquitectura NVIDIA Ampere/Ada Lovelace con Tensor Cores de 4ª generación",
+        "Compatibilidad total con TensorRT, vLLM, DeepStream y CUDA sin emulación",
+        "Aceleración nativa para embeddings vectoriales y procesamiento de visión/audio",
+      ],
+      en: [
+        "NVIDIA Ampere/Ada Lovelace architecture with 4th Gen Tensor Cores",
+        "Full native compatibility with TensorRT, vLLM, DeepStream, and CUDA",
+        "Native hardware acceleration for vector embeddings, vision, and audio",
+      ],
+    },
+    targetWorkload: {
+      es: "Agentes autónomos de voz/visión en tiempo real, pipelines RAG con alta tasa de concurrencia y vLLM.",
+      en: "Autonomous real-time voice/vision agents, high-concurrency RAG embedding pipelines, and vLLM.",
+    },
+    specsSummary: "NVIDIA 2048-core GPU | 64GB LPDDR5 | 275 TOPS | Red 10 GbE Industrial",
+    estimatedPriceUSD: "$1,799 - $3,850",
+    amazonSearchQuery: "NVIDIA Jetson AGX Orin Developer Kit 64GB",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("NVIDIA Jetson AGX Orin Developer Kit 64GB"),
+    recommendedForTierId: "ai_workstation",
+  },
+
+  // 11. Microsoft Surface Laptop Studio / Copilot+ PC
+  {
+    id: "microsoft_surface_copilot",
+    brand: "Microsoft",
+    model: "Microsoft Surface Studio & Copilot+ PC",
+    category: "mobile_workstation",
+    categoryLabel: { es: "Estación Móvil & Auditoría B2B", en: "Mobile Workstation & B2B Audit" },
+    badge: { es: "Auditoría en Terreno / NPU 45 TOPS", en: "On-Site Audit / 45 TOPS NPU" },
+    highlights: {
+      es: [
+        "Pantalla PixelSense Flow táctil convertible para demos ejecutivas ante clientes",
+        "NPU dedicada (45+ TOPS) o GPU NVIDIA RTX para ejecutar validaciones en local",
+        "Chasis ultra-resistente y batería de larga duración para consultoría en campo",
+      ],
+      en: [
+        "PixelSense Flow convertible touchscreen for executive client demos",
+        "Dedicated NPU (45+ TOPS) or NVIDIA RTX GPU to run local validations",
+        "Durable chassis with all-day battery life for field architecture consulting",
+      ],
+    },
+    targetWorkload: {
+      es: "Consultor de arquitectura B2B: demostración de PoCs en cliente, auditoría de seguridad y diagnósticos en vivo.",
+      en: "B2B architecture consultant: client PoC demos, security audit, and live on-site diagnostics.",
+    },
+    specsSummary: "Intel Core i7 / Snapdragon X Elite | 32GB-64GB RAM | 1TB SSD | NPU IA + RTX",
+    estimatedPriceUSD: "$1,499 - $2,699",
+    amazonSearchQuery: "Microsoft Surface Laptop Studio 2 32GB RAM NVIDIA RTX",
+    amazonAffiliateUrl: buildAmazonAffiliateUrl("Microsoft Surface Laptop Studio 2 32GB RAM NVIDIA RTX"),
+    recommendedForTierId: "homelab_minipc",
+  },
+];
+

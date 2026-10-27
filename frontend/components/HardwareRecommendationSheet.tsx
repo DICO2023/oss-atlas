@@ -3,7 +3,9 @@
 import React, { useState, useId } from "react";
 import {
   HARDWARE_CATALOG,
+  HARDWARE_BRAND_MODELS,
   HardwareTier,
+  HardwareBrandModel,
   recommendHardwareForArchitecture,
   buildAmazonAffiliateUrl,
   hasAffiliateTag,
@@ -26,8 +28,13 @@ export const HardwareRecommendationSheet: React.FC<HardwareRecommendationSheetPr
 }) => {
   const recommendation = recommendHardwareForArchitecture(layers);
   const [activeTierId, setActiveTierId] = useState<string>(recommendation.recommendedTier.id);
+  const [brandCategoryFilter, setBrandCategoryFilter] = useState<string>("all");
   const activeTier = HARDWARE_CATALOG.find((t) => t.id === activeTierId) || recommendation.recommendedTier;
   const isAffiliateActive = hasAffiliateTag();
+
+  const filteredBrandModels = brandCategoryFilter === "all"
+    ? HARDWARE_BRAND_MODELS
+    : HARDWARE_BRAND_MODELS.filter((m) => m.category === brandCategoryFilter);
 
   return (
     <div className="w-full space-y-8 animate-fadeIn">
@@ -284,7 +291,168 @@ export const HardwareRecommendationSheet: React.FC<HardwareRecommendationSheetPr
         </div>
       </div>
 
-      {/* 4. Nota Informativa y Aviso de Enlaces de Amazon */}
+      {/* 4. Catálogo de Fabricantes y Modelos Insignia (Minisforum, Beelink, Geekom, GMKtec, Apple, NVIDIA, etc.) */}
+      <div className="space-y-6 pt-4 border-t border-slate-800/80">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-2">
+              <span>🏭 {lang === "es" ? "Ecosistema de Fabricantes Recomendados" : "Recommended Hardware Brands"}</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            </div>
+            <h4 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+              <span>{lang === "es" ? "Modelos Destacados en Amazon para Producción On-Premise" : "Featured Amazon Models for On-Premise Production"}</span>
+            </h4>
+            <p className="text-xs text-slate-400 mt-1 max-w-3xl">
+              {lang === "es"
+                ? "Selección verificada de Mini PCs (Minisforum, Beelink, Geekom, GMKtec, Bosgame, Bmax), arquitectura Apple Silicon de memoria unificada, estaciones NVIDIA AI y equipos Microsoft con enlaces directos."
+                : "Verified lineup of Mini PCs (Minisforum, Beelink, Geekom, GMKtec, Bosgame, Bmax), Apple Silicon unified memory, NVIDIA AI stations, and Microsoft devices with direct search links."}
+            </p>
+          </div>
+
+          {/* Filtros de Categoría */}
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-950/80 border border-slate-800">
+            <button
+              type="button"
+              onClick={() => setBrandCategoryFilter("all")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                brandCategoryFilter === "all"
+                  ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              {lang === "es" ? "Todos (11)" : "All (11)"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setBrandCategoryFilter("minipc_x86")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                brandCategoryFilter === "minipc_x86"
+                  ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Mini PCs x86 (7)
+            </button>
+            <button
+              type="button"
+              onClick={() => setBrandCategoryFilter("apple_silicon")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                brandCategoryFilter === "apple_silicon"
+                  ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Apple Silicon (2)
+            </button>
+            <button
+              type="button"
+              onClick={() => setBrandCategoryFilter("nvidia_ai")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                brandCategoryFilter === "nvidia_ai"
+                  ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              NVIDIA AI (1)
+            </button>
+            <button
+              type="button"
+              onClick={() => setBrandCategoryFilter("mobile_workstation")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                brandCategoryFilter === "mobile_workstation"
+                  ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Microsoft Mobile (1)
+            </button>
+          </div>
+        </div>
+
+        {/* Cuadrícula de Modelos */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredBrandModels.map((item) => {
+            const brandBadgeColors: Record<string, string> = {
+              Minisforum: "border-emerald-500/40 bg-emerald-500/15 text-emerald-300",
+              Beelink: "border-amber-500/40 bg-amber-500/15 text-amber-300",
+              Geekom: "border-purple-500/40 bg-purple-500/15 text-purple-300",
+              GMKtec: "border-cyan-500/40 bg-cyan-500/15 text-cyan-300",
+              Bosgame: "border-blue-500/40 bg-blue-500/15 text-blue-300",
+              Bmax: "border-indigo-500/40 bg-indigo-500/15 text-indigo-300",
+              Apple: "border-slate-400/40 bg-slate-300/15 text-slate-200",
+              NVIDIA: "border-lime-500/40 bg-lime-500/15 text-lime-300",
+              Microsoft: "border-sky-500/40 bg-sky-500/15 text-sky-300",
+            };
+            const badgeClass = brandBadgeColors[item.brand] || "border-slate-700 bg-slate-800 text-slate-300";
+
+            return (
+              <div
+                key={item.id}
+                className="rounded-2xl p-5 bg-slate-900/70 border border-slate-800/90 hover:border-cyan-500/50 hover:bg-slate-900 transition-all flex flex-col justify-between space-y-4 group shadow-lg"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className={`text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md border ${badgeClass}`}>
+                      {item.brand.toUpperCase()}
+                    </span>
+                    <span className="text-[10px] font-mono text-cyan-300 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 truncate">
+                      {item.badge[lang]}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h5 className="text-sm font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
+                      {item.model}
+                    </h5>
+                    <p className="text-[11px] font-mono text-slate-400 mt-1 line-clamp-1">
+                      {item.specsSummary}
+                    </p>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-1.5 text-xs">
+                    {item.highlights[lang].map((hl, idx) => (
+                      <p key={idx} className="text-[11px] text-slate-300 flex items-start gap-1.5">
+                        <span className="text-emerald-400 shrink-0 font-bold">✓</span>
+                        <span className="leading-tight">{hl}</span>
+                      </p>
+                    ))}
+                  </div>
+
+                  <p className="text-[11px] text-slate-400 leading-relaxed italic">
+                    💡 <strong className="text-slate-300 font-normal">{item.targetWorkload[lang]}</strong>
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] font-mono text-slate-400 uppercase block">
+                      {lang === "es" ? "Rango Aprox." : "Approx Range"}
+                    </span>
+                    <span className="text-xs font-bold text-slate-200">
+                      {item.estimatedPriceUSD} <span className="text-[10px] text-slate-400 font-normal">USD</span>
+                    </span>
+                  </div>
+
+                  <a
+                    href={item.amazonAffiliateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2 px-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md shadow-amber-950/40 transition-all shrink-0 cursor-pointer"
+                  >
+                    <span>🛒</span>
+                    <span>{lang === "es" ? "Ver en Amazon" : "View on Amazon"}</span>
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 5. Nota Informativa y Aviso de Enlaces de Amazon */}
       <div className="rounded-xl bg-slate-950/60 border border-slate-800/80 p-4 text-xs text-slate-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="text-base">ℹ️</span>
