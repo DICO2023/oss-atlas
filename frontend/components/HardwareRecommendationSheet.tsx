@@ -36,7 +36,7 @@ export const HardwareRecommendationSheet: React.FC<HardwareRecommendationSheetPr
         <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
 
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="max-w-3xl space-y-3">
+          <div className="flex-1 space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-xs font-semibold">
               <span>🏆 {lang === "es" ? "Capa 0: Hardware Físico Recomendado" : "Layer 0: Recommended Physical Hardware"}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>

@@ -2714,12 +2714,12 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             </div>
           )}
 
-          {/* Scenario Switcher & RAGAS 4 Cardinal Metrics Dashboard */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Column: Scenario Selector & RAGAS Telemetry (4 cols) */}
-            <div className="lg:col-span-4 space-y-5">
-              <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
-                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-slate-300">
+          {/* Top Row: Scenario Switcher & RAGAS 4 Cardinal Metrics Dashboard */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            {/* Left Card: Scenario Selector */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 flex flex-col justify-between">
+              <div>
+                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-slate-300 mb-3">
                   {t.ragSelectCase}
                 </h3>
                 <div className="space-y-2">
@@ -2772,10 +2772,12 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   })}
                 </div>
               </div>
+            </div>
 
-              {/* RAGAS Quantitative Evaluation Card (Phase 4 Mandate) */}
-              <div className="p-5 rounded-2xl bg-slate-900/90 border border-emerald-500/30 space-y-4">
-                <div className="flex items-center justify-between">
+            {/* Right Card: RAGAS Quantitative Evaluation Card (Phase 4 Mandate) */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/90 border border-emerald-500/30 space-y-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
                   <div>
                     <span className="text-[11px] font-mono uppercase text-emerald-400 block">
                       {lang === 'es' ? 'Marco de Auditoría B2B' : 'B2B Audit Framework'}
@@ -2787,7 +2789,7 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="grid grid-cols-2 gap-2.5 text-xs font-mono">
                   <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
                     <span className="text-slate-400 block text-[11px]">Context Precision</span>
                     <span className="text-lg font-bold text-cyan-300">
@@ -2813,18 +2815,19 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     </span>
                   </div>
                 </div>
-
-                <p className="text-[11px] text-slate-400 font-mono leading-relaxed">
-                  {lang === 'es'
-                    ? 'Mitigación Riesgo R3: Si la similitud del coseno cae bajo el umbral seguro (0.78), el prompt detiene la inferencia antes de inventar dependencias inexistentes.'
-                    : 'R3 Risk Mitigation: If cosine similarity falls below safety threshold (0.78), inference halts before fabricating non-existent dependencies.'}
-                </p>
               </div>
-            </div>
 
-            {/* Right Column: Interactive Conversation & Emitted Architecture Map (8 cols) */}
-            <div className="lg:col-span-8 rounded-2xl bg-slate-950 border border-slate-800 p-5 sm:p-6 space-y-6">
-              {/* User Prompt Bubble */}
+              <p className="text-[11px] text-slate-400 font-mono leading-relaxed pt-2 border-t border-slate-800/60">
+                {lang === 'es'
+                  ? 'Mitigación Riesgo R3: Si la similitud del coseno cae bajo el umbral seguro (0.78), el prompt detiene la inferencia antes de inventar dependencias inexistentes.'
+                  : 'R3 Risk Mitigation: If cosine similarity falls below safety threshold (0.78), inference halts before fabricating non-existent dependencies.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Full-Width Interactive Conversation & Emitted Architecture Map */}
+          <div className="w-full rounded-2xl bg-slate-950 border border-slate-800 p-5 sm:p-7 space-y-6 shadow-xl">
+            {/* User Prompt Bubble */}
               <div className="flex items-start gap-3.5">
                 <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center shrink-0 text-xs font-mono font-bold text-cyan-300">
                   CTO
@@ -3101,7 +3104,6 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 </div>
               </div>
             </div>
-          </div>
         </section>
 
 
