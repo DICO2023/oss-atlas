@@ -1,6 +1,6 @@
 # 🚀 Estado del Proyecto: OSS Atlas (Acelerador de Integraciones Open Source)
 
-**Fecha de última sesión:** 27 de Octubre de 2026  
+**Fecha de última sesión:** 28 de Octubre de 2026  
 **Objetivo:** Desarrollar, auditar y operar la plataforma B2B de inteligencia arquitectónica 100% Open Source bajo Licencia MIT, con dimensionamiento de hardware físico on-premise (Capa 0) y monetización ética mediante el programa Amazon Associates (`iotdico-20`).  
 **Titularidad & Autoría Oficial (Formato Híbrido):** `EdisonPEÑA (Iotdico - https://ossatlas.iotdico.com)`  
 **Subdominio Corporativo Asignado:** `https://ossatlas.iotdico.com` (Hostinger Business Hosting activo hasta el 23 de enero de 2029).
@@ -363,7 +363,45 @@ Módulo técnico de generación y descarga de guías de integración para cada u
 
 ---
 
+## 🚀 6. Sincronización Real de Documentación, Catálogo de 122 Repos y Navegación Ergonómica (28 Octubre 2026)
+
+### 6.1. Reestructuración Fiel de la Documentación Oficial (`README.md`)
+- **Eliminación del Marco Hipotético de NoCountry:**
+  - Supresión completa de los inventarios ficticios de 9 personas, protocolos asíncronos y matriz RACI que nunca se llevaron a la práctica tras el retiro temprano del grupo.
+  - Consignación formal de la titularidad y autoría exclusiva de **EdisonPEÑA (Iotdico)** bajo licencia MIT 100% comunitaria.
+- **Registro de la Metodología AI-Driven y Reducción del Cronograma:**
+  - Se documentó la evolución del stack de inteligencia artificial: landing inicial con **Gemini Pro (Modelo Argon)**, andamiaje con **Muse**, y desarrollo full-stack, orquestación RAG, ingeniería de datos y despliegue cloud con **Google Antigravity**.
+  - Registro de la compresión del ciclo de desarrollo: **~15 días naturales de ejecución real** (reducido a la mitad frente a los 30 días teóricos iniciales).
+- **Consolidación de Módulos Cardinales en Producción:**
+  - Registro pormenorizado del **Evaluador On-Demand de GitHub API**, la **Capa 0 de Hardware Físico** con Recharts Radar y ROI, y el **Generador Tri-Plataforma** de guías (.md y .pdf) para Linux, Windows y macOS.
+
+### 6.2. Catálogo Curado Oficial de 122 Repositorios y Módulo de Saldo Pendiente
+- **Dataset Estructurado ([curated122Catalog.ts](frontend/lib/curated122Catalog.ts)):**
+  - Creación del índice maestro de las 122 tecnologías de referencia open-source empresariales:
+    - **AUTH (28 repos):** Keycloak, Ory Kratos, SuperTokens, Zitadel, Casbin, OpenFGA, Authentik, Authelia, Cerbos, Ory Hydra, Ory Keto, Ory Oathkeeper, Teleport, Boundary, Dex, NextAuth, Lucia, Passport, OAuth2-Proxy, Vaultwarden, Kanidm, Logto, Coraza, Pomerium, FreeIPA, Gluu, FusionAuth, etc.
+    - **DBS & VECTORES (34 repos):** Supabase, pgvector, Meilisearch, Qdrant, Chroma, Weaviate, Milvus, SurrealDB, ClickHouse, DuckDB, QuestDB, Typesense, Vespa, Neo4j, TiDB, CockroachDB, Dragonfly, Redis, ScyllaDB, MinIO, FerretDB, PostgreSQL, TimescaleDB, Cassandra, Dgraph, EdgeDB, LiteFS, SQLite, CouchDB, Pinot, SeaweedFS, RethinkDB, Immudb, TerminusDB.
+    - **PAYMENTS & BILLING (19 repos):** Hyperswitch, Lago Billing, KillBill, Formance, OpenBB, Crater, Invoice Ninja, Akaunting, Medusa, BTCPay Server, Solidus, Spree, Saleor, OpenMeter, Moov ACH, Tier, Hyperledger Besu, OpenPay, Fineract.
+    - **AI & RAG ENGINES (41 repos):** LangChain, LlamaIndex, Ragas, CopilotKit, Meetily, OpenShorts, Presenton, TopView, VoiceStudio, OpenNotebook, FreeLLMAPI, Vane, Upscayl, Dyad, Treblo, vLLM, Ollama, LocalAI, Flowise, Langflow, Dify, FastChat, Haystack, AutoGen, CrewAI, Semantic Kernel, PrivateGPT, Jan, Text Generation WebUI, LiteLLM, Guidance, DSPy, Instructor, Mem0, AnythingLLM, Open WebUI, Khoj, LibreChat, Quivr, AutoGPT, Imgbot.
+- **Telemetría Dinámica en el Explorador ([page.tsx](frontend/app/page.tsx)):**
+  - Cada tarjeta de categoría muestra en vivo: `${activeCount} activas / ${totalCount} proyectadas (${pendingCount} pendientes)`.
+  - Botón de acceso directo en la cabecera: `📋 Ver Saldo de los 122 Repos (X pendientes)`.
+- **Pestaña Interactiva "📋 Catálogo 122 & Saldo" en Modal de Ingesta:**
+  - Tarjetas de métricas: Universo Proyectado (122), En Catálogo Activo y Saldo por Incorporar.
+  - Filtros por categoría (`ALL`, `AUTH`, `DBS`, `PAYMENTS`, `AI`), conmutador de estado (`Todas`, `Solo Pendientes`, `Solo Activas`), buscador interno por texto/slug/tech.
+  - Botón **`⚡ Auditar e Incorporar`** en 1 clic para cada repositorio pendiente, conectando en tiempo real con la API de evaluación de GitHub y permitiendo la persistencia inmediata con embedding semántico `halfvec(1536)` en Neon Serverless PostgreSQL 16.
+
+### 6.3. Ergonomía de Catálogo y Garantía de Scroll Amigable
+- **Comportamiento en Búsqueda Vacía:**
+  - Cuando el campo de búsqueda está vacío (`catalogSearchQuery === ''`), el catálogo oculta todas las tarjetas de herramientas y presenta únicamente el banner compacto de exploración interactiva con sugerencias rápidas, garantizando un scroll vertical rápido, amigable y limpio hacia las secciones inferiores.
+- **Navegación Reactiva por Categorías:**
+  - Al hacer clic sobre cualquier categoría en el Explorador (`CategoriesGrid`), el sistema establece el filtro, asigna el término correspondiente en la búsqueda (ej. `AUTH`), desplaza la vista suavemente (`scrollIntoView`) hacia el catálogo y renderiza únicamente las herramientas evaluadas de esa categoría.
+  - Al desmarcar o pulsar `✕ Limpiar`, la búsqueda queda vacía y se recupera de inmediato el estado compacto sin tarjetas.
+
+---
+
 ## 📂 Archivos Clave del Desarrollo
+
+- [curated122Catalog.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/curated122Catalog.ts) — Catálogo curado oficial de 122 tecnologías de referencia open source empresariales estructuradas en 4 capas (AUTH, DBS, PAYMENTS, AI) para control de roadmap y auditoría del saldo.
 
 - [route.ts (GitHub Evaluate API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/github/evaluate/route.ts) — Endpoint backend para evaluación técnica On-Demand de repositorios de GitHub con cálculo de Health Score, Docker y ahorro B2B.
 - [test_github_evaluator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/scripts/test_github_evaluator.ts) — Suite de validación y pruebas de estrés para el módulo de auditoría On-Demand de GitHub.
