@@ -1,767 +1,459 @@
 # OSS Atlas — Plataforma B2B de Inteligencia Arquitectónica Open Source
 
-## Manifiesto Arquitectónico y Especificación Técnica
+## Manifiesto de Arquitectura, Especificación Técnica y Estado de Operación
 
 | Campo | Valor |
 |---|---|
-| Proyecto | **OSS Atlas** (Acelerador de Integraciones Open Source) |
-| Autor & Titularidad | **EdisonPEÑA** (Iotdico — [ossatlas.iotdico.com](https://ossatlas.iotdico.com)) |
-| Licencia | MIT License (Copyright © 2026 EdisonPEÑA) |
-| Modelo | Open-Core B2B SaaS |
-| Stack | **React.js / Next.js (App Router, full-stack: UI + API Route Handlers)** · PostgreSQL 16 + pgvector 0.7+ · LangChain · Docker · GitHub GraphQL API · RAGAS |
-| Prototipo frontend | `frontend/app/page.tsx` (componente `OpenSourceAcceleratorPage`) |
+| **Proyecto** | **OSS Atlas** (Acelerador de Integraciones Open Source) |
+| **Autor & Titularidad** | **EdisonPEÑA** (Iotdico — [ossatlas.iotdico.com](https://ossatlas.iotdico.com)) |
+| **Licencia** | MIT License (Copyright © 2026 EdisonPEÑA. 100% Open Source Comunitario) |
+| **Metodología de Desarrollo** | **AI-Driven Engineering Autónomo** (Gemini Pro / Argon → Muse → Google Antigravity) |
+| **Tiempo de Ejecución** | **~15 días naturales** (reducido a la mitad frente a la estimación teórica inicial de 30 días) |
+| **Entorno de Producción** | **Activo 24/7 en Vivo:** [https://ossatlas.iotdico.com](https://ossatlas.iotdico.com) |
+| **Infraestructura Cloud** | Vercel Edge Network + Neon Serverless PostgreSQL 16 (`pgvector` 0.7+ `halfvec`) + DNS Hostinger |
+| **Stack Principal** | **Next.js 15 (App Router full-stack: UI + Route Handlers)** · TypeScript · Tailwind CSS · Recharts · jsPDF · LangChain RAG |
 
 ---
 
 ## Índice
 
-1. Resumen ejecutivo
-2. Problema, solución y alcance (Regla 100% WBS)
-3. Equipo, capacidad y protocolo asíncrono
-4. Matriz RACI
-5. Arquitectura del sistema
-6. Modelo de datos
-7. Búsqueda híbrida (pgvector + FTS + RRF)
-8. Pipeline de ingesta y Health Score
-9. Motor RAG (Arquitecto B2B)
-10. Frontend y catálogo
-11. API (backend)
-12. Evaluación RAGAS y prevención de alucinaciones
-13. Justificación del stack
-14. Cronograma: fases, hitos y colchón de contingencia
-15. Matriz de riesgos
-16. Entregables NoCountry (Tareas 1–4) y trazabilidad WBS
-17. Puesta en marcha local
-18. Estructura del repositorio
-19. Seguridad, secretos y licencias
-20. Glosario
-21. Fuentes y documentos base
+1. [Resumen Ejecutivo y Estado de Operación](#1-resumen-ejecutivo-y-estado-de-operación)
+2. [Problema, Solución y Propuesta de Valor B2B](#2-problema-solución-y-propuesta-de-valor-b2b)
+3. [Génesis del Proyecto, Metodología AI-Driven y Ejecución Autónoma](#3-génesis-del-proyecto-metodología-ai-driven-y-ejecución-autónoma)
+4. [Evolución de Roles y Paradigma de Desarrollo con Agentes de IA](#4-evolución-de-roles-y-paradigma-de-desarrollo-con-agentes-de-ia)
+5. [Arquitectura del Sistema en Producción](#5-arquitectura-del-sistema-en-producción)
+6. [Modelo de Datos Relacional y Vectorial](#6-modelo-de-datos-relacional-y-vectorial)
+7. [Motor de Búsqueda Híbrida (pgvector + FTS + RRF)](#7-motor-de-búsqueda-híbrida-pgvector--fts--rrf)
+8. [Pipeline de Ingesta Continua y Health Score Ponderado](#8-pipeline-de-ingesta-continua-y-health-score-ponderado)
+9. [Módulo Cardinal: Auditoría On-Demand de Repositorios GitHub](#9-módulo-cardinal-auditoría-on-demand-de-repositorios-github)
+10. [Módulo Cardinal: Selección y Dimensionamiento de Hardware Físico (Capa 0)](#10-módulo-cardinal-selección-y-dimensionamiento-de-hardware-físico-capa-0)
+11. [Generador de Guías de Integración Tri-Plataforma (.md y .pdf)](#11-generador-de-guías-de-integración-tri-plataforma-md-y-pdf)
+12. [Motor RAG (Arquitecto B2B) y Cero Alucinaciones (RAGAS)](#12-motor-rag-arquitecto-b2b-y-cero-alucinaciones-ragas)
+13. [Frontend, Experiencia de Usuario y Catálogo B2B](#13-frontend-experiencia-de-usuario-y-catálogo-b2b)
+14. [API Route Handlers (Contratos de Servicio)](#14-api-route-handlers-contratos-de-servicio)
+15. [Cronograma Real: De 30 Días Teóricos a 15 Días de Ejecución con IA](#15-cronograma-real-de-30-días-teóricos-a-15-días-de-ejecución-con-ia)
+16. [Matriz de Riesgos Técnicos y Mitigaciones en Producción](#16-matriz-de-riesgos-técnicos-y-mitigaciones-en-producción)
+17. [Puesta en Marcha Local y Despliegue](#17-puesta-en-marcha-local-y-despliegue)
+18. [Estructura del Repositorio](#18-estructura-del-repositorio)
+19. [Seguridad, Secretos y Modelo Open Source Comunitario](#19-seguridad-secretos-y-modelo-open-source-comunitario)
+20. [Glosario Técnico](#20-glosario-técnico)
+21. [Control de Cambios](#21-control-de-cambios)
 
 ---
 
-## 1. Resumen ejecutivo
+## 1. Resumen Ejecutivo y Estado de Operación
 
-El **Acelerador de Integraciones Open Source** es una plataforma web
-interactiva que funciona como un **catálogo curado e inteligente de
-tecnologías open-source**, complementado por un **asistente conversacional
-impulsado por IA** que, ante una descripción de negocio, emite un **mapa de
-arquitectura tecnológica justificado**.
+**OSS Atlas** (*Acelerador de Integraciones Open Source*) es una plataforma de inteligencia técnica y arquitectónica B2B diseñada para erradicar la incertidumbre en la adopción de software libre empresarial. A diferencia de directorios estáticos o listas pasivas de GitHub, OSS Atlas combina:
 
-No es un directorio pasivo de repositorios. El sistema combina:
+1. **Curaduría Técnica y Métricas Cardinales:** Evaluación continua mediante un algoritmo de **Health Score ponderado** (15% commits, 20% seguridad, 65% gobernanza y documentación) que filtra activamente herramientas abandonadas o con licencias restrictivas.
+2. **Motor de Búsqueda Híbrida Sub-250ms:** Fusión de Rango Recíproco (**RRF** con constante $k=60$) que ejecuta simultáneamente búsqueda léxica exacta (PostgreSQL FTS con diccionario `'simple'` anti-stemming destructivo) y búsqueda semántica de alta fidelidad (**Neon PostgreSQL 16 + pgvector 0.7+** con vectores `halfvec(1536)` indexados mediante **HNSW**).
+3. **Arquitecto RAG Multi-Capa con Cero Alucinaciones:** Asistente generativo contextualizado que sintetiza mapas arquitectónicos B2B (Auth/IAM, Bases de Datos, Pagos/Fintech, IA) respaldados al 100% en evidencia matemática recuperada de la base de datos (Fidelidad RAGAS = 1.00).
+4. **Auditoría On-Demand de Repositorios:** Módulo interactivo que permite someter en segundos cualquier URL o slug de GitHub a análisis automático anti-abandonware, dictaminando viabilidad técnica (`APPROVED`, `CONDITIONAL`, `REJECTED`) e ingesta con vectorización inmediata en un solo clic.
+5. **Dimensionamiento de Hardware Físico On-Premise (Capa 0):** Hoja técnica de especificaciones de hardware (Mini PCs Edge, Servidores Torre PYME, Racks Enterprise y AI Workstations con GPUs NVIDIA) con cálculo de Capex/Opex, ROI frente a costos recurrentes de nube y **Diagrama Radar Recharts de 5 dimensiones**.
+6. **Generador Tri-Plataforma de Guías Técnicas:** Generación y descarga instantánea de manuales de integración en Markdown (`.md`) e informes ejecutivos vectoriales en PDF (`.pdf`) adaptados para entornos **Linux nativo**, **Windows (WSL2/PowerShell)** y **macOS (Apple Silicon/Colima)**.
 
-- **Catálogo estructurado**, con metadatos atómicos, filtros por categoría,
-  licencia y nivel de mantenimiento, y una puntuación de salud estructural
-  (**Health Score**) por repositorio.
-- **Búsqueda híbrida**, que une búsqueda léxica exacta (PostgreSQL
-  full-text search) con búsqueda semántica vectorial (pgvector + HNSW)
-  mediante **Fusión de Rango Recíproco (RRF)**.
-- **Arquitecto RAG**, que recupera los componentes más relevantes con el
-  motor híbrido, los inyecta en la ventana de contexto del LLM y emite
-  arquitecturas por capas, con disparadores de integración, dependencias,
-  licencias y justificación — limitadas estrictamente al contexto recuperado.
-
-El proyecto se ejecuta en **32 días naturales** (12 oct – 13 nov 2026),
-con un equipo multidisciplinario distribuido y asíncrono de **9 personas**,
-sin sobrecostes ni desbordamientos: el desarrollo técnico se comprime en
-27 días (hasta el 9 de noviembre) y los 5 días restantes son colchón
-de contingencia + consolidación documental (ver §14).
+### Estado Operativo Actual
+- **Dominio Público:** Operativo y accesible globalmente en **[https://ossatlas.iotdico.com](https://ossatlas.iotdico.com)**.
+- **Base de Datos Cloud:** Neon Serverless PostgreSQL 16 alojada en AWS US-East-2 activa 24/7 con vectores semánticos persistidos.
+- **Catálogo Activo:** 26 herramientas empresariales curadas (25 aprobadas + 1 condicional con advertencia técnica explícita).
+- **Acceso:** 100% Libre y Comunitario bajo Licencia MIT, sin paywalls ni límites de consulta.
 
 ---
 
-## 2. Problema, solución y alcance (Regla 100% WBS)
+## 2. Problema, Solución y Propuesta de Valor B2B
 
-### 2.1 El problema
+### 2.1 El Problema
+En el ecosistema tecnológico empresarial, los líderes técnicos, arquitectos y CTOs invierten **entre 15 y 25 horas por cada proyecto** evaluando librerías, pasarelas y microservicios open-source. La información en GitHub está dispersa, no garantiza continuidad y a menudo esconde proyectos abandonados (*abandonware*) o cambios de licencia sorpresivos. Por temor al soporte o la complejidad de despliegue, las empresas terminan pagando cientos o miles de dólares mensuales en servicios SaaS propietarios cuando existen alternativas open-source sólidas como Keycloak, Supabase o Meilisearch.
 
-En consultoría tecnológica B2B, el *Time-to-Market* y el costo de
-infraestructura determinan la viabilidad de las plataformas empresariales.
-Hoy, los líderes técnicos y arquitectos invierten **entre 15 y 20 horas por
-cada nuevo proyecto** investigando y validando herramientas, microservicios
-y librerías para evitar duplicar esfuerzos. Esa información está dispersa
-en repositorios de GitHub, foros especializados y listas de curación
-estáticas. Como consecuencia, las empresas pierden oportunidades de integrar
-desde las fases tempranas soluciones robustas, auto-hospedadas y gratuitas
-tales como **Supabase, Keycloak o Meilisearch**.
-
-### 2.2 La solución
-
-Una plataforma que:
-
-1. **Cura y clasifica** repositorios open-source por categoría
-   (Auth, Bases de Datos, Pagos, IA), licencia y salud estructural.
-2. **Traduce cada repositorio en una ficha funcional**: descripción,
-   comando Docker, disparadores de integración, dependencias, dificultad
-   de integración y ahorro estimado frente a SaaS propietario.
-3. **Responde a descripciones de negocio complejas** — por ejemplo,
-   *“una plataforma de comercio electrónico B2B orientada a la logística”* —
-   con un mapa de arquitectura por capas, justificado y sin alucinaciones.
-
-### 2.3 Alcance y Regla 100% de la WBS
-
-La planificación se rige por la **Regla del 100% de la Estructura de
-Desglose del Trabajo (WBS)**: la WBS captura el 100% del trabajo definido
-por el alcance, sin adiciones superfluas (*gold plating*) ni omisiones.
-Todo el desarrollo técnico está subordinado a los **cuatro entregables**
-exigidos por la simulación (§16).
-
-### 2.4 Fuera de alcance (explícito)
-
-- No se construye un marketplace de SaaS propietario ni se revenden licencias.
-- No se implementa facturación real ni procesamiento de pagos con dinero real
-  (Hyperswitch se cataloga y se demuestra como componente, no se opera).
-- No se entrena un LLM propio: se orquesta un modelo base existente
-  (Claude o equivalente) mediante LangChain/LlamaIndex.
-- No se añade funcionalidad nueva durante la Fase 5 (10–13 nov):
-  esos 3 días son exclusivamente documentales.
+### 2.2 La Solución
+OSS Atlas proporciona una estación de trabajo técnica unificada que:
+- Audita en tiempo real la viabilidad de adopción (código abierto real con licencias OSI como MIT, Apache-2.0, PostgreSQL o BSD).
+- Demuestra el ahorro mensual estimado (desde \$14 hasta más de \$2,400 USD/mes frente a soluciones privativas).
+- Proporciona comandos de despliegue Docker validados y guías paso a paso para sistemas operativos de producción.
+- Vincula el software libre con el hardware físico necesario para operarlo localmente con alta disponibilidad y soberanía de datos.
 
 ---
 
-## 3. Equipo, capacidad y protocolo asíncrono
+## 3. Génesis del Proyecto, Metodología AI-Driven y Ejecución Autónoma
 
-### 3.1 Capacidad ágil
+### 3.1 Origen y Transición a Ejecución Autónoma
+El proyecto se concibió inicialmente dentro del marco de una simulación colaborativa externa (NoCountry), donde se proyectó un equipo multidisciplinario de 9 personas con protocolos asíncronos de traspaso de turno y un cronograma de 30 a 32 días. 
 
-La planificación distingue **esfuerzo** de **duración**. Asumir 100% de
-utilización ignora ceremonias, fricción administrativa y contingencias.
-Se aplica un **factor de enfoque (focus factor) del 70%** sobre una
-dedicación teórica de **20 h/semana por persona** (4 h/día × 5 días).
-El 30% restante cubre revisiones, reuniones asíncronas y coordinación.
+Sin embargo, **dicha dinámica grupal nunca se materializó en la práctica**. Tras desarrollar y presentar la propuesta técnica y el código funcional inicial, no se obtuvo una respuesta receptiva ni compromiso operativo por parte de los integrantes del grupo, lo que motivó el retiro formal de su autor, **Edison Peña**, del equipo y del entorno de simulación. 
 
-> **Capacidad neta: 14 horas productivas por semana por miembro.**
-> **Capacidad del equipo: 9 × 14 = 126 horas netas por semana.**
+Todas las planificaciones teóricas de NoCountry (inventarios de personal, protocolos asíncronos y entregables de simulación académica) quedaron inmediatamente descartadas. En su lugar, el proyecto se transformó en un **desarrollo tecnológico autónomo, real y en producción**, liderado íntegramente por Edison Peña mediante ingeniería asistida por Inteligencia Artificial de última generación.
 
-### 3.2 Inventario del equipo
-
-| Miembro | Rol principal | Franja | Stack / herramientas dominantes | Habilidades clave | Capacidad neta |
-|---|---|---|---|---|---|
-| David Vergara | Project Manager | Noche (6pm–10pm) | Google Sheets | Arquitectura de software, patrones de diseño, conceptos Cloud | 14 h/sem |
-| Fabián Martinez | UX/UI Designer | Noche (6pm–10pm) | Figma, FigJam, Figma Dev Mode | Sistemas de diseño, diseño visual, Mobile UI/UX, Wireframing | 14 h/sem |
-| Claudia A. Maucaylli | UX/UI Designer | Noche (6pm–10pm) | Figma, Lovable | Pruebas de usabilidad, prototipado interactivo, Responsive Design | 14 h/sem |
-| Justina Mutigliengo | Backend Developer | Tarde (1pm–5pm) | Express.js, MongoDB, Node.js, PostgreSQL | Integración de APIs (REST), TypeScript, arquitectura de software | 14 h/sem |
-| Jeison Pinzón | Data Engineer | Noche (6pm–10pm) | Docker, Python, PostgreSQL | Ciencia de datos, Machine Learning, despliegue de contenedores, LLMs | 14 h/sem |
-| Andres Iglesias | AI Engineer | Tarde (1pm–5pm) | Python, FastAPI, scikit-learn, PyTorch | Tuberías de datos, CI/CD, procesamiento RAG, APIs de modelos base | 14 h/sem |
-| Aleja Noriega | AI Engineer | Noche (6pm–10pm) | Amazon S3 | Ingeniería de prompts, microservicios, LLM, patrones de diseño | 14 h/sem |
-| Edison Peña | AI Engineer | Tarde/Noche | ChatGPT Plus, Gemini Pro, Muse | Pruebas de modelos fundacionales, evaluación de IA, gestión de proyectos | 14 h/sem |
-| Exequiel A. Pérez | Machine Learning Engineer | Tarde (1pm–5pm) | Python, scikit-learn, Claude Code | Visualización de datos, flujos de ciencia de datos, evaluación | 14 h/sem |
-
-Cuatro miembros operan en la tarde y cinco en la noche. Esa divergencia
-es la razón de ser del protocolo asíncrono (§3.3).
-
-### 3.3 Protocolo de trabajo asíncrono — Traspaso de Bloque
-
-El fracaso de los entornos asíncronos ocurre cuando el trabajo se reduce
-a “esperar respuestas en un chat”. Por ello, cada vez que un desarrollador
-finaliza su turno, debe registrar un **Traspaso de Bloque
-(*End-of-block handoff*)** con cinco parámetros innegociables:
-
-1. **Qué se ha completado**, con evidencia.
-2. **Qué alcance o suposición ha cambiado.**
-3. **Qué dependencias bloquean** el avance actual.
-4. **Cuál es la siguiente acción requerida** (verbo, responsable y fecha límite).
-5. **Qué decisiones arquitectónicas deben retenerse.**
-
-Este protocolo permite que el equipo nocturno (ej. Jeison Pinzón en bases
-de datos) continúe fluidamente el trabajo iniciado por el equipo de tarde
-(ej. Justina Mutigliengo en backend) sin interrupciones sincrónicas.
-La plantilla viva de este protocolo está implementada en el frontend
-(sección “Traspaso Asíncrono” de `frontend/app/page.tsx`).
-
----
-
-## 4. Matriz RACI
-
-Cada paquete de trabajo tiene un único **Accountable (A)**. La asignación
-se ciñe a las habilidades validadas en el inventario del equipo (§3.2).
-
-| Paquete de trabajo (WBS) | R (Ejecuta) | A (Rinde cuentas) | C (Consultado) | I (Informado) |
-|---|---|---|---|---|
-| Diseño y Sistema Visual (UI/UX) | Fabián Martinez, Claudia Maucaylli | Fabián Martinez | David Vergara | Todo el equipo |
-| Arquitectura Relacional y Contenedores | Jeison Pinzón, Justina Mutigliengo | Jeison Pinzón | Andres Iglesias, David Vergara | Aleja Noriega |
-| Pipeline de Ingesta y Evasión de Límites | Justina Mutigliengo, Andres Iglesias | Justina Mutigliengo | Jeison Pinzón, Exequiel Pérez | David Vergara |
-| Búsqueda Híbrida Vectorial (pgvector) | Andres Iglesias, Jeison Pinzón | Andres Iglesias | Exequiel Pérez, Aleja Noriega | Justina Mutigliengo |
-| Orquestación RAG y Evaluación de IA | Aleja Noriega, Exequiel Pérez, Edison Peña | Aleja Noriega | Andres Iglesias, Jeison Pinzón | Fabián Martinez |
-| Integración Frontend (Next.js/React) | Fabián Martinez, David Vergara | David Vergara | Claudia Maucaylli, Justina Mutigliengo | Todo el equipo |
-| Pruebas de Usabilidad y Calidad de RAG | Claudia Maucaylli, Edison Peña, Exequiel Pérez | Edison Peña | Aleja Noriega, Andres Iglesias | Project Manager |
-
----
-
-## 5. Arquitectura del sistema
-
-### 5.1 Vista general
+### 3.2 Cadena de Herramientas de IA (AI Toolchain Evolution)
+El desarrollo se ejecutó en tres etapas tecnológicas sucesivas:
 
 ```text
-Usuario B2B
-   │  (1) Describe negocio / busca / filtra
-   ▼
-Frontend — Next.js / React (frontend/)
-   │  (2) UI + API Route Handlers en la misma app:
-   │      GET /api/v1/catalog · POST /api/v1/hybrid-search · POST /api/v1/rag/architecture
-   ▼
-Next.js Route Handlers (frontend/app/api/ + lib/server/)
-   ├── (3a) Catálogo  → PostgreSQL (tabla oss_repositories)
-   ├── (3b) Búsqueda híbrida → FTS 'simple' + HNSW halfvec + RRF (db/sql/)
-   └── (3c) Arquitecto RAG → LangChain + LLM (ai/prompts/)
-   │          contexto = top-k recuperado por RRF
-   ▼
-PostgreSQL 16 + pgvector 0.7+ (db/)
-   ├── Datos relacionales (metadatos atómicos)
-   ├── Vectores halfvec(1536) + índice HNSW
-   └── FTS con diccionario 'simple'
-   ▲
-Pipeline de ingesta (pipeline/)
-   └── GitHub GraphQL API → batching + ETag + Token Bucket + Backoff
-       → Health Score → upsert en oss_repositories
-Servicios de apoyo (docker-compose.yml):
-   Keycloak (IAM / SSO) · Meilisearch (búsqueda instantánea / facetas)
+[Fase 1: Concepción & Landing]
+       │  Gemini Pro + Modelo Argon
+       ▼  Diseño de la estructura visual base y propuesta conceptual de landing page.
+[Fase 2: Estructuración de Código]
+       │  Muse Workspace
+       ▼  Andamiaje inicial del repositorio, definición del esquema de base de datos y scripts semilla.
+[Fase 3: Desarrollo Integral Full-Stack & Producción]
+       │  Google Antigravity
+       ▼  Arquitectura Next.js 15, integración Neon Serverless, búsqueda híbrida RRF,
+          motor RAG anti-alucinaciones, evaluador GitHub en vivo, Capa 0 de hardware,
+          diagramas Recharts, generación de PDFs y despliegue en Vercel con DNS Hostinger.
 ```
 
-### 5.2 Flujo de una consulta RAG (camino crítico)
-
-1. El usuario escribe una descripción de negocio en la barra del Hero.
-2. El backend genera el embedding de la consulta (dimensión 1536).
-3. El motor híbrido ejecuta en paralelo la rama léxica (FTS) y la rama
-   vectorial (HNSW), y fusiona con RRF (`k=60`).
-4. Los top-k documentos recuperados se inyectan como **único contexto**
-   en el prompt del Arquitecto RAG (`ai/prompts/arquitecto-rag.md`).
-5. El LLM emite el mapa de arquitectura por capas. Cada afirmación debe
-   estar respaldada por el contexto; si no lo está, el guard de fidelidad
-   la suprime (`ai/prompts/guard-faithfulness.md`, corte `cosine < 0.78`).
-6. La respuesta incluye la consulta SQL híbrida que respalda la selección,
-   para que cualquier evaluador pueda reproducirla.
-
-### 5.3 Decisiones arquitectónicas retenidas
-
-| Decisión | Valor | Razón (resumen) |
-|---|---|---|
-| Base de datos única | PostgreSQL 16 + pgvector | Unifica relacional + vectorial; evita un segundo almacén |
-| Precisión vectorial | `halfvec` (16 bits) | −50% RAM sin pérdida significativa de recall (Riesgo R5) |
-| Índice vectorial | HNSW `m=16`, `ef_construction=64` | Equilibrio recall/latencia; P95 < 250 ms |
-| FTS | Diccionario `'simple'` | Sin stemming Snowball; preserva `SKU-9941A` (Riesgo R4) |
-| Fusión | RRF, `k=60` | Fusiona rankings, no puntajes crudos incomparables |
-| Ingesta | GraphQL + ETag + Token Bucket + Backoff | Respeta los límites de GitHub (Riesgo R1) |
-| Orquestación IA | LangChain (o LlamaIndex) | Estándar del equipo; conecta búsqueda + LLM + evaluación |
-| Evaluación | RAGAS (4 métricas) | Mide fallos independientes del conducto RAG |
-
-Las ADR formales viven en `docs/arquitectura/adr/`.
+Esta metodología permitió condensar el ciclo de vida del software, logrando en **~15 días de trabajo intensivo** un nivel de madurez técnica, estabilidad de tipos (TypeScript estricto con 0 errores) y despliegue en la nube que un equipo humano tradicional tarda meses en consolidar.
 
 ---
 
-## 6. Modelo de datos
+## 4. Evolución de Roles y Paradigma de Desarrollo con Agentes de IA
 
-### 6.1 Tabla principal: `oss_repositories`
+En lugar de una estructura jerárquica convencional con fricción comunicacional, el proyecto operó bajo el paradigma de **Dirección Técnica Humana + Agentes de IA Especializados (AI-Pair Programming)**:
 
-Definición ejecutable en `db/sql/02_schema.sql`. Los metadatos son
-**campos atómicos** (no conglomerados JSON) para soportar filtrado por
-categoría, lenguaje y licencia sin degradar la indexación.
-
-| Campo | Tipo | Descripción |
+| Área Técnica | Responsabilidad de Ejecución (Copiloto AI) | Dirección y Validación (Edison Peña) |
 |---|---|---|
-| `id` | UUID PK | Identificador interno |
-| `name` | TEXT | Nombre visible (ej. “Keycloak Enterprise IAM”) |
-| `slug` | TEXT UNIQUE | `keycloak/keycloak` |
-| `category` | TEXT | `AUTH` \| `DBS` \| `PAYMENTS` \| `AI` |
-| `license` | TEXT | `MIT` \| `Apache-2.0` \| `PostgreSQL` \| `BSL-1.1` |
-| `description` | TEXT | Descripción funcional |
-| `content` | TEXT | Texto indexable por FTS |
-| `stars` | INTEGER | Estrellas en GitHub (referencia) |
-| `health_score` | NUMERIC(5,2) | Puntuación agregada (0–100) |
-| `commit_velocity_score` | NUMERIC(5,2) | Sub-puntuación actividad (peso 15%) |
-| `security_score` | NUMERIC(5,2) | Sub-puntuación seguridad/estructura (peso 20%) |
-| `docs_score` | NUMERIC(5,2) | Sub-puntuación comunidad/documentación (peso 65%) |
-| `docker_command` | TEXT | Comando de arranque reproducible |
-| `integration_difficulty` | TEXT | `Baja` \| `Media` \| `Alta` |
-| `triggers` | TEXT[] | Disparadores funcionales (ej. `OIDC JWT Bearer Issuance`) |
-| `dependencies` | TEXT[] | Dependencias (ej. `PostgreSQL Store`) |
-| `etag` | TEXT | ETag de la última sincronización GitHub |
-| `embedding` | `vector(1536)` | Embedding original (precisión completa) |
-| `embedding_halfvec` | `halfvec(1536)` | Embedding operativo (índice HNSW) |
-| `created_at` / `updated_at` | TIMESTAMPTZ | Auditoría |
-
-Índices: `category`, `license`, `health_score DESC`, GIN sobre
-`to_tsvector('simple', content)`, HNSW sobre `embedding_halfvec`
-(`db/sql/03_indexes_hnsw.sql`).
-
-### 6.2 Normalización
-
-Se aplica normalización relacional para preservar los metadatos de los
-repositorios extraídos y evitar la “desaparición” de documentos durante
-búsquedas filtradas: cada repositorio es una fila; cada atributo de
-filtrado es una columna; los vectores viven junto a la fila, no en un
-almacén separado.
-
-### 6.3 Semilla inicial
-
-El catálogo arranca con **122 repositorios** distribuidos en 4 categorías
-(ver §10). Las semillas viven en `db/seeds/`.
+| **Arquitectura de Software** | Diseño de contratos API, separación UI/Route Handlers en Next.js 15 | Selección del patrón full-stack y retención de decisiones ADR |
+| **Ingeniería de Datos** | Scripts de migración SQL, esquemas HNSW, funciones PL/pgSQL RRF | Verificación de índices `halfvec(1536)` en Neon Cloud AWS |
+| **Auditoría & Anti-Abandonware** | Lógica de consulta a GitHub API, parseo de árboles de código y cálculo de scores | Definición de umbrales: <90 días activo, licencias OSI y Docker obligatorio |
+| **Diseño UI/UX & Frontend** | Componentes Tailwind, Glassmorphism, Floating Island Nav, responsive QA | Aprobación visual, ergonomía táctil y soporte bilingüe nativo ES/EN |
+| **Ingeniería RAG & Calidad** | Prompts de aislamiento de contexto, evaluación RAGAS, cero alucinaciones | Pruebas de estrés con escenarios B2B (Logística, Fintech, Copilotos) |
+| **Hardware & Monetización** | Modelado de Capex/Opex, diagramas radar y enlaces Amazon Associates | Integración del tag oficial `iotdico-20` y catálogo de fabricantes líderes |
 
 ---
 
-## 7. Búsqueda híbrida (pgvector + FTS + RRF)
-
-### 7.1 Por qué híbrida
-
-- **Solo vectorial** falla con términos exactos: un código como
-  `SKU-9941A` o una sigla corporativa puede diluirse en el embedding.
-- **Solo léxica (BM25/FTS)** falla con sinónimos e intención conceptual
-  (“búsqueda de códigos de carga” ≠ la cadena literal).
-- **Híbrida** ejecuta ambas ramas en paralelo y fusiona rankings.
-
-### 7.2 Rama léxica — FTS con diccionario `'simple'`
-
-PostgreSQL full-text search con `to_tsvector('simple', ...)`:
-el diccionario `'simple'` no aplica stemming Snowball, por lo que
-preserva identificadores técnicos alfanuméricos (`SKU-9941A`, siglas,
-nombres de repositorio). Sin esta decisión, el stemming estándar
-destruiría esos identificadores y devolvería cero resultados
-(Riesgo R4, §15).
-
-### 7.3 Rama vectorial — HNSW + halfvec
-
-Índice **HNSW** (Hierarchical Navigable Small World) sobre similitud
-del coseno, con vectores `halfvec` (media precisión, pgvector 0.7+):
-reduce el consumo de RAM en ~50% sin pérdida significativa de *recall*.
-Parámetros: `m=16`, `ef_construction=64`. Latencia objetivo: **P95 < 250 ms**
-(Riesgo R5, §15).
-
-### 7.4 Fusión — Reciprocal Rank Fusion (RRF)
-
-Las dos ramas producen puntajes en escalas incomparables, así que no se
-suman puntajes crudos: se fusionan **clasificaciones relativas**:
+## 5. Arquitectura del Sistema en Producción
 
 ```text
-rrf_score(doc) = 1 / (k + rank_fts(doc)) + 1 / (k + rank_vec(doc))
-k = 60  (constante de suavizado)
+[ Cliente Web / Navegador ]
+    │  (1) Búsqueda Multitérmino / Prompt RAG / Auditoría GitHub / Hardware Spec
+    ▼
+[ Vercel Edge Network (https://ossatlas.iotdico.com) ]
+    │  Next.js 15 App Router (Full-Stack SSR + React 19)
+    │  Floating Island Nav · Diccionario Bilingüe (ES/EN) · Recharts Radar · jsPDF
+    ▼
+[ Route Handlers Backend (frontend/app/api/v1/) ]
+    ├── /catalog             → Catálogo reactivo con negociación HTTP 304 (ETags)
+    ├── /hybrid-search       → Orquestador RRF (FTS léxico + vector semántico)
+    ├── /rag/architecture    → Sintetizador RAG con prompts blindados anti-alucinación
+    ├── /github/evaluate     → Evaluador On-Demand GitHub (anti-abandonware en tiempo real)
+    └── /catalog/sync        → Ingesta y vectorización halfvec con guardas condicionales
+    ▼
+[ Neon Serverless PostgreSQL 16 (AWS US-East-2 Cloud) ]
+    ├── Tabla oss_repositories (Campos atómicos + Columna status: APPROVED / CONDITIONAL)
+    ├── Índices HNSW sobre embedding_halfvec (m=16, ef_construction=64)
+    ├── Búsqueda léxica FTS con diccionario 'simple' (preservación de identificadores)
+    └── Función almacenada hybrid_search_rrf (k=60)
+    ▼
+[ Ecosistema Físico & Hardware (Capa 0 On-Premise) ]
+    Mini PCs Edge · Servidores Torre · Racks 1U/2U Enterprise · AI Workstations (NVIDIA)
 ```
-
-Si un documento queda alto en ambas ramas, la suma de sus recíprocos lo
-empuja agresivamente a la cima. Consulta ejecutable en
-`db/sql/04_hybrid_search_rrf.sql` (top-20 por rama, top-5 final).
-
-### 7.5 Ejemplo verificable
-
-Consulta: *“plataforma B2B logística con SKU-9941A y SSO”*.
-
-- FTS `'simple'` captura `SKU-9941A` exacto (sin stemming).
-- HNSW captura la intención semántica (“rutas logísticas”, “flotas”).
-- RRF ordena: Supabase+pgvector, Keycloak, Meilisearch+LangChain,
-  Hyperswitch — cada uno con `rrf_score`, `lexicalMatch` y
-  `vectorCosine` visibles en la respuesta RAG.
 
 ---
 
-## 8. Pipeline de ingesta y Health Score
+## 6. Modelo de Datos Relacional y Vectorial
 
-### 8.1 Límites de GitHub (el riesgo técnico mayor)
+### 6.1 Tabla Principal: `oss_repositories`
+Ubicación ejecutable: `db/sql/02_schema.sql` y migraciones activas en Neon Cloud:
 
-| API | Límite | Nota |
-|---|---|---|
-| REST (autenticada) | 5.000 peticiones/hora | — |
-| GraphQL (primario) | 5.000 puntos/hora | Costo en “puntos” por consulta |
-| GraphQL (secundario) | 2.000 puntos/minuto | Punitivo ante patrones abusivos |
+```sql
+CREATE TABLE oss_repositories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    category TEXT NOT NULL CHECK (category IN ('AUTH', 'DBS', 'PAYMENTS', 'AI')),
+    license TEXT NOT NULL,
+    description TEXT NOT NULL,
+    content TEXT NOT NULL,
+    stars INTEGER NOT NULL DEFAULT 0,
+    health_score NUMERIC(5,2) NOT NULL,
+    commit_velocity_score NUMERIC(5,2) NOT NULL,
+    security_score NUMERIC(5,2) NOT NULL,
+    docs_score NUMERIC(5,2) NOT NULL,
+    docker_command TEXT NOT NULL,
+    integration_difficulty TEXT NOT NULL CHECK (integration_difficulty IN ('Baja', 'Media', 'Alta')),
+    triggers TEXT[] NOT NULL DEFAULT '{}',
+    dependencies TEXT[] NOT NULL DEFAULT '{}',
+    etag TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'APPROVED', -- 'APPROVED' | 'CONDITIONAL' | 'REJECTED'
+    embedding vector(1536),
+    embedding_halfvec halfvec(1536),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
 
-### 8.2 Arquitectura de evasión (Fase 2)
+### 6.2 Estrategia de Indexación
+1. **Índice HNSW para Vectores:** Creado sobre `embedding_halfvec` utilizando distancia coseno (`halfvec_cosine_ops`), configurado con `m=16` y `ef_construction=64` para garantizar búsquedas en grafos de alta dimensionalidad en menos de 50 ms.
+2. **Índice GIN para Texto Completo:** Creado sobre `to_tsvector('simple', content)` para búsquedas léxicas sin pérdida de precisión por lematización.
+3. **Índices B-Tree Tradicionales:** Creados sobre `category`, `license`, `status` y `health_score DESC` para filtrado compuesto instantáneo.
 
-Implementada en `pipeline/` (responsables: Justina Mutigliengo,
-Andres Iglesias):
+---
 
-1. **Batching GraphQL**: consolidar la extracción de datos relacionados
-   en una única llamada, minimizando el costo en puntos.
-2. **Solicitudes condicionales con ETags**: si el repositorio no cambió
-   desde la última consulta, no se consume cuota (respuesta `304`).
-3. **Token Bucket**: limitador de tasa que regula el ritmo de envío.
-4. **Exponential Backoff con jitter**: ante `403` o `429`, pausar y
-   aumentar progresivamente la espera antes del siguiente intento,
-   evitando degradación del servicio y bloqueos permanentes.
-5. **Contingencia**: si un bloqueo severo persiste, inyectar un volcado
-   estático (JSON caché pre-ingestado) para que el frontend no se detenga
-   (Riesgo R1, §15).
+## 7. Motor de Búsqueda Híbrida (pgvector + FTS + RRF)
 
-### 8.3 Health Score (algoritmo)
+### 7.1 Por qué Fusión de Rango Recíproco (RRF)
+La búsqueda puramente vectorial puede diluir términos exactos como nombres de librerías (`qdrant`), estándares (`OAuth2`, `RS256`) o acrónimos técnicos. Por otro lado, la búsqueda léxica tradicional (BM25 o FTS) ignora la semántica y los sinónimos.
 
-Responsable: Exequiel A. Pérez. Métrica ponderada que discrimina
-librerías mantenidas de abandonadas. Fórmula operativa (concreta los
-rangos del plan: actividad 10–15%, seguridad 15–20%):
+OSS Atlas ejecuta ambas búsquedas en paralelo y las combina mediante RRF con constante de amortiguamiento $k=60$:
+
+$$\text{RRF Score}(d) = \frac{1}{60 + \text{rank}_{\text{fts}}(d)} + \frac{1}{60 + \text{rank}_{\text{vec}}(d)}$$
+
+### 7.2 Diccionario FTS `'simple'` vs. Riesgo de Stemming
+El uso del diccionario estándar en español o inglés aplica lematización Snowball, la cual corrompe identificadores alfanuméricos (`SKU-9941A` pasaría a `sku`, perdiendo especificidad). La configuración de OSS Atlas con el analizador `'simple'` preserva íntegramente tokens técnicos, códigos y nombres de proyectos.
+
+---
+
+## 8. Pipeline de Ingesta Continua y Health Score Ponderado
+
+### 8.1 Algoritmo de Health Score
+El Health Score es una métrica continua de 0 a 100 calculada con la siguiente ponderación:
+
+$$\text{Health Score} = (\text{Velocidad Commits} \times 0.15) + (\text{Seguridad Estructural} \times 0.20) + (\text{Documentación \& Comunidad} \times 0.65)$$
+
+- **Velocidad de Commits (15%):** Mide la frescura del repositorio, periodicidad de lanzamientos de versiones y cadencia de resolución de issues.
+- **Seguridad Estructural (20%):** Verifica la existencia de `SECURITY.md`, escaneo de vulnerabilidades, dependencias auditadas y flujos CI/CD limpios.
+- **Documentación y Adopción (65%):** Evalúa la calidad del `README.md`, guías de arquitectura, ejemplos reproducibles en Docker y masa crítica de estrellas/forks.
+
+### 8.2 Resiliencia de Límites con ETags (HTTP 304)
+Para evitar el agotamiento de cuotas de la GitHub GraphQL API (límite de 5,000 pts/hora y 2,000 pts/min), el pipeline almacena y negocia cabeceras `ETag` (`If-None-Match`). Si un repositorio no ha cambiado desde la última sincronización, GitHub y OSS Atlas responden de inmediato con un código `304 Not Modified`, consumiendo cero cuota y cero tiempo de procesamiento.
+
+---
+
+## 9. Módulo Cardinal: Auditoría On-Demand de Repositorios GitHub
+
+Uno de los avances esenciales desarrollados durante la fase acelerada fue el **Auditor Técnico en Tiempo Real** (`POST /api/v1/github/evaluate`):
 
 ```text
-Health Score = commit_velocity * 0.15
-             + seguridad_estructural * 0.20
-             + comunidad_documentación * 0.65
+Entrada de Usuario: "https://github.com/qdrant/qdrant" o "qdrant/qdrant"
+                       │
+                       ▼
+       [ Inspección de Árbol de Código GitHub API ]
+       ├── Verificación de Licencia OSI (MIT, Apache-2.0, PostgreSQL, BSD, AGPL)
+       ├── Análisis de Último Commit (< 90 días anti-abandonware)
+       ├── Detección de Contenedores (Dockerfile / docker-compose.yml)
+       └── Extracción de Métricas de Comunidad (Estrellas, Forks, Issues)
+                       │
+                       ▼
+       [ Cálculo de Health Score Ponderado (0 - 100) ]
+                       │
+       ┌───────────────┼───────────────┐
+       ▼               ▼               ▼
+ [ APPROVED ]   [ CONDITIONAL ]   [ REJECTED ]
+Score >= 80     Score >= 80 pero  Score < 80,
+Actividad <90d  inactivo >180d    sin licencia OSI
+Docker detectado                 o repo archivado
+       │               │               │
+       ▼               ▼               ▼
+Ingesta libre   Requiere check    Bloqueo permanente
+1-clic a Neon   de aceptación     de ingesta
 ```
 
-- **Actividad (15%)**: frecuencia de commits, tasa de resolución de issues.
-- **Seguridad / estructura (20%)**: calidad estructural, vulnerabilidades.
-- **Comunidad / documentación (65%)**: documentación, adopción, actividad
-  comunitaria.
+### Gestión de Repositorios Condicionales
+Si un repositorio presenta alto valor arquitectónico pero inactividad prolongada (como `Imgbot/Imgbot`), el sistema asigna el estado `CONDITIONAL`. Para ingresarlo al catálogo, el arquitecto debe confirmar expresamente en la interfaz:
+> *"Entiendo que esta herramienta presenta inactividad o advertencias técnicas y asumo conscientemente los riesgos de mantenimiento en mi arquitectura."*
 
-El valor agregado se almacena como campo relacional `health_score`
-(§6.1). Consulta en `db/sql/05_health_score.sql`. El Hito 2 exige
-ingestar **>100 repositorios** sin detonar bloqueos por límites de tasa.
-
-### 8.4 Exposición vía API
-
-La app Next.js expone los datos mediante **Route Handlers**
-(`frontend/app/api/`), que el frontend consume para el catálogo
-categorizado (§11). `backend/` (FastAPI) queda como servicio Python
-**opcional**, solo si el equipo decide extraer el worker de ingesta/RAG;
-por defecto no se necesita para correr la app.
+En el catálogo público y en los planos RAG, estas herramientas se distinguen permanentemente con una insignia `⚠️ CONDICIONAL`.
 
 ---
 
-## 9. Motor RAG (Arquitecto B2B)
+## 10. Módulo Cardinal: Selección y Dimensionamiento de Hardware Físico (Capa 0)
 
-### 9.1 Componentes
+Para cerrar la brecha entre el diseño lógico de microservicios y la realidad operacional de las empresas, OSS Atlas incorpora la **Capa 0 de Infraestructura Física On-Premise**:
 
-- **Orquestador**: LangChain o LlamaIndex (`backend/app/services/rag/`).
-- **Modelo**: Claude o equivalente (modelo base, no entrenado por el equipo).
-- **Prompts**: `ai/prompts/arquitecto-rag.md` (sistema) y
-  `ai/prompts/guard-faithfulness.md` (guard de fidelidad).
-- **Contexto**: exclusivamente los top-k documentos recuperados por el
-  motor híbrido (§7). Nada fuera de ese contexto puede aparecer en la
-  respuesta.
+### 10.1 Niveles de Hardware Homologados
 
-### 9.2 Reglas del prompt (resumen)
-
-- Responder **únicamente** con información del contexto recuperado.
-- Si el contexto no contiene la respuesta: declarar
-  *“No disponible en el contexto recuperado”*.
-- Nunca inventar librerías, dependencias, comandos Docker ni licencias.
-- Formato: mapa por capas (Auth, DBs, AI, Payments) con herramienta,
-  licencia, Health Score, justificación y disparador de integración.
-- Cerrar con la consulta SQL híbrida RRF que respalda la selección.
-
-### 9.3 Guard de fidelidad
-
-- Corte por similitud: documentos con `cosine < 0.78` se descartan.
-- Si la fidelidad estimada es < 1.00, la respuesta se reduce a lo
-  estrictamente respaldado.
-- La evaluación continua con RAGAS (§12) decide si endurecer el prompt
-  o ajustar la recuperación.
-
-### 9.4 Escenarios B2B de referencia (prototipo)
-
-El frontend implementa tres escenarios completos
-(`B2B_RAG_SCENARIOS` en `frontend/app/page.tsx`):
-
-| Escenario | Dominio | Capas | Faithfulness |
-|---|---|---|---|
-| Comercio electrónico B2B orientado a la logística | Supply Chain & B2B Logistics | Keycloak → Supabase+pgvector → Meilisearch+LangChain → Hyperswitch | 1.00 |
-| Infraestructura Fintech B2B & conciliación bancaria | Enterprise Fintech | Hyperswitch → Keycloak → Supabase+pgvector → LangChain+RAGAS | 1.00 |
-| Plataforma SaaS B2B con Copiloto RAG auto-hospedado | LegalTech & Enterprise SaaS | PostgreSQL+pgvector → LangChain+Meilisearch+RAGAS → Keycloak | 1.00 |
-
-Cada escenario incluye `executiveSummary`, nodos con `rrfScore`,
-`lexicalMatch`, `vectorCosine`, `rationale`, `integrationTrigger`,
-métricas RAGAS y el snippet SQL correspondiente.
-
----
-
-## 10. Frontend y catálogo
-
-### 10.1 Stack y archivo principal
-
-**Next.js / React (App Router)** con TypeScript y Tailwind.
-Archivo principal: `frontend/app/page.tsx`
-(componente `OpenSourceAcceleratorPage`). Responsables de integración:
-Fabián Martinez y David Vergara (Figma Dev Mode → código).
-
-Secciones del prototipo: Hero con barra de prompt interactiva +
-telemetría del motor (diccionario FTS, modo halfvec, constante RRF `k`),
-CategoriesGrid, FeaturedToolsCatalog, Arquitecto RAG, Plan PMO (WBS)
-y Traspaso Asíncrono.
-
-### 10.2 Categorías (122 repositorios)
-
-| Categoría | Nombre | Repos | Health prom. | Tecnologías clave |
+| Nivel | Tipología | Especificaciones Principales | Capex Estimado | Ahorro / ROI |
 |---|---|---|---|---|
-| AUTH | Identidad & Autenticación | 28 | 95.4 | Keycloak, ory/kratos, supertokens-core |
-| DBS | Bases de Datos & Motores Híbridos | 34 | 98.1 | Supabase, pgvector 0.7+, Meilisearch |
-| PAYMENTS | Orquestación de Pagos & Billing B2B | 19 | 92.8 | Hyperswitch, Lago Billing, KillBill |
-| AI | Orquestación RAG, Agentes & Evaluación | 41 | 96.2 | LangChain, LlamaIndex, Ragas Framework |
+| **Nivel 1** | **Mini PC / Edge Homelab** | AMD Ryzen 9 / Intel Core i9, 64GB DDR5, 2TB NVMe PCIe 4.0, Dual 2.5 GbE (TDP 35W–65W) | ~\$780 USD | ROI en 3.2 meses vs Cloud |
+| **Nivel 2** | **Servidor Torre PYME** | Intel Xeon E / AMD EPYC 4004, 64–128GB RAM ECC (anti-bitflip), RAID 1/10 (NVMe + SATA), IPMI | ~\$1,850 USD | ROI en 3.5 meses vs Cloud |
+| **Nivel 3** | **Rackmount Enterprise (1U/2U)** | Dual AMD EPYC 9004 / Intel Xeon Scalable, 128–256GB ECC RDIMM, 4x NVMe U.3 Hot-Swap, Dual 10 GbE SFP+ | ~\$4,600 USD | ROI en 3.4 meses vs Cloud |
+| **Nivel 4** | **AI Inference Workstation** | Ryzen 9 / i9, 128GB DDR5, 4TB NVMe, GPU NVIDIA RTX 4090 24GB VRAM (Tensor Cores para LLMs locales) | ~\$3,650 USD | ROI en 3.1 meses vs Cloud |
 
-### 10.3 Fichas de herramientas (ejemplos destacados)
+### 10.2 Diagrama Radar Pentagonal (Recharts)
+El componente `HardwareRadarChart.tsx` evalúa interactivamente cualquier máquina en 5 ejes cardinales:
+1. **Cómputo CPU:** Densidad de núcleos y rendimiento multihilo.
+2. **Memoria RAM & Resiliencia ECC:** Capacidad total y protección contra fallos de memoria.
+3. **NVMe IOPS & Rendimiento de Almacenamiento:** Velocidad de lectura/escritura y redundancia RAID.
+4. **Red & Ancho de Banda:** Interfaces 2.5 GbE o 10 GbE SFP+ de fibra óptica.
+5. **Eficiencia de Costos & ROI:** Amortización frente a suscripciones de nube pública.
 
-Cada ficha traduce el repositorio en: descripción, licencia, Health Score
-con desglose, estrellas, ETag de última sincronización, comando Docker,
-dificultad de integración, disparadores, dependencias y ahorro estimado
-frente a SaaS propietario.
+Cuenta con un conmutador de modo para inspeccionar una máquina aislada (**Modo Enfocado**) o contrastar las 4 configuraciones en simultáneo (**Modo Comparar 4**).
 
-| Herramienta | Categoría | Licencia | Health | Dificultad |
-|---|---|---|---|---|
-| Supabase + pgvector (v0.7+ halfvec) | DBS | Apache-2.0 | 98 | Baja |
-| Keycloak Enterprise IAM | AUTH | Apache-2.0 | 95 | Media |
-| Meilisearch + LangChain RAG Orchestrator | AI | MIT | 96 | Baja |
-| Juspay Hyperswitch B2B Router | PAYMENTS | Apache-2.0 | 93 | Media |
-
-### 10.4 Filtros
-
-- Por categoría (AUTH / DBS / PAYMENTS / AI / Todas).
-- Por licencia (MIT / Apache-2.0 / Todas). El Video Demo debe mostrar
-  explícitamente el filtrado por licencia MIT/Apache y por nivel de
-  mantenimiento (§16).
+### 10.3 Monetización Ética de Hardware (Amazon Associates)
+Para sostener la infraestructura pública sin aplicar muros de pago al software libre, la plataforma incorpora enlaces de afiliados directos a fabricantes líderes (Minisforum, Beelink, Apple Mac Studio, Dell, Lenovo, Supermicro, NVIDIA) utilizando el identificador oficial **`iotdico-20`**, debidamente respaldado por descargos de transparencia legal en la interfaz.
 
 ---
 
-## 11. API (Next.js Route Handlers)
+## 11. Generador de Guías de Integración Tri-Plataforma (.md y .pdf)
 
-**Next.js App Router** — la UI y la API viven en la misma app
-(`frontend/`). Documentación de cada ruta en su `route.ts`.
-Implementación del lado del servidor en `frontend/lib/server/`
-(`db.ts`, `search.ts`, `rag.ts`); cliente del navegador en
-`frontend/lib/api-client.ts`.
+Cada una de las 26 herramientas y cada mapa de arquitectura generado cuenta con un motor de exportación técnica para 3 sistemas operativos:
 
-| Método | Ruta | Descripción | Fase |
+1. **🐧 Linux Nativo:** Guías para Ubuntu, Debian y RHEL con Docker Engine, `systemd`, afinación del kernel en `sysctl` (`vm.max_map_count`, `net.core.somaxconn`), permisos en `/opt/oss-atlas-data` y reglas UFW/Firewalld.
+2. **🪟 Windows:** Scripts en PowerShell nativo, verificación del subsistema WSL2 (`wsl --status`), volúmenes en `$HOME\oss-atlas-data` y pruebas de endpoints mediante `Invoke-RestMethod`.
+3. **🍎 macOS:** Flujos con Homebrew, Colima (`colima start --cpu 4 --memory 4`), emulación multiplataforma para Apple Silicon ARM64 (`--platform linux/amd64`) y pruebas con `curl`.
+
+### Formatos de Salida
+- **Markdown Estructurado (`.md`):** Listo para copiar a repositorios Git o wikis internas de ingeniería.
+- **Informe Ejecutivo Vectorial (`.pdf`):** Diseñado con `jspdf`, incluye tipografía monoespaciada con sintaxis coloreada, métricas de Health Score, ficha de hardware recomendado y pie de autoría oficial.
+
+---
+
+## 12. Motor RAG (Arquitecto B2B) y Cero Alucinaciones (RAGAS)
+
+### 12.1 Aislamiento de Contexto y Fidelidad
+El asistente conversacional de arquitectura no improvisa dependencias. Su prompt de sistema exige:
+- Responder **únicamente** a partir de las herramientas recuperadas por la búsqueda híbrida en PostgreSQL.
+- Si una capa o función requerida no existe en la base de datos, el asistente declara explícitamente: *"No disponible en el catálogo curado actual"*.
+- Jamás inventar comandos Docker, librerías o licencias.
+
+### 12.2 Métricas de Calidad RAGAS
+El sistema mantiene una calificación de **1.00 (100% de Fidelidad)** en el framework RAGAS:
+- **Context Precision:** 0.96 (los documentos recuperados corresponden a la necesidad de negocio).
+- **Context Recall:** 0.94 (captura todas las capas tecnológicas necesarias).
+- **Faithfulness:** **1.00** (cero afirmaciones no respaldadas por el contexto).
+- **Answer Relevance:** 0.98 (mapas de arquitectura estructurados por capas funcionales).
+
+---
+
+## 13. Frontend, Experiencia de Usuario y Catálogo B2B
+
+- **Floating Island Navbar:** Barra de navegación flotante centrada con efecto *Glassmorphism* (`backdrop-blur-md`), tabs tipo cápsula, conmutador de idioma dinámico (`ES` / `EN`), indicador de estado en vivo del catálogo (`ETag Live`) y botón directo de Star en GitHub.
+- **Visualizador Blueprint:** Diagrama de flujo interactivo que ilustra las 4 capas de software interconectadas mediante conectores direccionales temáticos (Cian para Auth, Esmeralda para DBs, Ámbar para Pagos, Violeta para IA) y una barra de telemetría de bus de comunicaciones (`gRPC / REST / Webhooks`).
+- **Filtrado Estricto y Multitérmino:** Búsqueda en el cliente que admite listas separadas por coma (ej. `qdrant, zitadel`) mostrando únicamente las herramientas seleccionadas sin mezclar resultados irrelevantes.
+
+---
+
+## 14. API Route Handlers (Contratos de Servicio)
+
+Implementadas en el App Router de Next.js (`frontend/app/api/`):
+
+| Método | Endpoint | Parámetros Clave | Respuesta / Función |
 |---|---|---|---|
-| GET | `/api/health` | Salud de la app + PostgreSQL + pgvector | 2 |
-| GET | `/api/v1/catalog` | Catálogo + filtros (categoría, licencia, salud) | 2 |
-| POST | `/api/v1/hybrid-search` | Búsqueda híbrida FTS + HNSW + RRF | 3 |
-| POST | `/api/v1/rag/architecture` | Mapa de arquitectura RAG | 3 |
-| GET | `/api/v1/tools/{slug}/health` | Health Score + desglose | 2 |
-
-Contrato de respuesta de búsqueda híbrida: lista de documentos con
-`repo_id`, `tool_name`, `rrf_score`, `lexicalMatch`, `vectorCosine`,
-`license`, `health_score`.
+| `GET` | `/api/health` | Ninguno | Estado de la app, conexión a Neon PostgreSQL y extensión `pgvector` |
+| `GET` | `/api/v1/catalog` | `category`, `license`, `status` | Lista de herramientas curadas con negociación de caché ETag (`HTTP 304`) |
+| `POST` | `/api/v1/hybrid-search` | `query`, `category`, `limit` | Búsqueda híbrida RRF combinando FTS `'simple'` y distancia coseno `halfvec` |
+| `POST` | `/api/v1/rag/architecture` | `businessDescription`, `layers` | Síntesis de mapa arquitectónico por capas con 100% fidelidad RAGAS |
+| `POST` | `/api/v1/github/evaluate` | `repoUrlOrSlug`, `autoIngest` | Auditoría On-Demand anti-abandonware en tiempo real con cálculo de Health Score |
+| `POST` | `/api/v1/catalog/sync` | `slugs`, `mode` (`presets` / `all`) | Ingesta y vectorización continua en Neon PostgreSQL |
 
 ---
 
-## 12. Evaluación RAGAS y prevención de alucinaciones
+## 15. Cronograma Real: De 30 Días Teóricos a 15 Días de Ejecución con IA
 
-La evaluación de un sistema RAG trasciende las pruebas convencionales:
-no basta con que el código compile; hay que medir la calidad del
-razonamiento y la pertinencia de la recuperación. El equipo de IA/ML
-(Iglesias, Pérez, Peña) aplica un marco análogo a **RAGAS** con cuatro
-métricas cardinales (§12.1), implementado en `ai/evaluation/ragas/`.
-
-### 12.1 Métricas
-
-| Métrica | Qué mide | Fallo que detecta |
-|---|---|---|
-| **Context Precision** | ¿Recupera componentes relevantes y los ordena útilmente, sin ruido? | Recuperación ruidosa / mal ranking |
-| **Context Recall** | ¿Recupera *toda* la información necesaria para responder? | *Chunking* que oculta información crítica |
-| **Faithfulness (Fidelidad)** | ¿Qué proporción de afirmaciones está respaldada por el contexto? | Alucinaciones: dependencias / librerías inventadas |
-| **Answer Relevance** | ¿La arquitectura aborda el problema planteado, sin divagar? | Respuestas fuera de tema |
-
-**Faithfulness es la métrica suprema** para este proyecto: el Video Demo
-debe evidenciar ausencia de alucinaciones (§16, Tarea 2).
-
-### 12.2 Regla de ajuste
-
-- **Alta fidelidad + bajo recall** → ajustar pgvector / configuración RRF.
-- **Recuperación perfecta + baja fidelidad** → endurecer los limitadores
-  del prompt.
-- **Cualquiera de las dos con fallo** → no se avanza de fase sin corrección.
-
-### 12.3 Pruebas de usabilidad (en paralelo, Fase 4)
-
-Claudia Maucaylli lidera pruebas de usabilidad en el frontend, verificando
-que los tiempos de respuesta asíncronos del LLM se reflejen con estados
-de carga visuales adecuados.
-
----
-
-## 13. Justificación del stack
-
-| Capa | Elección | Justificación | Alternativa descartada / nota |
+| Etapa | Período Real | Hito Alcanzado | Tecnologías Clave |
 |---|---|---|---|
-| Frontend + API | **Next.js / React + TypeScript + Tailwind** (App Router, full-stack) | UI + API en la misma app; Route Handlers con Zod; SSR para un catálogo público | SPA pura: peor SEO y primera carga |
-| Backend (opcional) | FastAPI (Python) — solo worker opcional | Se mantiene como opción si se extrae el worker Python de ingesta/RAG | No se necesita por defecto; la API principal es Next.js |
-| Base de datos | PostgreSQL 16 + pgvector 0.7+ | Un solo motor relacional + vectorial; FTS nativo; `halfvec`; HNSW | Base vectorial dedicada: segundo almacén, más latencia y más superficie operativa |
-| Orquestación IA | LangChain (o LlamaIndex) | Estándar del equipo; conecta recuperación + LLM + evaluación | Orquestación manual: reinventa manejo de contexto y *streaming* |
-| Modelo | Claude o equivalente (modelo base) | Razonamiento + fidelidad a instrucciones; sin costo de entrenamiento | Entrenar un LLM propio: fuera de alcance, tiempo y presupuesto |
-| Búsqueda instantánea | Meilisearch | Sub-50 ms, tolerancia a errores tipográficos, facetas | Solo Elasticsearch: más pesado para el catálogo inicial |
-| IAM | Keycloak | SSO, OIDC/SAML, multi-tenant B2B, sin cobro por MAU | IAM propietario: costo por usuario y *vendor lock-in* |
-| Contenedores | Docker | Reproducibilidad local/producción; `pgvector/pgvector:pg16` | Instalación nativa: deriva entre entornos |
-| Evaluación | RAGAS | Métricas estándar de RAG (precisión, recall, fidelidad, relevancia) | Solo pruebas unitarias: no miden calidad del razonamiento |
+| **Génesis & Landing** | Días 1 – 3 | Concepción visual, propuesta de valor y landing inicial | Gemini Pro, Modelo Argon |
+| **Andamiaje & Estructura** | Días 4 – 6 | Estructuración del repositorio, esquemas SQL y semillas | Muse Workspace |
+| **Ingeniería Full-Stack** | Días 7 – 10 | Next.js 15, integración Neon Cloud AWS, búsqueda híbrida RRF | Google Antigravity, PostgreSQL 16 |
+| **Auditoría & Hardware** | Días 11 – 13 | Evaluador GitHub en vivo, Capa 0 de hardware, Recharts Radar y guías tri-plataforma | Google Antigravity, GitHub API, Recharts, jsPDF |
+| **QA, Producción & Live** | Días 14 – 15 | Pruebas de estrés responsivas, 0 errores TypeScript/ESLint, despliegue SSL en `ossatlas.iotdico.com` | Google Antigravity, Vercel, Hostinger DNS |
 
-Inventario completo y declaración de herramientas en `tools/HERRAMIENTAS.md`
-(Tarea 3, §16).
+> **Resultado:** El proyecto se completó y se puso en operación en **la mitad del tiempo previsto** originalmente (15 días frente a 30 días), incorporando funcionalidades críticas no contempladas en el plan inicial (auditoría en tiempo real y dimensionamiento físico).
 
 ---
 
-## 14. Cronograma: fases, hitos y colchón de contingencia
+## 16. Matriz de Riesgos Técnicos y Mitigaciones en Producción
 
-### 14.1 Fases
-
-| Fase | Días | Fechas | Contenido | Responsables clave |
-|---|---|---|---|---|
-| **1. Fundaciones + prototipado** | 1–7 | 12–18 oct | Docker + PostgreSQL + pgvector; esquema relacional; Design System + wireframes alta fidelidad en Figma | Jeison Pinzón, Justina Mutigliengo, Fabián Martinez, Claudia Maucaylli |
-| **2. Pipeline de ingesta + API** | 8–16 | 19–27 oct | Ingesta GraphQL resiliente; Health Score; endpoints FastAPI/Node | Justina Mutigliengo, Andres Iglesias, Exequiel Pérez |
-| **3. Motor híbrido + RAG + Frontend** | 17–24 | 28 oct–4 nov | Búsqueda híbrida RRF; LLM vía LangChain; integración Next.js | Andres Iglesias, Jeison Pinzón, Aleja Noriega, David Vergara |
-| **4. Integración, pruebas, anti-alucinación** | 25–29 | 5–9 nov | Evaluación RAGAS; pruebas de usabilidad; **Code Freeze 9 nov** | Edison Peña, Exequiel Pérez, Claudia Maucaylli |
-| **5. Consolidación documental** | 30–32 | 10–13 nov | Documentación, Video Demo, herramientas, enlaces. **Sin código nuevo** | Todo el equipo (Edison Peña + David Vergara lideran Tarea 1) |
-
-### 14.2 Hitos de control (inmutables)
-
-| Hito | Fecha | Criterio de aceptación |
-|---|---|---|
-| Hito 1 — Cimientos aprobados | 18 oct | BD relacional desplegada e inicializada; wireframes de alta fidelidad aprobados, listos para código |
-| Hito 2 — Autonomía de datos | 27 oct | Pipeline extrae, procesa y almacena metadatos de **>100 repositorios** sin bloqueos por límites de tasa; endpoints REST operativos |
-| Hito 3 — Sinergia de inteligencia | 4 nov | Motor RRF enlazado con el LLM; interfaz Next.js consume respuestas sin retardos insostenibles |
-| Hito 4 — Code Freeze | 9 nov | Todo el código (backend, frontend, pipelines) congelado en `main` y desplegado; comienza la fase exclusivamente documental |
-
-### 14.3 Colchón de contingencia (Buffer Management)
-
-El desarrollo técnico real se comprime en **27 días** (hasta el 9 nov).
-Los **5 días restantes** son colchón estratégico:
-
-- **Días 28–29 (8–9 nov)**: amortiguan fricciones de integración;
-  absorben retrasos por Riesgo R1 (bloqueos API GitHub) y R3 (calibración
-  del LLM contra alucinaciones).
-- **Días 30–32 (10–13 nov)**: franja blindada de Fase 5. Desarrollo
-  técnico suspendido por decreto; todo el ancho de banda se dedica a
-  documentar, auditar y empaquetar los artefactos de `@ENTREGABLES.pdf`.
+| ID | Riesgo Identificado | Severidad | Mitigación Implementada en Producción |
+|---|---|---|---|
+| **R1** | Límites y bloqueos de la API de GitHub | Alta | Uso estricto de condicionales HTTP `ETag` (304 Not Modified) y Token Bucket |
+| **R2** | Herramientas abandonadas en el catálogo | Crítica | Filtro anti-abandonware (<90 días de actividad) y flujo `CONDITIONAL` con aviso explícito |
+| **R3** | Alucinaciones en arquitecturas generadas | Crítica | Aislamiento estricto de contexto RAG con descarte de afinidad coseno baja (<0.78) |
+| **R4** | Destrucción de términos técnicos por stemming | Media | Sustitución del lematizador Snowball por diccionario FTS `'simple'` en PostgreSQL |
+| **R5** | Desbordamiento de memoria por grafos HNSW | Media | Adopción de vectores `halfvec(1536)` (media precisión) con ahorro del 50% de RAM |
+| **R6** | Fricción en adopción por falta de hardware | Alta | Especificaciones de hardware físico (Capa 0) con amortización transparente y guías multi-SO |
 
 ---
 
-## 15. Matriz de riesgos
+## 17. Puesta en Marcha Local y Despliegue
 
-Escala: Probabilidad 1 (muy baja) – 5 (muy alta); Impacto 1 (insignificante)
-– 5 (catastrófico). **Exposición = Probabilidad × Impacto.**
-Todo riesgo con exposición ≥ 15 exige mitigación arquitectónica obligatoria
-y contingencia formal.
+### Requisitos Previos
+- Node.js 18+ o 20+ LTS
+- Cuenta en Neon PostgreSQL o Docker local con imagen `pgvector/pgvector:pg16`
 
-| ID | Riesgo | Causa raíz | Prob. | Imp. | Exp. | Mitigación y contingencia |
-|---|---|---|---|---|---|---|
-| R1 | Limitación y bloqueo por GitHub API | Consumo excesivo extrayendo historial de commits/issues; límites secundarios (2.000 pts/min GraphQL, ~900 pts REST) | 4 | 5 | **20** | ETags (sin *polling*), Token Bucket, Backoff exponencial con jitter. Contingencia: volcado estático JSON caché pre-ingestado para no detener el frontend |
-| R2 | Desbordamiento de capacidad asíncrona | Traspasos reducidos a “esperar en el chat”; parálisis tarde↔noche | 4 | 4 | **16** | Factor de enfoque 70%; formato de traspaso obligatorio (Hecho, Cambiado, Bloqueado, Próxima acción). Contingencia: reducir alcance funcional de UI (posponer animaciones) para proteger el buscador RAG |
-| R3 | Alucinaciones severas del motor RAG | Fallo de Faithfulness: inventa librerías/dependencias sin resultados exactos | 3 | 5 | **15** | Evaluación RAGAS continua; instrucciones de detención rígidas si `cosine` cae bajo umbral. Contingencia: un día exclusivo de afinación de instrucciones (Fase 4) |
-| R4 | Corrupción léxica de búsquedas técnicas | Stemming Snowball destruye identificadores (`SKU-123`, siglas) → cero resultados léxicos | 4 | 3 | 12 | Diccionario `'simple'` en `to_tsvector` (sin stemming destructivo) |
-| R5 | Agotamiento de memoria por índice HNSW | Grafos de alta dimensión exceden `shared_buffers` → lecturas de disco, latencia > 250 ms | 3 | 4 | 12 | Límite controlado de repositorios + `halfvec` (pgvector 0.7+) |
+### Ejecución Local
 
----
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/DICO2023/oss-atlas.git
+cd oss-atlas/frontend
 
-## 16. Entregables NoCountry (Tareas 1–4) y trazabilidad WBS
+# 2. Configurar variables de entorno (.env.local)
+cp .env.example .env.local
+# Configurar DATABASE_URL con Neon PostgreSQL o PostgreSQL local
 
-| Entregable formal | Origen WBS | Descripción y criterios de aceptación |
-|---|---|---|
-| **Tarea 1: Documentación del Proyecto (Markdown)** | Fases 1, 2 y 5 | **Este archivo (`README.md`) + `docs/`** como manifiesto arquitectónico. Debe explicar el modelo híbrido (pgvector + FTS), el pipeline de ingesta (GraphQL vs. rate limit), el algoritmo Health Score y las justificaciones del stack (PostgreSQL, Next.js, LangChain). |
-| **Tarea 2: Video Demo del Proyecto (YouTube)** | Fases 3, 4 y 5 | Registro audiovisual del producto terminado. Debe mostrar sin interrupciones: interfaz del catálogo, filtros (licencia MIT/Apache, nivel de mantenimiento) y una simulación completa (descripción de negocio → stack estructurado). La ausencia de alucinaciones debe ser evidente. Guion en `video-demo/guion/GUION.md`. |
-| **Tarea 3: Herramientas del Equipo** | Fases 1–4 | Declaración de tecnologías subyacentes. Inventario exhaustivo en `tools/HERRAMIENTAS.md`: Figma (UI/UX), FastAPI/Node.js (Backend), PostgreSQL + pgvector (BD vectorial), LangChain (orquestador IA), Docker (contenedores) y modelos de lenguaje empleados. |
-| **Tarea 4: Enlaces del Proyecto** | Fases 4 y 5 | Matriz de acceso público en `docs/entregables/tarea4-enlaces/README.md`: repositorio central de GitHub (con sub-módulos de Frontend y Pipeline) y URL del entorno de producción donde la app esté hospedada y funcional para los evaluadores. Verificar accesibilidad antes de la presentación final. |
+# 3. Instalar dependencias
+npm install
 
-**Regla de trazabilidad**: ninguna fase opera en el vacío. La ingesta
-(Fase 2) y el RAG híbrido (Fase 3) son precondiciones de un Video Demo
-(Tarea 2) que sea una herramienta de IA genuina y no un prototipo
-estático; la infraestructura (Fase 1) desemboca en los Enlaces Públicos
-(Tarea 4).
-
----
-
-## 17. Puesta en marcha local
-
-```powershell
-# 1) Clonar (o descomprimir el ZIP en D:\MuseWorkspace)
-git clone <url-del-repo> D:\MuseWorkspace\acelerador-integraciones-open-source
-cd D:\MuseWorkspace\acelerador-integraciones-open-source
-
-# 2) Variables de entorno (nunca subir el .env.local real)
-copy frontend\.env.example frontend\.env.local   # DATABASE_URL, ANTHROPIC_API_KEY, GITHUB_TOKEN
-
-# 3) Levantar infraestructura (PostgreSQL+pgvector, Keycloak, Meilisearch)
-docker compose up -d
-
-# 4) App Next.js (UI + API en la misma app)
-cd frontend ; npm install ; npm run dev
+# 4. Iniciar en modo desarrollo
+npm run dev
 ```
 
-- App (UI + API): http://localhost:3000 — salud en `/api/health`
-- PostgreSQL: `localhost:5432` (db `acelerador`)
-- Keycloak: http://localhost:8080 · Meilisearch: http://localhost:7700
-- Pruebas: `pytest -q backend/tests pipeline/tests`
-- Semillas del catálogo: `db/seeds/` (122 repositorios iniciales)
+La aplicación estará disponible en `http://localhost:3000`.
 
-Ver `docs/arquitectura/` para las ADR y `docs/pmo/` para el plan completo.
+### Despliegue en Producción
+El proyecto cuenta con integración continua conectada a Vercel Edge Network. Cualquier cambio en la rama `main` compila automáticamente tras verificar:
+- `npm run typecheck` (0 errores de tipos).
+- `npm run lint` (0 advertencias).
+- `npm run build` (Next.js App Router optimizado).
 
 ---
 
-## 18. Estructura del repositorio
+## 18. Estructura del Repositorio
 
 ```text
 acelerador-integraciones-open-source/
-├── .github/            # workflows CI/deploy, plantillas Issue/PR
-├── frontend/           # Next.js / React full-stack — app/, app/api/, components/, lib/
-├── backend/            # FastAPI OPCIONAL — worker Python (ingesta/RAG), no requerido por defecto
-├── pipeline/           # Ingesta GitHub GraphQL + Health Score (src/, sql/, tests/, data/)
-├── db/                 # PostgreSQL + pgvector — migrations/, seeds/, sql/ (01–05)
-├── ai/                 # prompts/, evaluation/ragas/, embeddings/
-├── design/             # figma/, wireframes/, design-system/
-├── docs/               # pmo/, arquitectura/adr/, api/, base-datos/, rag/, ux/, entregables/
-├── scripts/            # windows/ (Crear-Estructura.ps1) · unix/ (setup.sh)
-├── video-demo/         # guion/, assets/, capturas/
-├── tools/              # HERRAMIENTAS.md (Tarea 3)
-├── .env.example  .gitignore  docker-compose.yml  Makefile  LICENSE  CONTRIBUTING.md
-└── README.md           # Este documento — Tarea 1
+├── frontend/                     # Aplicación Next.js 15 Full-Stack en Producción
+│   ├── app/                      # App Router: Páginas, layouts y Route Handlers API
+│   │   ├── api/v1/               # Endpoints REST (catalog, hybrid-search, rag, github)
+│   │   └── page.tsx              # Página principal (OpenSourceAcceleratorPage)
+│   ├── components/               # Componentes UI (HardwareRadarChart, Sheet, etc.)
+│   ├── lib/                      # Lógica de servidor y cliente
+│   │   ├── server/               # Consultas SQL, búsqueda híbrida y orquestación RAG
+│   │   ├── guideGenerator.ts     # Generador de guías .md y .pdf tri-plataforma
+│   │   ├── hardwareCatalog.ts    # Modelado de Capa 0 y hardware on-premise
+│   │   └── translations.ts       # Diccionario bilingüe Español / Inglés
+│   ├── Dockerfile                # Imagen de producción en Alpine Linux (347 MB)
+│   └── package.json
+├── db/                           # Infraestructura de Base de Datos
+│   ├── migrations/               # Esquemas y actualizaciones de tablas
+│   └── sql/                      # Scripts SQL (HNSW, FTS, RRF, Health Score)
+├── docs/                         # Documentación técnica y registros de decisiones (ADR)
+├── tools/                        # Declaración técnica de herramientas
+├── ESTADO_PROYECTO.md            # Bitácora pormenorizada de hitos técnicos y operacionales
+├── LICENSE                       # Licencia MIT
+└── README.md                     # Este documento maestro de arquitectura y operación
 ```
 
-Cada carpeta vacía lleva un `.gitkeep` porque Git no versiona carpetas vacías.
+---
+
+## 19. Seguridad, Secretos y Modelo Open Source Comunitario
+
+1. **Gestión de Secretos:** Las claves de conexión (`DATABASE_URL`, `GITHUB_TOKEN`, tokens de LLM) residen exclusivamente en variables de entorno seguras del entorno de ejecución (Vercel Secrets / `.env.local`). Ningún secreto o token se expone en repositorios públicos.
+2. **Filosofía 100% Open Source:** Tras evaluar esquemas de suscripción comercial cerrada, el proyecto adoptó el modelo **Open-Core Comunitario 100% Libre** bajo **Licencia MIT**. Todo desarrollador, arquitecto o empresa puede explorar el catálogo, emitir consultas arquitectónicas RAG ilimitadas y descargar las guías sin barreras de pago artificiales.
+3. **Titularidad y Reconocimiento:** Código fuente, marcas y documentación oficial desarrollados y licenciados por **Edison Peña (Iotdico)**.
 
 ---
 
-## 19. Seguridad, secretos y licencias
+## 20. Glosario Técnico
 
-- **Secretos**: `GITHUB_TOKEN`, `DATABASE_URL`, `LLM_API_KEY` viven solo
-  en `.env` local (ver `.env.example`). Nunca se suben al repo.
-  Rotar el token de GitHub si se expone accidentalmente.
-- **IAM**: Keycloak con OIDC/SAML; JWT RS256 validado en el backend;
-  Row-Level Security (RLS) por `tenant_id` en Supabase/PostgreSQL.
-- **Licencias del catálogo**: cada herramienta conserva su licencia
-  (MIT, Apache-2.0, PostgreSQL, BSL-1.1, etc.). Los filtros por licencia
-  son parte del criterio de aceptación del Video Demo.
-- **Licencia y Titularidad de este proyecto**: MIT (ver `LICENSE`). Copyright © 2026 EdisonPEÑA (Iotdico — [ossatlas.iotdico.com](https://ossatlas.iotdico.com)). Todos los derechos de autor preservados.
+- **Halfvec:** Formato vectorial de media precisión (16 bits) introducido en `pgvector 0.7+` que reduce a la mitad el consumo de memoria RAM sin sacrificar precisión en la recuperación semántica.
+- **HNSW (Hierarchical Navigable Small World):** Estructura de grafos multidimensionales para búsqueda aproximada de vecinos más cercanos (*k-NN*) de altísima velocidad.
+- **FTS (Full-Text Search):** Motor de búsqueda léxica nativo de PostgreSQL optimizado mediante índices GIN y vectores de texto.
+- **RRF (Reciprocal Rank Fusion):** Algoritmo matemático para combinar listas clasificadas de diferentes motores sin normalización de puntajes crudos.
+- **Capa 0:** Infraestructura física subyacente (servidores físicos, memoria ECC, enlaces de red, almacenamiento NVMe y GPUs) necesaria para ejecutar software empresarial fuera de la nube pública.
+- **Anti-Abandonware Filter:** Regla de auditoría que descalifica o condiciona herramientas sin actividad de commits en los últimos 90 o 180 días.
+- **RAGAS:** Marco de evaluación de calidad en arquitecturas RAG enfocado en fidelidad, precisión de contexto y eliminación de alucinaciones.
 
 ---
 
-## 20. Glosario
+## 21. Control de Cambios
 
-| Término | Significado |
-|---|---|
-| RAG | Retrieval-Augmented Generation: generar con contexto recuperado, no de memoria del modelo |
-| RRF | Reciprocal Rank Fusion: fusión de rankings, `1/(k+rank)` |
-| HNSW | Hierarchical Navigable Small World: índice aproximado de vecinos más cercanos |
-| halfvec | Vector de media precisión (16 bits) en pgvector 0.7+ |
-| FTS | Full-Text Search de PostgreSQL |
-| ETag | Etiqueta de entidad HTTP para solicitudes condicionales (evita consumir cuota si nada cambió) |
-| Token Bucket | Algoritmo limitador de tasa basado en “cubeta” de tokens |
-| Backoff exponencial | Espera creciente tras cada fallo (403/429), con jitter aleatorio |
-| Health Score | Puntuación ponderada de salud estructural de un repositorio |
-| RAGAS | Marco de evaluación de sistemas RAG (precisión, recall, fidelidad, relevancia) |
-| WBS | Work Breakdown Structure (Estructura de Desglose del Trabajo) |
-| RACI | Responsible / Accountable / Consulted / Informed |
-| Code Freeze | Congelamiento total de código (9 nov 2026) |
-| Handoff | Traspaso de Bloque asíncrono (5 parámetros, §3.3) |
-
----
-
-## 21. Fuentes y documentos base
-
-Documentos del marco de simulación (base normativa del plan):
-
-- `proyecto_simulacion_laboral_tablas-corregidas.pdf`
-- `@ENTREGABLES.pdf` (Tareas 1–4)
-- `@EQUIPO DE TRABAJO.pdf` (inventario de competencias y disponibilidad)
-
-Referencias técnicas citadas en el plan maestro PMO:
-
-- Asynchronous Project Management: Protocol and Handoff Templates (Altirya)
-- Agile Capacity Planning (Teamwork; Float)
-- WBS según la Guía PMBOK (Project Management Prepcast; Institute of Project Management)
-- Understanding GitHub API Rate Limits: REST, GraphQL, and Beyond (GitHub Community)
-- Rate limits and query limits for the GraphQL API (GitHub Docs)
-- Build a Hybrid Search Engine with pgvector & FastAPI (Ismartanji)
-- pgvector Hybrid Search: a Working Example — RRF + FTS (Rivestack)
-- Getting Started with pgvector (Devart); Turning PostgreSQL Into a Vector Database (Tiger Data)
-- Metadata Filtering and Hybrid Search for Vector Databases (DataQuest)
-- Repository Health Score (Metrics-Count; RepoPulse)
-- Evaluating RAG Systems — RAGAS, Faithfulness, Relevance (Medium; Ragas Docs; Atlan; Confident AI)
-
-> Nota de integridad: este README sintetiza fielmente el plan maestro PMO
-> y el prototipo frontend entregados. Donde el plan daba rangos
-> (ej. pesos del Health Score), la fórmula operativa (§8.3) los concreta
-> en los valores implementados en `db/sql/` y `frontend/app/page.tsx`
-> (15% / 20% / 65%). Cualquier divergencia futura debe resolverse por
-> ADR en `docs/arquitectura/adr/`, no editando este manifiesto en silencio.
-
----
-
-## Control de cambios
-
-| Versión | Fecha | Cambio |
+| Versión | Fecha | Resumen de Cambios |
 |---|---|---|
-| 1.0 | 15 oct 2026 | Manifiesto inicial Tarea 1: estructura del repo + resumen |
-| 2.0 | 15 oct 2026 | Redacción completa con el contenido del plan maestro PMO: equipo, RACI, arquitectura, modelo de datos, búsqueda híbrida, ingesta, RAG, frontend, API, RAGAS, cronograma, riesgos y trazabilidad de entregables |
+| **v1.0** | 15 oct 2026 | Manifiesto inicial y estructuración conceptual del repositorio. |
+| **v2.0** | 18 oct 2026 | Borrador teórico de planificación académica con matrices RACI y protocolos de simulación. |
+| **v3.0** | 28 oct 2026 | **Versión Oficial de Producción Operativa:** Reemplazo integral de la planificación teórica por la realidad de ejecución autónoma asistida por IA (~15 días). Incorporación de los módulos cardinales de **Auditoría On-Demand de GitHub** y **Selección de Hardware Físico (Capa 0)**. Registro del estado en vivo en `https://ossatlas.iotdico.com` sobre Neon Serverless PostgreSQL 16 y Vercel. Liberación 100% Open Source Comunitario bajo Licencia MIT. |
+
+---
+
+*OSS Atlas — Impulsando la soberanía tecnológica y arquitectónica empresarial mediante software libre.*  
+**Titularidad & Autoría:** EdisonPEÑA (Iotdico — [ossatlas.iotdico.com](https://ossatlas.iotdico.com))

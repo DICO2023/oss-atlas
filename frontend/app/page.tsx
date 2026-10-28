@@ -17,6 +17,7 @@ import {
   getPlatformGuides,
 } from '@/lib/guideGenerator';
 import HardwareRecommendationSheet from '@/components/HardwareRecommendationSheet';
+import { CURATED_122_CATALOG, type CuratedRepoTarget } from '@/lib/curated122Catalog';
 
 export type CategoryId = 'ALL' | 'AUTH' | 'DBS' | 'PAYMENTS' | 'AI';
 
@@ -1047,7 +1048,10 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
   // Pipeline Sync states (Paso 5 - Ingesta Continua & Sincronización)
   const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
-  const [syncTab, setSyncTab] = useState<'AUDIT' | 'PRESETS' | 'CUSTOM' | 'MAINTENANCE'>('AUDIT');
+  const [syncTab, setSyncTab] = useState<'ROADMAP' | 'AUDIT' | 'PRESETS' | 'CUSTOM' | 'MAINTENANCE'>('ROADMAP');
+  const [roadmapCategoryFilter, setRoadmapCategoryFilter] = useState<CategoryId>('ALL');
+  const [roadmapStatusFilter, setRoadmapStatusFilter] = useState<'ALL' | 'PENDING' | 'ACTIVE'>('ALL');
+  const [roadmapSearchQuery, setRoadmapSearchQuery] = useState<string>('');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [syncFeedback, setSyncFeedback] = useState<{
     type: 'success' | 'error';
@@ -1447,7 +1451,9 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const searchMatchedTools = useMemo<OpenSourceTool[]>(() => {
     const trimmed = catalogSearchQuery.trim();
     if (!trimmed) {
-      return [];
+      return catalogTools.filter((tool: OpenSourceTool) => {
+        return selectedCategory === 'ALL' || tool.category === selectedCategory;
+      });
     }
 
     // 1. If hybrid search in PostgreSQL returned results, use them as our ranked candidate list
@@ -1507,13 +1513,39 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
   // Final tools list applying the license filter (ALL | Apache-2.0 | MIT)
   const filteredCatalogTools = useMemo<OpenSourceTool[]>(() => {
-    if (!catalogSearchQuery.trim()) {
-      return [];
-    }
     return searchMatchedTools.filter((tool: OpenSourceTool) => {
       return selectedLicenseFilter === 'ALL' || tool.license === selectedLicenseFilter;
     });
-  }, [catalogSearchQuery, searchMatchedTools, selectedLicenseFilter]);
+  }, [searchMatchedTools, selectedLicenseFilter]);
+
+  // Filtered repositories for the 122 Curated Roadmap Tab
+  const displayedRoadmapRepos = useMemo(() => {
+    return CURATED_122_CATALOG.filter((repo: CuratedRepoTarget) => {
+      // 1. Category filter
+      if (roadmapCategoryFilter !== 'ALL' && repo.category !== roadmapCategoryFilter) {
+        return false;
+      }
+      // 2. Status filter
+      const isAlreadyActive = catalogTools.some(
+        (t) => t.slug.toLowerCase() === repo.slug.toLowerCase() || t.name.toLowerCase() === repo.name.toLowerCase()
+      );
+      if (roadmapStatusFilter === 'ACTIVE' && !isAlreadyActive) {
+        return false;
+      }
+      if (roadmapStatusFilter === 'PENDING' && isAlreadyActive) {
+        return false;
+      }
+      // 3. Search query filter
+      if (roadmapSearchQuery.trim()) {
+        const q = roadmapSearchQuery.toLowerCase().trim();
+        const text = `${repo.name} ${repo.slug} ${repo.category} ${repo.license} ${repo.keyTech} ${repo.descriptionEs} ${repo.descriptionEn}`.toLowerCase();
+        if (!text.includes(q)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [catalogTools, roadmapCategoryFilter, roadmapStatusFilter, roadmapSearchQuery]);
 
   // Live RAG generation state
   const [liveRagResponse, setLiveRagResponse] = useState<B2BScenario | null>(null);
@@ -2214,17 +2246,34 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 {t.categoriesSubtitle}
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
-                onClick={() => setSelectedCategory('ALL')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold border transition-all ${
+                onClick={() => {
+                  setSelectedCategory('ALL');
+                  setCatalogSearchQuery('');
+                  document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold border transition-all cursor-pointer ${
                   selectedCategory === 'ALL'
                     ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                {t.categoriesAllBtn} (122 Repos)
+                {t.categoriesAllBtn} ({catalogTools.length} {lang === 'es' ? 'Activas' : 'Active'} / 122 {lang === 'es' ? 'Proyectadas' : 'Projected'})
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setRoadmapCategoryFilter('ALL');
+                  setRoadmapStatusFilter('PENDING');
+                  setSyncTab('ROADMAP');
+                  setIsSyncModalOpen(true);
+                }}
+                className="px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-gradient-to-r from-purple-500/20 to-cyan-500/20 hover:from-purple-500/30 hover:to-cyan-500/30 text-cyan-300 border border-cyan-500/40 shadow-sm transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <span>📋</span>
+                <span>{lang === 'es' ? `Ver Saldo de los 122 Repos (${Math.max(0, 122 - catalogTools.length)} pendientes)` : `View 122 Repos Backlog (${Math.max(0, 122 - catalogTools.length)} pending)`}</span>
               </button>
             </div>
           </div>
@@ -2232,16 +2281,27 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {CATEGORIES_DATA.map((cat: CategoryItem) => {
               const isSelected = selectedCategory === cat.id;
+              const activeCount = catalogTools.filter((t) => t.category === cat.id).length;
+              const totalCount = cat.repoCount;
+              const pendingCount = Math.max(0, totalCount - activeCount);
               return (
                 <div
                   key={cat.id}
-                  onClick={() => setSelectedCategory(isSelected ? 'ALL' : cat.id)}
+                  onClick={() => {
+                    const newCat = isSelected ? 'ALL' : cat.id;
+                    setSelectedCategory(newCat);
+                    setCatalogSearchQuery('');
+                    document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      setSelectedCategory(isSelected ? 'ALL' : cat.id);
+                      const newCat = isSelected ? 'ALL' : cat.id;
+                      setSelectedCategory(newCat);
+                      setCatalogSearchQuery('');
+                      document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
                   className={`group relative rounded-2xl p-6 border transition-all cursor-pointer flex flex-col justify-between ${
@@ -2281,9 +2341,21 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                     </div>
 
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-slate-400">{cat.repoCount} {lang === 'es' ? 'repositorios' : 'repositories'}</span>
+                      <span className="text-slate-200 font-semibold">
+                        {activeCount} {lang === 'es' ? 'activas' : 'active'} <span className="text-slate-500 font-normal">/ {totalCount} {lang === 'es' ? 'proyectadas' : 'projected'}</span>
+                      </span>
                       <span className="text-emerald-400 font-semibold">
                         {lang === 'es' ? 'Health Prom:' : 'Avg Health:'} {cat.avgHealthScore}%
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] font-mono pt-1 text-slate-400 border-t border-slate-800/50">
+                      <span className="text-amber-400/90 font-medium">
+                        ⏳ {pendingCount} {lang === 'es' ? 'pendientes' : 'pending'}
+                      </span>
+                      <span className="text-cyan-400 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 font-semibold">
+                        <span>{lang === 'es' ? 'Explorar en catálogo' : 'Explore in catalog'}</span>
+                        <span>↓</span>
                       </span>
                     </div>
                   </div>
@@ -2496,46 +2568,89 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             </div>
           </div>
 
+          {/* Active Context / Filter Indicator Bar */}
+          {(selectedCategory !== 'ALL' || catalogSearchQuery.trim() || selectedLicenseFilter !== 'ALL') && (
+            <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-sm">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-slate-400 font-semibold">{lang === 'es' ? 'Filtro activo:' : 'Active filter:'}</span>
+                {selectedCategory !== 'ALL' && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-semibold">
+                    <span>🏷️ {CATEGORIES_DATA.find((c) => c.id === selectedCategory)?.name || selectedCategory}</span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory('ALL')}
+                      className="hover:text-white ml-1 text-slate-400 cursor-pointer"
+                      title={lang === 'es' ? 'Quitar filtro de categoría' : 'Remove category filter'}
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+                {catalogSearchQuery.trim() && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold">
+                    <span>🔍 &quot;{catalogSearchQuery}&quot;</span>
+                    <button
+                      type="button"
+                      onClick={() => setCatalogSearchQuery('')}
+                      className="hover:text-white ml-1 text-slate-400 cursor-pointer"
+                      title={lang === 'es' ? 'Limpiar búsqueda' : 'Clear search'}
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+                {selectedLicenseFilter !== 'ALL' && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 font-semibold">
+                    <span>⚖️ {selectedLicenseFilter}</span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedLicenseFilter('ALL')}
+                      className="hover:text-white ml-1 text-slate-400 cursor-pointer"
+                      title={lang === 'es' ? 'Todas las licencias' : 'All licenses'}
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+                <span className="text-slate-400">
+                  ({filteredCatalogTools.length} {filteredCatalogTools.length === 1 ? (lang === 'es' ? 'herramienta visible' : 'tool visible') : (lang === 'es' ? 'herramientas visibles' : 'tools visible')})
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {selectedCategory !== 'ALL' && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRoadmapCategoryFilter(selectedCategory);
+                      setRoadmapStatusFilter('PENDING');
+                      setSyncTab('ROADMAP');
+                      setIsSyncModalOpen(true);
+                    }}
+                    className="text-amber-300 hover:text-amber-200 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-xl transition-all cursor-pointer flex items-center gap-1 font-semibold"
+                  >
+                    <span>⚡</span>
+                    <span>{lang === 'es' ? `Ver pendientes de esta categoría (${Math.max(0, (CATEGORIES_DATA.find((c) => c.id === selectedCategory)?.repoCount || 0) - catalogTools.filter((t) => t.category === selectedCategory).length)})` : `View pending in this category (${Math.max(0, (CATEGORIES_DATA.find((c) => c.id === selectedCategory)?.repoCount || 0) - catalogTools.filter((t) => t.category === selectedCategory).length)})`}</span>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory('ALL');
+                    setSelectedLicenseFilter('ALL');
+                    setCatalogSearchQuery('');
+                  }}
+                  className="text-slate-400 hover:text-white underline cursor-pointer"
+                >
+                  {lang === 'es' ? 'Restablecer todos' : 'Reset all'}
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Featured Tools Grid (Live Catalog from PostgreSQL 16) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {!catalogSearchQuery.trim() ? (
-              <div className="col-span-full py-16 px-6 rounded-2xl bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-slate-800 text-center space-y-4 shadow-xl">
-                <div className="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                  <IconSearchSparkle className="w-7 h-7" />
-                </div>
-                <div className="max-w-xl mx-auto space-y-2">
-                  <h3 className="text-lg font-bold text-white">
-                    {lang === 'es' ? 'Explora el Catálogo Dinámico B2B' : 'Explore the B2B Dynamic Catalog'}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    {lang === 'es'
-                      ? 'Escribe un término en la barra de búsqueda o haz clic en cualquiera de las búsquedas rápidas superiores para desplegar las herramientas evaluadas y filtrarlas por licencia (Apache-2.0 o MIT).'
-                      : 'Type a query in the search bar or click any quick search chip above to reveal audited tools and filter them by license (Apache-2.0 or MIT).'}
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-                  <span className="text-xs font-mono text-slate-500">
-                    {lang === 'es' ? 'Sugerencias recomendadas:' : 'Recommended suggestions:'}
-                  </span>
-                  {(lang === 'es'
-                    ? ['autenticacion SSO', 'PostgreSQL pgvector', 'motor busqueda rust', 'pagos pasarela multi-adquirente']
-                    : ['SSO authentication', 'PostgreSQL pgvector', 'rust search engine', 'multi-acquirer payments']
-                  ).map((chip) => (
-                    <button
-                      key={chip}
-                      type="button"
-                      onClick={() => {
-                        setCatalogSearchQuery(chip);
-                        setSelectedCategory('ALL');
-                      }}
-                      className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-950 border border-slate-800 text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900 transition-all cursor-pointer"
-                    >
-                      ⚡ {chip}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : filteredCatalogTools.length === 0 ? (
+            {filteredCatalogTools.length === 0 ? (
               <div className="col-span-full py-12 px-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 text-center space-y-3">
                 <div className="w-10 h-10 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-mono text-lg">
                   ∅
@@ -2547,26 +2662,28 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
                     {selectedLicenseFilter !== 'ALL' ? (
                       lang === 'es'
-                        ? `No hay herramientas con licencia ${selectedLicenseFilter} para "${catalogSearchQuery}".`
-                        : `No tools found with license ${selectedLicenseFilter} for "${catalogSearchQuery}".`
+                        ? `No hay herramientas con licencia ${selectedLicenseFilter}${catalogSearchQuery ? ` para "${catalogSearchQuery}"` : ''}.`
+                        : `No tools found with license ${selectedLicenseFilter}${catalogSearchQuery ? ` for "${catalogSearchQuery}"` : ''}.`
                     ) : (
                       lang === 'es'
-                        ? `No se encontraron herramientas para "${catalogSearchQuery}". Intenta con otro término o una búsqueda rápida.`
-                        : `No tools found for "${catalogSearchQuery}". Try another keyword or a quick search.`
+                        ? `No se encontraron herramientas para los filtros seleccionados. Intenta con otro término o restablece los filtros.`
+                        : `No tools found for the selected filters. Try another keyword or reset filters.`
                     )}
                   </p>
                 </div>
-                {selectedLicenseFilter !== 'ALL' && (
-                  <div className="pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedLicenseFilter('ALL')}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-cyan-300 hover:text-white bg-cyan-950/40 border border-cyan-800/50 hover:bg-cyan-900/40 transition-all cursor-pointer"
-                    >
-                      <span>👁️ {lang === 'es' ? 'Ver resultados con todas las licencias' : 'View results across all licenses'}</span>
-                    </button>
-                  </div>
-                )}
+                <div className="pt-2 flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory('ALL');
+                      setSelectedLicenseFilter('ALL');
+                      setCatalogSearchQuery('');
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium text-cyan-300 hover:text-white bg-cyan-950/40 border border-cyan-800/50 hover:bg-cyan-900/40 transition-all cursor-pointer"
+                  >
+                    <span>↺ {lang === 'es' ? 'Restablecer filtros y ver todas' : 'Reset filters and view all'}</span>
+                  </button>
+                </div>
               </div>
             ) : (
               filteredCatalogTools.map((tool: OpenSourceTool) => {
@@ -3459,6 +3576,17 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
               <button
                 type="button"
+                onClick={() => setSyncTab('ROADMAP')}
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  syncTab === 'ROADMAP'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+              >
+                {t.ingestTabRoadmap} ({Math.max(0, 122 - catalogTools.length)} {lang === 'es' ? 'pendientes' : 'pending'})
+              </button>
+              <button
+                type="button"
                 onClick={() => setSyncTab('AUDIT')}
                 className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   syncTab === 'AUDIT'
@@ -3502,6 +3630,244 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 ⚙️ {t.ingestTabReindex}
               </button>
             </div>
+
+            {/* Tab: ROADMAP (122 Curated Repos & Backlog Balance) */}
+            {syncTab === 'ROADMAP' && (
+              <div className="space-y-5 animate-fadeIn">
+                {/* Metrics Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                    <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+                      {lang === 'es' ? 'Universo Proyectado' : 'Target Universe'}
+                    </span>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <span className="text-2xl font-bold font-mono text-white">122</span>
+                      <span className="text-xs font-mono text-slate-400">{lang === 'es' ? 'repositorios curados' : 'curated repos'}</span>
+                    </div>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                    <span className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {lang === 'es' ? 'En Catálogo Activo' : 'In Active Catalog'}
+                    </span>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <span className="text-2xl font-bold font-mono text-emerald-300">{catalogTools.length}</span>
+                      <span className="text-xs font-mono text-emerald-400/80">{lang === 'es' ? 'en PostgreSQL 16' : 'in PostgreSQL 16'}</span>
+                    </div>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                    <span className="text-[11px] font-mono text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      {lang === 'es' ? 'Saldo por Incorporar' : 'Backlog to Ingest'}
+                    </span>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <span className="text-2xl font-bold font-mono text-amber-300">
+                        {Math.max(0, 122 - catalogTools.length)}
+                      </span>
+                      <span className="text-xs font-mono text-amber-400/80">{lang === 'es' ? 'pendientes de auditoría' : 'pending audit'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Info Note */}
+                <div className="p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 text-xs font-mono text-slate-300 space-y-1">
+                  <div className="flex items-center gap-2 font-bold text-cyan-300">
+                    <span>💡</span>
+                    <span>{lang === 'es' ? 'Cómo auditar e incorporar repositorios del saldo:' : 'How to audit and ingest backlog repositories:'}</span>
+                  </div>
+                  <p className="leading-relaxed text-[11px] text-slate-400">
+                    {lang === 'es'
+                      ? 'La taxonomía de OSS Atlas comprende 122 tecnologías de referencia (28 Auth, 34 DBs, 19 Payments y 41 AI). Para incorporar cualquiera de las herramientas pendientes al catálogo de producción, haz clic en "⚡ Auditar e Incorporar": el sistema ejecutará la auditoría automatizada contra GitHub en tiempo real, evaluando su Health Score y generando su vector semántico halfvec.'
+                      : 'The OSS Atlas taxonomy covers 122 benchmark technologies (28 Auth, 34 DBs, 19 Payments, and 41 AI). To ingest any pending tool into the live production catalog, click "⚡ Audit & Ingest": the engine will audit it via GitHub API, verify its Health Score and compute its halfvec semantic vector.'}
+                  </p>
+                </div>
+
+                {/* Filter Toolbar */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs font-mono">
+                  {/* Category Filter */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(['ALL', 'AUTH', 'DBS', 'PAYMENTS', 'AI'] as const).map((catKey) => {
+                      const count = catKey === 'ALL'
+                        ? 122
+                        : CURATED_122_CATALOG.filter((r) => r.category === catKey).length;
+                      return (
+                        <button
+                          key={catKey}
+                          type="button"
+                          onClick={() => setRoadmapCategoryFilter(catKey)}
+                          className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                            roadmapCategoryFilter === catKey
+                              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+                          }`}
+                        >
+                          <span>{catKey === 'ALL' ? (lang === 'es' ? 'Todas' : 'All') : catKey}</span>
+                          <span className="ml-1 text-[10px] text-slate-500">({count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Status Filter */}
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRoadmapStatusFilter('ALL')}
+                      className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        roadmapStatusFilter === 'ALL'
+                          ? 'bg-slate-800 text-white font-bold'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {lang === 'es' ? 'Todas' : 'All'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRoadmapStatusFilter('PENDING')}
+                      className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                        roadmapStatusFilter === 'PENDING'
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold'
+                          : 'text-slate-400 hover:text-amber-300'
+                      }`}
+                    >
+                      <span>⏳ {lang === 'es' ? 'Solo Pendientes' : 'Pending Only'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRoadmapStatusFilter('ACTIVE')}
+                      className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                        roadmapStatusFilter === 'ACTIVE'
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                          : 'text-slate-400 hover:text-emerald-300'
+                      }`}
+                    >
+                      <span>✓ {lang === 'es' ? 'Solo Activas' : 'Active Only'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Search Bar inside Roadmap */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={roadmapSearchQuery}
+                    onChange={(e) => setRoadmapSearchQuery(e.target.value)}
+                    placeholder={lang === 'es' ? 'Buscar entre los 122 repositorios por nombre, slug o tecnología...' : 'Search across all 122 repos by name, slug or tech...'}
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 font-mono focus:outline-none focus:border-cyan-400"
+                  />
+                  {roadmapSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setRoadmapSearchQuery('')}
+                      className="absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs font-mono cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                {/* Repositories Scrollable List */}
+                <div className="max-h-[460px] overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+                  {displayedRoadmapRepos.map((repo: CuratedRepoTarget) => {
+                    const matchingCatalogTool = catalogTools.find(
+                      (t) => t.slug.toLowerCase() === repo.slug.toLowerCase() || t.name.toLowerCase() === repo.name.toLowerCase()
+                    );
+                    const isAlreadyActive = Boolean(matchingCatalogTool);
+
+                    return (
+                      <div
+                        key={repo.slug}
+                        className={`p-3.5 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                          isAlreadyActive
+                            ? 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'
+                            : 'bg-slate-900/90 border-slate-800 hover:border-amber-500/40'
+                        }`}
+                      >
+                        <div className="space-y-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-bold text-sm text-white">{repo.name}</span>
+                            <span className="font-mono text-xs text-cyan-400 bg-cyan-950/60 border border-cyan-800/60 px-2 py-0.5 rounded">
+                              {repo.slug}
+                            </span>
+                            <span className="font-mono text-[10px] text-slate-400 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded">
+                              {repo.category}
+                            </span>
+                            <span className="font-mono text-[10px] text-slate-400 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded">
+                              {repo.license}
+                            </span>
+                            {repo.estimatedStars && (
+                              <span className="font-mono text-[10px] text-amber-300">
+                                ★ {repo.estimatedStars}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                            {lang === 'es' ? repo.descriptionEs : repo.descriptionEn}
+                          </p>
+                          <div className="text-[11px] font-mono text-slate-500">
+                            {lang === 'es' ? 'Stack / Tecnología:' : 'Stack / Tech:'} <span className="text-slate-300">{repo.keyTech}</span>
+                          </div>
+                        </div>
+
+                        <div className="shrink-0 flex items-center gap-2">
+                          {isAlreadyActive ? (
+                            <>
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                                <span>✓</span>
+                                <span>{lang === 'es' ? 'En Catálogo' : 'In Catalog'}</span>
+                                {matchingCatalogTool?.healthScore ? (
+                                  <span className="ml-1 text-[10px] font-bold text-emerald-400">({matchingCatalogTool.healthScore})</span>
+                                ) : null}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setIsSyncModalOpen(false);
+                                  if (matchingCatalogTool) {
+                                    setSelectedCategory(matchingCatalogTool.category);
+                                    setCatalogSearchQuery(matchingCatalogTool.name);
+                                    setInspectedToolId(matchingCatalogTool.id);
+                                  }
+                                  document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                                className="px-2.5 py-1 rounded-lg text-xs font-mono bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors cursor-pointer"
+                              >
+                                {lang === 'es' ? 'Ver' : 'View'}
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                                <span>⏳</span>
+                                <span>{lang === 'es' ? 'Pendiente' : 'Pending'}</span>
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSyncTab('AUDIT');
+                                  setAuditRepoInput(repo.slug);
+                                  handleEvaluateGitHub(repo.slug);
+                                }}
+                                className="px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-amber-500 to-cyan-500 hover:from-amber-400 hover:to-cyan-400 text-slate-950 transition-all cursor-pointer shadow-sm flex items-center gap-1"
+                              >
+                                <span>⚡</span>
+                                <span>{lang === 'es' ? 'Auditar e Incorporar' : 'Audit & Ingest'}</span>
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {displayedRoadmapRepos.length === 0 && (
+                    <div className="py-8 text-center text-xs font-mono text-slate-500">
+                      {lang === 'es' ? 'No se encontraron repositorios con esos criterios de filtro.' : 'No repositories found matching those filters.'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Tab 0: AUDIT (On-Demand GitHub Evaluator) */}
             {syncTab === 'AUDIT' && (

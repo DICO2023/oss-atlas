@@ -252,6 +252,7 @@ export const TRANSLATIONS = {
     // Ingest Modal & GitHub On-Demand Audit
     ingestModalTitle: 'Módulo de Ingesta Continua & Auditoría On-Demand',
     ingestModalSubtitle: 'Gestión atómica de repositorios, auditoría de GitHub en vivo y generación de vectores semánticos en PostgreSQL 16.',
+    ingestTabRoadmap: '📋 Catálogo 122 & Saldo',
     ingestTabAudit: '🔍 Auditoría On-Demand GitHub',
     ingestTabPresets: 'Presets Curados B2B',
     ingestTabCustom: 'Ingesta Personalizada',
@@ -536,6 +537,7 @@ export const TRANSLATIONS = {
     // Ingest Modal & GitHub On-Demand Audit
     ingestModalTitle: 'Continuous Ingestion & On-Demand Audit Module',
     ingestModalSubtitle: 'Atomic repository management, live GitHub audit, and semantic vector generation on PostgreSQL 16.',
+    ingestTabRoadmap: '📋 122 Catalog & Backlog',
     ingestTabAudit: '🔍 On-Demand GitHub Audit',
     ingestTabPresets: 'Curated B2B Presets',
     ingestTabCustom: 'Custom Ingestion',
