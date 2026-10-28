@@ -1443,52 +1443,77 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const [isSynthesizingRag, setIsSynthesizingRag] = useState<boolean>(false);
   const [showSqlQueryModal, setShowSqlQueryModal] = useState<boolean>(false);
 
-  // Filtered tools computation (Strict match on query terms: single or comma-separated, clearing restores all tools)
-  const filteredCatalogTools = useMemo<OpenSourceTool[]>(() => {
+  // Tools matching the active search query (either from PostgreSQL RRF or smart local fallback)
+  const searchMatchedTools = useMemo<OpenSourceTool[]>(() => {
     const trimmed = catalogSearchQuery.trim();
-
-    // When no search query is present, return all catalog tools filtered by category and license
     if (!trimmed) {
-      return catalogTools.filter((tool: OpenSourceTool) => {
-        const matchesCategory = selectedCategory === 'ALL' || tool.category === selectedCategory;
-        const matchesLicense = selectedLicenseFilter === 'ALL' || tool.license === selectedLicenseFilter;
-        return matchesCategory && matchesLicense;
+      return [];
+    }
+
+    // 1. If hybrid search in PostgreSQL returned results, use them as our ranked candidate list
+    if (hybridSearchResults !== null) {
+      return hybridSearchResults.filter((tool: OpenSourceTool) => {
+        return selectedCategory === 'ALL' || tool.category === selectedCategory;
       });
     }
 
-    // Support comma-separated queries (e.g. "qdrant, zitadel") or space-separated terms
-    const rawTokens = trimmed.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean);
-    const tokens = rawTokens.length > 0 ? rawTokens : [trimmed.toLowerCase()];
+    // 2. Otherwise (local / offline fallback), perform multi-term matching with diacritic normalization
+    const normalize = (text: string) =>
+      (text || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
 
-    // Base search list: if hybrid search returned results, use them; otherwise search against catalogTools
-    const candidatePool = hybridSearchResults !== null ? hybridSearchResults : catalogTools;
+    const queryNorm = normalize(trimmed);
+    const tokens = queryNorm
+      .split(/[\s,]+/)
+      .map((t) => t.trim())
+      .filter((t) => t.length >= 2);
 
-    return candidatePool.filter((tool: OpenSourceTool) => {
-      const matchesCategory = selectedCategory === 'ALL' || tool.category === selectedCategory;
-      const matchesLicense = selectedLicenseFilter === 'ALL' || tool.license === selectedLicenseFilter;
-      if (!matchesCategory || !matchesLicense) return false;
+    const scoredTools: { tool: OpenSourceTool; score: number }[] = [];
 
-      const toolName = (tool.name || '').toLowerCase();
-      const toolSlug = (tool.slug || '').toLowerCase();
-      const toolDesc = (tool.description || '').toLowerCase();
-      const toolCat = (tool.category || '').toLowerCase();
-      const toolTriggers = (tool.triggers || []).map((t) => t.toLowerCase()).join(' ');
+    for (const tool of catalogTools) {
+      if (selectedCategory !== 'ALL' && tool.category !== selectedCategory) {
+        continue;
+      }
 
-      // Check if ANY of the comma-separated tokens match this tool strictly
-      const matchesQuery = tokens.some((token) => {
-        return (
-          toolName.includes(token) ||
-          toolSlug.includes(token) ||
-          toolDesc.includes(token) ||
-          toolCat.includes(token) ||
-          toolTriggers.includes(token)
-        );
-      });
+      if (tokens.length === 0) {
+        scoredTools.push({ tool, score: 1 });
+        continue;
+      }
 
-      // If user provided a specific search, ONLY tools matching the search terms are returned
-      return matchesQuery;
+      const catInfo = CATEGORIES_DATA.find((c) => c.id === tool.category);
+      const catText = catInfo ? `${catInfo.name} ${catInfo.description} ${catInfo.keyTechs.join(' ')}` : '';
+
+      const target = normalize(
+        `${tool.name} ${tool.slug} ${tool.description} ${tool.category} ${(tool.triggers || []).join(' ')} ${(tool.dependencies || []).join(' ')} ${tool.license} ${catText}`
+      );
+
+      let matchCount = 0;
+      for (const token of tokens) {
+        if (target.includes(token)) {
+          matchCount++;
+        }
+      }
+
+      if (matchCount > 0) {
+        scoredTools.push({ tool, score: matchCount });
+      }
+    }
+
+    scoredTools.sort((a, b) => b.score - a.score);
+    return scoredTools.map((s) => s.tool);
+  }, [catalogSearchQuery, hybridSearchResults, catalogTools, selectedCategory]);
+
+  // Final tools list applying the license filter (ALL | Apache-2.0 | MIT)
+  const filteredCatalogTools = useMemo<OpenSourceTool[]>(() => {
+    if (!catalogSearchQuery.trim()) {
+      return [];
+    }
+    return searchMatchedTools.filter((tool: OpenSourceTool) => {
+      return selectedLicenseFilter === 'ALL' || tool.license === selectedLicenseFilter;
     });
-  }, [catalogTools, hybridSearchResults, catalogSearchQuery, selectedCategory, selectedLicenseFilter]);
+  }, [catalogSearchQuery, searchMatchedTools, selectedLicenseFilter]);
 
   // Live RAG generation state
   const [liveRagResponse, setLiveRagResponse] = useState<B2BScenario | null>(null);
@@ -2298,7 +2323,15 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   </span>
                 )}
                 <span className="text-xs font-mono text-slate-400 ml-1">
-                  {lang === 'es' ? 'Mostrando' : 'Showing'} <strong className="text-white">{filteredCatalogTools.length}</strong> {lang === 'es' ? 'de' : 'of'} {catalogTools.length}
+                  {catalogSearchQuery.trim() ? (
+                    lang === 'es' ? (
+                      <>Mostrando <strong className="text-white">{filteredCatalogTools.length}</strong> {filteredCatalogTools.length === 1 ? 'herramienta' : 'herramientas'}</>
+                    ) : (
+                      <>Showing <strong className="text-white">{filteredCatalogTools.length}</strong> {filteredCatalogTools.length === 1 ? 'tool' : 'tools'}</>
+                    )
+                  ) : (
+                    lang === 'es' ? 'Listo para búsqueda interactiva' : 'Ready for interactive search'
+                  )}
                 </span>
               </div>
             </div>
@@ -2307,20 +2340,37 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-mono text-slate-400 mr-1">{t.catalogFilterLicense}</span>
-                {(['ALL', 'Apache-2.0', 'MIT'] as const).map((lic) => (
-                  <button
-                    key={lic}
-                    type="button"
-                    onClick={() => setSelectedLicenseFilter(lic)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold border transition-all ${
-                      selectedLicenseFilter === lic
-                        ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
-                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    {lic === 'ALL' ? t.catalogAllLicenses : lic}
-                  </button>
-                ))}
+                {(['ALL', 'Apache-2.0', 'MIT'] as const).map((lic) => {
+                  const count =
+                    lic === 'ALL'
+                      ? searchMatchedTools.length
+                      : searchMatchedTools.filter((t) => t.license === lic).length;
+                  return (
+                    <button
+                      key={lic}
+                      type="button"
+                      onClick={() => setSelectedLicenseFilter(lic)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold border transition-all cursor-pointer ${
+                        selectedLicenseFilter === lic
+                          ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 ring-1 ring-emerald-500/30'
+                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <span>{lic === 'ALL' ? t.catalogAllLicenses : lic}</span>
+                      {catalogSearchQuery.trim() ? (
+                        <span
+                          className={`ml-1.5 px-1.5 py-0.2 rounded-md text-[10px] font-bold ${
+                            selectedLicenseFilter === lic
+                              ? 'bg-emerald-500/30 text-emerald-200'
+                              : 'bg-slate-800 text-slate-400'
+                          }`}
+                        >
+                          {count}
+                        </span>
+                      ) : null}
+                    </button>
+                  );
+                })}
               </div>
 
               <button
@@ -2364,10 +2414,12 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                   <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
                   {lang === 'es' ? 'Calculando RRF en PostgreSQL...' : 'Computing RRF in PostgreSQL...'}
                 </div>
-              ) : hybridSearchResults !== null ? (
+              ) : catalogSearchQuery.trim() ? (
                 <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-300 shrink-0">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  {lang === 'es' ? `Ranking RRF activo (${hybridSearchResults.length} coincidencias)` : `Active RRF Ranking (${hybridSearchResults.length} matches)`}
+                  {lang === 'es'
+                    ? `${filteredCatalogTools.length} ${filteredCatalogTools.length === 1 ? 'coincidencia' : 'coincidencias'}${hybridSearchResults !== null ? ' (RRF)' : ''}`
+                    : `${filteredCatalogTools.length} ${filteredCatalogTools.length === 1 ? 'match' : 'matches'}${hybridSearchResults !== null ? ' (RRF)' : ''}`}
                 </div>
               ) : null}
             </div>
@@ -2393,10 +2445,18 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 <button
                   key={term}
                   type="button"
-                  onClick={() => setCatalogSearchQuery(term)}
+                  onClick={() => {
+                    if (catalogSearchQuery === term) {
+                      setCatalogSearchQuery('');
+                      setHybridSearchResults(null);
+                    } else {
+                      setCatalogSearchQuery(term);
+                      setSelectedCategory('ALL');
+                    }
+                  }}
                   className={`px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
                     catalogSearchQuery === term
-                      ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300'
+                      ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300 ring-1 ring-cyan-500/30'
                       : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-slate-700'
                   }`}
                 >
@@ -2438,34 +2498,75 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
           {/* Featured Tools Grid (Live Catalog from PostgreSQL 16) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {filteredCatalogTools.length === 0 ? (
-              <div className="col-span-full py-12 px-6 rounded-2xl bg-slate-900/60 border border-slate-800 text-center space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-mono text-xl">
+            {!catalogSearchQuery.trim() ? (
+              <div className="col-span-full py-16 px-6 rounded-2xl bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-slate-800 text-center space-y-4 shadow-xl">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                  <IconSearchSparkle className="w-7 h-7" />
+                </div>
+                <div className="max-w-xl mx-auto space-y-2">
+                  <h3 className="text-lg font-bold text-white">
+                    {lang === 'es' ? 'Explora el Catálogo Dinámico B2B' : 'Explore the B2B Dynamic Catalog'}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    {lang === 'es'
+                      ? 'Escribe un término en la barra de búsqueda o haz clic en cualquiera de las búsquedas rápidas superiores para desplegar las herramientas evaluadas y filtrarlas por licencia (Apache-2.0 o MIT).'
+                      : 'Type a query in the search bar or click any quick search chip above to reveal audited tools and filter them by license (Apache-2.0 or MIT).'}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                  <span className="text-xs font-mono text-slate-500">
+                    {lang === 'es' ? 'Sugerencias recomendadas:' : 'Recommended suggestions:'}
+                  </span>
+                  {(lang === 'es'
+                    ? ['autenticacion SSO', 'PostgreSQL pgvector', 'motor busqueda rust', 'pagos pasarela multi-adquirente']
+                    : ['SSO authentication', 'PostgreSQL pgvector', 'rust search engine', 'multi-acquirer payments']
+                  ).map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      onClick={() => {
+                        setCatalogSearchQuery(chip);
+                        setSelectedCategory('ALL');
+                      }}
+                      className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-950 border border-slate-800 text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900 transition-all cursor-pointer"
+                    >
+                      ⚡ {chip}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : filteredCatalogTools.length === 0 ? (
+              <div className="col-span-full py-12 px-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 text-center space-y-3">
+                <div className="w-10 h-10 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-mono text-lg">
                   ∅
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-white">
-                    {lang === 'es' ? 'Sin herramientas para este filtro' : 'No tools found for this filter'}
+                    {lang === 'es' ? 'Sin herramientas para este criterio de búsqueda' : 'No tools match this search criteria'}
                   </h3>
                   <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
-                    {selectedCategory !== 'ALL' && (
-                      <>{lang === 'es' ? 'En la categoría' : 'In category'} <strong className="text-cyan-300 font-mono">{selectedCategory}</strong>, </>
+                    {selectedLicenseFilter !== 'ALL' ? (
+                      lang === 'es'
+                        ? `No hay herramientas con licencia ${selectedLicenseFilter} para "${catalogSearchQuery}".`
+                        : `No tools found with license ${selectedLicenseFilter} for "${catalogSearchQuery}".`
+                    ) : (
+                      lang === 'es'
+                        ? `No se encontraron herramientas para "${catalogSearchQuery}". Intenta con otro término o una búsqueda rápida.`
+                        : `No tools found for "${catalogSearchQuery}". Try another keyword or a quick search.`
                     )}
-                    {lang === 'es'
-                      ? `no existen herramientas registradas con la licencia ${selectedLicenseFilter}.`
-                      : `no tools are registered with license ${selectedLicenseFilter}.`}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedCategory('ALL');
-                    setSelectedLicenseFilter('ALL');
-                  }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all cursor-pointer"
-                >
-                  {t.catalogResetFilters} ({lang === 'es' ? 'Ver todas las herramientas' : 'View all tools'})
-                </button>
+                {selectedLicenseFilter !== 'ALL' && (
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedLicenseFilter('ALL')}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-cyan-300 hover:text-white bg-cyan-950/40 border border-cyan-800/50 hover:bg-cyan-900/40 transition-all cursor-pointer"
+                    >
+                      <span>👁️ {lang === 'es' ? 'Ver resultados con todas las licencias' : 'View results across all licenses'}</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               filteredCatalogTools.map((tool: OpenSourceTool) => {
