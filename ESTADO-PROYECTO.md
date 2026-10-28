@@ -1,7 +1,7 @@
 # 🚀 Estado del Proyecto: OSS Atlas (Acelerador de Integraciones Open Source)
 
-**Fecha de última sesión:** 23 de Octubre de 2026  
-**Objetivo:** Desarrollar, auditar y preparar para monetización/despliegue la plataforma B2B de inteligencia arquitectónica Open Source bajo el modelo Open-Core sin dependencias de nubes propietarias.  
+**Fecha de última sesión:** 27 de Octubre de 2026  
+**Objetivo:** Desarrollar, auditar y operar la plataforma B2B de inteligencia arquitectónica 100% Open Source bajo Licencia MIT, con dimensionamiento de hardware físico on-premise (Capa 0) y monetización ética mediante el programa Amazon Associates (`iotdico-20`).  
 **Titularidad & Autoría Oficial (Formato Híbrido):** `EdisonPEÑA (Iotdico - https://ossatlas.iotdico.com)`  
 **Subdominio Corporativo Asignado:** `https://ossatlas.iotdico.com` (Hostinger Business Hosting activo hasta el 23 de enero de 2029).
 
@@ -16,6 +16,7 @@
 | **Build Producción** | Next.js 15 compilado (`npm run build`) | **Verificado 100% exitoso** (0 errores de tipos / lint) |
 | **Contenedor Producción** | Imagen Docker `acelerador-frontend:latest` (347 MB en Alpine Linux) | Compilada y lista |
 | **Despliegue Global en Vivo** | Vercel Edge Network + DNS Hostinger CNAME (`ossatlas.iotdico.com`) | **100% operativo con SSL activo de por vida** |
+| **Programa de Afiliados** | Amazon Associates (`iotdico-20`) | **Activo y verificado** en hardware on-premise con leyenda legal |
 
 ### Comandos para ejecutar el entorno:
 ```bash
@@ -80,11 +81,10 @@ npm run dev
 
 ## 🎯 3. Decisiones Estratégicas y de Negocio
 
-1. **Rumbo del Proyecto: Autónomo / Open-Core B2B:**
-   - Retención absoluta de titularidad y propiedad intelectual por parte de EdisonPEÑA (Iotdico).
-   - Modelo comercial: **Open-Core Freemium**:
-     - *Capa Libre / Open Source:* Catálogo con 25 herramientas curadas, búsqueda híbrida local y despliegue Docker.
-     - *Capa Monetizable SaaS ($19 - $49 USD/mes):* Guías paso a paso para Windows y Mac (.md / .pdf), consultas ilimitadas al Arquitecto RAG, manifiestos unificados y soporte técnico.
+1. **Rumbo del Proyecto: 100% Open Source Comunitario bajo Licencia MIT:**
+   - Retención absoluta de titularidad y autoría intelectual por parte de EdisonPEÑA (Iotdico).
+   - **Eliminación total de muros de pago (Paywalls):** Consultas ilimitadas en el Arquitecto RAG y descargas libres de guías de integración (.md y .pdf) para democratizar la adopción tecnológica B2B.
+   - **Monetización Ética de Hardware On-Premise (Amazon Associates):** Recomendación de la Capa 0 física (Mini PCs, Servidores Torre, Servidores Rack y AI Workstations) con el ID oficial `iotdico-20` para cubrir infraestructura y generar ingresos de alto ticket sin cobrar al desarrollador ni bloquear software libre.
 2. **Nombre Oficial de Marca y Producto:**
    - **OSS Atlas** *(The Open-Source Architecture & Intelligence Atlas)*.
 3. **Infraestructura Activa a Costo Cero:**
@@ -304,18 +304,80 @@ Módulo técnico de generación y descarga de guías de integración para cada u
 
 ---
 
+## 🚀 5. Hitos de Transición a 100% Open Source Comunitario (26 Octubre 2026)
+
+### 5.1. Fase 1: Limpieza de Pasarelas de Pago & Liberación 100% Open Source
+- **Eliminación Total de Barreras Comerciales y Paywalls:**
+  - Se retiró la sección de precios de pago (`PricingSection`), sustituyéndola por la sección **Comunidad & Manifiesto Open Source** (`#community-manifesto-section`), destacando la libertad tecnológica bajo licencia MIT y los 3 pilares comunitarios (Catálogo & Búsqueda Híbrida, Arquitecto RAG sin límites y Guías libres).
+  - Se eliminó completamente de la interfaz el modal de suscripción y facturación B2B (`CheckoutModal` de PayPal/Wenia).
+  - Se sustituyó el botón de suscripción Pro del Header por un botón comunitario directo de **Star en GitHub** hacia el repositorio oficial (`https://github.com/DICO2023/oss-atlas`).
+- **Liberación de Consultas y Descargas Sin Restricciones:**
+  - **Asistente RAG:** Se eliminó la restricción de 3 consultas diarias del plan gratuito. Ahora cualquier arquitecto o desarrollador puede consultar de forma ilimitada sin límites ni bloqueos.
+  - **Guías de Integración (.md y .pdf):** Se eliminó el requisito de suscripción Pro para descargar. Ambos formatos se generan y descargan libre e instantáneamente para entornos Windows y macOS.
+- **Actualización Integral del Diccionario Bilingüe (`translations.ts`):**
+  - Textos de badges actualizados de `PRO B2B` a `OPEN SOURCE` y `100% Libre & Abierto`.
+  - Badges de cuota actualizados a `⚡ Consultas Ilimitadas (100% Open Source)` / `⚡ Unlimited Queries (100% Open Source)`.
+- **Verificación y Compilación Exitosa:**
+  - `npm run typecheck` (`tsc --noEmit`): **0 errores de tipos**.
+  - `npm run lint`: **0 advertencias y 0 errores** de ESLint.
+  - `npm run build`: Compilación de producción en Next.js 15.5.28 completada con éxito en 34.6s.
+
+### 5.2. Fase 2: Rediseño de la Navbar Flotante Humana (Inspiración navbar.gallery)
+- **Concepto "Floating Island / Pill Nav":**
+  - Barra de navegación flotante centrada (`fixed top-3 sm:top-4 inset-x-0 mx-auto w-[95%] max-w-6xl z-50 rounded-full`).
+  - Fondo de vidrio satinado con efecto Glassmorphism (`backdrop-blur-md bg-slate-900/80 border border-slate-700/60 shadow-2xl shadow-cyan-950/20`).
+- **Píldoras de Navegación Segmentada e Interacción Dinámica:**
+  - Identidad visual a la izquierda: Logo tecnológico animado con pulso sutil cian, nombre `OSS Atlas` y badge `v1.0 OSS`.
+  - Pestañas centrales tipo cápsula: `Catálogo & Categorías`, `Alcance de Servicios`, `Arquitecto RAG B2B`, y `Comunidad & Manifiesto`, con estado activo iluminado en cian y fondo `bg-cyan-500/20 text-cyan-300 font-semibold shadow-sm`.
+  - Selector de idioma en minipíldora redondeada (`ES` / `EN`) con transición suave.
+  - Botón de comunidad **GitHub Star** con estrella dorada vectorial (`★ Star`) enlazando directamente al repositorio.
+  - Indicador de estado del catálogo en vivo con pulso de actividad verde esmeralda (`ETag Live`).
+- **Menú Móvil Flotante:**
+  - Botón hamburguesa táctil redondeado que despliega un panel de vidrio flotante independiente (`rounded-2xl backdrop-blur-xl bg-slate-900/95 border border-slate-700/80 shadow-2xl`) con enlaces directos, selector de idioma y botón GitHub Star.
+- **Validación Visual y Compilación:**
+  - Verificado en navegador local (`http://localhost:3000`) y compilación `npm run build` completada con éxito (Exit Code 0).
+  - Desplegado y versionado en GitHub `origin main` (commit `77201f0`).
+
+### 5.3. Fase 3: Hoja de Hardware Recomendado (Capa 0 Física), Diagrama Radar & Guías Tri-Plataforma (Linux, Windows, macOS)
+- **Modelado de Hardware Físico On-Premise ([hardwareCatalog.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/hardwareCatalog.ts)):**
+  - **Nivel 1 (Mini PC / Homelab Edge):** Ryzen 9 / i9, 64GB DDR5, 2TB NVMe PCIe 4.0, Dual 2.5 GbE (35W-65W TDP). Capex ~$780 USD, ROI en 3.2 meses.
+  - **Nivel 2 (Servidor Torre PYME):** Intel Xeon ECC / AMD EPYC 4004, 64-128GB ECC (anti-bitflip), RAID 1/10 (2x 2TB NVMe + 2x 4TB SATA), IPMI/iDRAC. Capex ~$1,850 USD, ROI en 3.5 meses.
+  - **Nivel 3 (Servidor Rackmount 1U/2U Enterprise):** Dual EPYC 9004 / Xeon Silver, 128-256GB ECC RDIMM, 4x 1.92TB NVMe U.3 Hot-Swap, Dual 10 GbE SFP+ Fibra. Capex ~$4,600 USD, ROI en 3.4 meses.
+  - **Nivel 4 (AI Inference & Agentic Workstation):** Ryzen 9 / i9, 128GB DDR5, 4TB NVMe, GPU NVIDIA RTX 4090 24GB VRAM (Tensor Cores / local LLMs). Capex ~$3,650 USD, ROI en 3.1 meses.
+- **Diagrama Radar de Rendimiento Físico Recharts ([HardwareRadarChart.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/components/HardwareRadarChart.tsx)):**
+  - Gráfico pentagonal en 5 dimensiones cardinales: Cómputo CPU, Memoria RAM & ECC, NVMe IOPS, Red & Ancho de Banda, y Eficiencia ROI/Costo.
+  - Modos conmutables: **🎯 Modo Enfocado** (analizar una máquina) vs **📊 Modo Comparar 4** (superposición multi-color simultánea).
+- **Integración Nativa en el Asistente B2B ([page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx)):**
+  - Pestañas superiores segmentadas: `🖥️ Capas 1-4: Arquitectura de Software` y `🖲️ Capa 0: Hardware Recomendado & Diagrama Radar`.
+  - Activado y verificado el programa de **Amazon Associates** con el ID único oficial `iotdico-20` (`NEXT_PUBLIC_AMAZON_AFFILIATE_TAG=iotdico-20`), inyectando automáticamente el parámetro `&tag=iotdico-20` en todos los enlaces y activando el descargo de transparencia legal en UI y guías.
+  - Ecosistema de marcas líderes integrado y verificado: Minisforum, Beelink, Geekom, GMKtec, Apple Silicon Mac Studio, NVIDIA, Microsoft, Dell, Lenovo y Supermicro con enlaces directos categorizados.
+  - Optimización de layout del Asistente B2B: visualización Blueprint en ancho completo y fila superior compacta de telemetría de arquitectura (Salud del Stack, Capex Físico y Ahorro SaaS Propietario).
+- **Soporte Tri-Plataforma Nativo en Guías (.md & .pdf) e Interfaz:**
+  - Incorporado **🐧 Linux nativo (Ubuntu / Debian / RHEL / Docker Engine & systemd)** con comandos oficiales de instalación de Docker, optimización del kernel (sysctl: `vm.max_map_count`, `net.core.somaxconn`), permisos persistentes `/opt/oss-atlas-data`, reglas de cortafuegos UFW/Firewalld y políticas SELinux.
+  - Ficha de especificaciones de Hardware On-Premise incorporada en las descargas de guías `.md` y `.pdf` para presentación directa a equipos de compras y CTOs.
+- **Validación y Compilación de Producción:**
+  - `npm run typecheck` (`tsc --noEmit`): **0 errores de tipos**.
+  - `npm run lint`: **0 advertencias, 0 errores** de ESLint.
+  - `npm run build`: Compilación Next.js 15 exitosa (Exit Code 0).
+  - Versionado y desplegado en GitHub `origin main` (commits `5e2ecd0`, `74701c9`, `434d8ee`, `51a0324`, `20521e5` y `30c18ca`).
+
+---
+
 ## 📂 Archivos Clave del Desarrollo
 
 - [route.ts (GitHub Evaluate API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/github/evaluate/route.ts) — Endpoint backend para evaluación técnica On-Demand de repositorios de GitHub con cálculo de Health Score, Docker y ahorro B2B.
 - [test_github_evaluator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/scripts/test_github_evaluator.ts) — Suite de validación y pruebas de estrés para el módulo de auditoría On-Demand de GitHub.
 - [MANUAL_MAESTRO_USUARIO.md](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/MANUAL_MAESTRO_USUARIO.md) — Documento maestro y guía completa de usuario para arquitectos y desarrolladores.
 - [ingest_12_tools.js](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/ingest_12_tools.js) — Script de ingesta masiva y vectorización `halfvec(1536)` para las 12 herramientas de IA en Neon PostgreSQL.
-- [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos para Windows y Mac.
-- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal unificada (Hero, Catálogo de 25 herramientas, Sección Explicativa de Servicios, Modal de Ingesta & Auditoría GitHub, Asistente RAG B2B, Checkout con PayPal/Wenia, Selector de Idioma y Modal de Guías).
-- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) con 25 herramientas, escenarios RAG, planes de precios, alcance de servicios y auditoría GitHub.
-- [route.ts (Checkout API)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/checkout/route.ts) — Backend de monetización con soporte para PayPal, Wenia USDW y facturas proforma B2B.
+- [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos tri-plataforma (Windows, macOS y Linux) y ficha de hardware físico.
+- [hardwareCatalog.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/hardwareCatalog.ts) — Catálogo de hardware físico Capa 0 (Mini PC, Torre PYME, Rack Enterprise y AI Workstation), dimensionamiento dinámico y enlaces de afiliados Amazon (`iotdico-20`).
+- [HardwareRadarChart.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/components/HardwareRadarChart.tsx) — Componente de gráfico vectorial Radar / Spider en Recharts con modos Enfocado y Comparativo de 5 dimensiones.
+- [HardwareRecommendationSheet.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/components/HardwareRecommendationSheet.tsx) — Interfaz de recomendación de hardware en el Asistente B2B, calculadora de ROI, especificaciones de ingeniería y descargo legal de Amazon Associates.
+- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal 100% Open Source (Floating Island Navbar, Catálogo de 25 herramientas, Asistente RAG Ilimitado, Pestaña Capa 0 de Hardware, Manifiesto Comunitario y Modal Tri-Plataforma).
+- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) adaptado 100% a la filosofía comunitaria Open Source y hardware on-premise.
 - [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Ingesta continua con Health Score ponderado y vectorización `halfvec(1536)`.
 - [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores semánticos.
 - [rag.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/rag.ts) — Asistente de arquitectura con evaluación RAGAS de cero alucinaciones.
 - [icon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/icon.svg) & [favicon.svg](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/public/favicon.svg) — Favicon corporativo y assets visuales de pestaña.
 - [Dockerfile](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/Dockerfile) — Contenedor de producción Alpine Linux optimizado (347 MB).
+
