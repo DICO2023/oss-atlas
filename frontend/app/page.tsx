@@ -1451,6 +1451,11 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   const searchMatchedTools = useMemo<OpenSourceTool[]>(() => {
     const trimmed = catalogSearchQuery.trim();
     if (!trimmed) {
+      return [];
+    }
+
+    const normTrimmed = trimmed.toLowerCase();
+    if (normTrimmed === 'all' || normTrimmed === 'todas' || normTrimmed === '*') {
       return catalogTools.filter((tool: OpenSourceTool) => {
         return selectedCategory === 'ALL' || tool.category === selectedCategory;
       });
@@ -1512,11 +1517,15 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
   }, [catalogSearchQuery, hybridSearchResults, catalogTools, selectedCategory]);
 
   // Final tools list applying the license filter (ALL | Apache-2.0 | MIT)
+  // CRITICAL: When search query is empty, return [] so NO tool cards appear, keeping the scroll friendly and compact!
   const filteredCatalogTools = useMemo<OpenSourceTool[]>(() => {
+    if (!catalogSearchQuery.trim()) {
+      return [];
+    }
     return searchMatchedTools.filter((tool: OpenSourceTool) => {
       return selectedLicenseFilter === 'ALL' || tool.license === selectedLicenseFilter;
     });
-  }, [searchMatchedTools, selectedLicenseFilter]);
+  }, [catalogSearchQuery, searchMatchedTools, selectedLicenseFilter]);
 
   // Filtered repositories for the 122 Curated Roadmap Tab
   const displayedRoadmapRepos = useMemo(() => {
@@ -2251,11 +2260,11 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 type="button"
                 onClick={() => {
                   setSelectedCategory('ALL');
-                  setCatalogSearchQuery('');
+                  setCatalogSearchQuery('ALL');
                   document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
                 }}
                 className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold border transition-all cursor-pointer ${
-                  selectedCategory === 'ALL'
+                  selectedCategory === 'ALL' && catalogSearchQuery === 'ALL'
                     ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                 }`}
@@ -2288,20 +2297,28 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
                 <div
                   key={cat.id}
                   onClick={() => {
-                    const newCat = isSelected ? 'ALL' : cat.id;
-                    setSelectedCategory(newCat);
-                    setCatalogSearchQuery('');
-                    document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+                    if (isSelected && catalogSearchQuery === cat.id) {
+                      setSelectedCategory('ALL');
+                      setCatalogSearchQuery('');
+                    } else {
+                      setSelectedCategory(cat.id);
+                      setCatalogSearchQuery(cat.id);
+                      document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      const newCat = isSelected ? 'ALL' : cat.id;
-                      setSelectedCategory(newCat);
-                      setCatalogSearchQuery('');
-                      document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+                      if (isSelected && catalogSearchQuery === cat.id) {
+                        setSelectedCategory('ALL');
+                        setCatalogSearchQuery('');
+                      } else {
+                        setSelectedCategory(cat.id);
+                        setCatalogSearchQuery(cat.id);
+                        document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+                      }
                     }
                   }}
                   className={`group relative rounded-2xl p-6 border transition-all cursor-pointer flex flex-col justify-between ${
@@ -2650,7 +2667,44 @@ export default function OpenSourceAcceleratorPage(): React.JSX.Element {
 
           {/* Featured Tools Grid (Live Catalog from PostgreSQL 16) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {filteredCatalogTools.length === 0 ? (
+            {!catalogSearchQuery.trim() ? (
+              <div className="col-span-full py-16 px-6 rounded-2xl bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-slate-800 text-center space-y-4 shadow-xl">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                  <IconSearchSparkle className="w-7 h-7" />
+                </div>
+                <div className="max-w-xl mx-auto space-y-2">
+                  <h3 className="text-lg font-bold text-white">
+                    {lang === 'es' ? 'Explora el Catálogo Dinámico B2B' : 'Explore the B2B Dynamic Catalog'}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    {lang === 'es'
+                      ? 'Escribe un término en la barra de búsqueda, selecciona una categoría arriba o haz clic en las sugerencias para desplegar las herramientas evaluadas y hacer tu análisis arquitectónico.'
+                      : 'Type a query in the search bar, select a category above, or click any suggestion to reveal audited tools and perform your architectural analysis.'}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                  <span className="text-xs font-mono text-slate-500">
+                    {lang === 'es' ? 'Sugerencias recomendadas:' : 'Recommended suggestions:'}
+                  </span>
+                  {(lang === 'es'
+                    ? ['autenticacion SSO', 'PostgreSQL pgvector', 'motor busqueda rust', 'pagos pasarela multi-adquirente', 'orquestacion RAG agentes']
+                    : ['SSO authentication', 'PostgreSQL pgvector', 'rust search engine', 'multi-acquirer payments', 'agent RAG orchestration']
+                  ).map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      onClick={() => {
+                        setCatalogSearchQuery(chip);
+                        setSelectedCategory('ALL');
+                      }}
+                      className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-950 border border-slate-800 text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900 transition-all cursor-pointer"
+                    >
+                      ⚡ {chip}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : filteredCatalogTools.length === 0 ? (
               <div className="col-span-full py-12 px-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 text-center space-y-3">
                 <div className="w-10 h-10 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-mono text-lg">
                   ∅
