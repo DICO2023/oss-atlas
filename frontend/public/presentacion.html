@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-import os
-
-html_parts = []
-
-html_parts.append("""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -530,17 +525,8 @@ html_parts.append("""<!DOCTYPE html>
 
   <!-- Slides Wrapper -->
   <main class="slides-wrapper">
-""")
 
-# Now let's append all 30 slides!
-with open('generate_full_presentation.py', 'w', encoding='utf-8') as f:
-    f.write("".join(html_parts))
-
-print("Header written to generate_full_presentation.py")
-    <!-- ==========================================
-         DIAPOSITIVA 1: PORTADA & VISIÓN EJECUTIVA
-         ========================================== -->
-    <section class="slide active" id="slide-1">
+<section class="slide active" id="slide-1">
       <div>
         <div class="slide-badge badge-cyan">💼 Presentación Ejecutiva para Fundadores & CTOs B2B</div>
         <h1 class="slide-title">Soberanía Tecnológica B2B:<br><span>Software & Hardware On-Premise</span></h1>
@@ -571,7 +557,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>EdisonPEÑA</strong> (Iotdico) • Plataforma Global: <span class="footer-highlight">https://ossatlas.iotdico.com</span></div>
         <div>Usa las teclas <span class="key-badge">←</span> <span class="key-badge">→</span> o <span class="key-badge">Espacio</span> para navegar</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 2: EL PROBLEMA DE LA NUBE
          ========================================== -->
     <section class="slide" id="slide-2">
@@ -619,7 +607,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Insight B2B:</strong> El activo más valioso de una empresa es su <span class="footer-highlight">conocimiento particular acumulado</span>.</div>
         <div>2 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 3: LA SOLUCIÓN OSS ATLAS
          ========================================== -->
     <section class="slide" id="slide-3">
@@ -686,7 +676,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Arquitectura Multicapa:</strong> Todos los componentes se comunican de forma desacoplada y segura.</div>
         <div>3 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 4: AUDITORÍA & HEALTH SCORE
          ========================================== -->
     <section class="slide" id="slide-4">
@@ -730,7 +722,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Garantía de Confianza:</strong> Solo recomendamos software que supere auditorías de seguridad corporativa.</div>
         <div>4 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 5: BÚSQUEDA RRF & ARQUITECTO RAG
          ========================================== -->
     <section class="slide" id="slide-5">
@@ -777,7 +771,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Zero-Hallucination Guarantee:</strong> Respuestas técnicas fundamentadas en código y documentación verificada.</div>
         <div>5 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 6: CAPA 0 HARDWARE FÍSICO
          ========================================== -->
     <section class="slide" id="slide-6">
@@ -839,7 +835,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Infraestructura Propia:</strong> El equipo es un activo de la empresa (Capex), no una renta eterna (Opex).</div>
         <div>6 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 7: DIAGRAMA RADAR 5D & ROI
          ========================================== -->
     <section class="slide" id="slide-7">
@@ -907,7 +905,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Equilibrio Financiero:</strong> Después del mes 4, la infraestructura opera a costo marginal prácticamente cero.</div>
         <div>7 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 8: PRIVACIDAD RADICAL & IA LOCAL
          ========================================== -->
     <section class="slide" id="slide-8">
@@ -958,7 +958,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Ventaja Competitiva B2B:</strong> Vender a clientes corporativos garantizando que sus datos <span class="footer-highlight">jamás tocan la nube pública</span>.</div>
         <div>8 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 9: DESPLIEGUE TRI-PLATAFORMA
          ========================================== -->
     <section class="slide" id="slide-9">
@@ -1016,7 +1018,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Time-to-Market Acelerado:</strong> Guías estandarizadas que eliminan semanas de investigación devops.</div>
         <div>9 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 10: CONCLUSIÓN & HOJA DE RUTA
          ========================================== -->
     <section class="slide" id="slide-10">
@@ -1071,7 +1075,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>OSS Atlas:</strong> Propiedad y Autoría de <strong>EdisonPEÑA (Iotdico)</strong> • Licencia MIT.</div>
         <div>10 de 30 • Continúa a los Módulos de Operación Práctica →</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 11: ARQUITECTURA DE LA PLATAFORMA (LOS 7 COMPONENTES)
          ========================================== -->
     <section class="slide" id="slide-11">
@@ -1127,7 +1133,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Ecosistema Integrado:</strong> Del requerimiento en texto a la orden de compra de hardware en minutos.</div>
         <div>11 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 12: BLOQUE 1 - GENERADOR DE MAPA RAG B2B
          ========================================== -->
     <section class="slide" id="slide-12">
@@ -1207,7 +1215,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Topología Transparente:</strong> Cada componente es reemplazable independientemente sin romper el sistema.</div>
         <div>12 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 13: BLOQUE 1 - TRIGGERS & CONECTIVIDAD
          ========================================== -->
     <section class="slide" id="slide-13">
@@ -1262,7 +1272,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Cero Acoplamiento:</strong> Microservicios comunicados por APIs REST y Webhooks JSON estándar.</div>
         <div>13 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 14: BLOQUE 2 - CONSULTAS PRECONFIGURADAS
          ========================================== -->
     <section class="slide" id="slide-14">
@@ -1326,7 +1338,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Ahorro en Consultoría:</strong> Reduce de 3 semanas a 10 segundos la selección inicial del stack tecnológico.</div>
         <div>14 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 15: BLOQUE 2 - MÉTRICAS CARDINALES RAGAS
          ========================================== -->
     <section class="slide" id="slide-15">
@@ -1377,7 +1391,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Rigor Matemático:</strong> Ningún software es sugerido si su fidelidad al contexto recuperado cae bajo 0.95.</div>
         <div>15 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 16: BLOQUE 3 - SINTETIZAR ARQUITECTURA RAG LIBRE
          ========================================== -->
     <section class="slide" id="slide-16">
@@ -1429,7 +1445,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Sin Costos Ocultos:</strong> Diseñado para empoderar a fundadores y arquitectos sin cobrar membresías.</div>
         <div>16 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 17: BLOQUE 3 - CÓMO FUNCIONA LA SÍNTESIS RAG
          ========================================== -->
     <section class="slide" id="slide-17">
@@ -1488,7 +1506,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Alta Disponibilidad:</strong> Endpoint serverless desacoplado con tiempos de respuesta consistentes sub-2s.</div>
         <div>17 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 18: CASOS B2B PARA EVALUAR #1 - FINTECH
          ========================================== -->
     <section class="slide" id="slide-18">
@@ -1540,7 +1560,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Listo para Probar:</strong> Puedes ejecutar este texto exacto en <span class="footer-highlight">https://ossatlas.iotdico.com</span></div>
         <div>18 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 19: CASOS B2B PARA EVALUAR #2 - SALUD DIGITAL HIPAA
          ========================================== -->
     <section class="slide" id="slide-19">
@@ -1592,7 +1614,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Privacidad No Negociable:</strong> Los historiales de pacientes jamás alimentan modelos de terceros.</div>
         <div>19 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 20: CASOS B2B PARA EVALUAR #3 - SUPPLY CHAIN
          ========================================== -->
     <section class="slide" id="slide-20">
@@ -1644,7 +1668,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Rendimiento Inmediato:</strong> Recuperación de catálogos masivos sin facturación por petición.</div>
         <div>20 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 21: BOTÓN "AUDITAR UN REPOSITORIO DE GITHUB AHORA"
          ========================================== -->
     <section class="slide" id="slide-21">
@@ -1697,7 +1723,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Control de Calidad Continuo:</strong> Evita integrar proyectos huérfanos o con riesgos legales en tu negocio.</div>
         <div>21 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 22: AUDITORÍA EN ACCIÓN - EL ALGORITMO 15/20/65
          ========================================== -->
     <section class="slide" id="slide-22">
@@ -1764,7 +1792,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Criterio Enterprise:</strong> Si un proyecto tiene documentación deficiente, no califica para el catálogo.</div>
         <div>22 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 23: AUDITORÍA A INGESTA EN 1 CLIC
          ========================================== -->
     <section class="slide" id="slide-23">
@@ -1810,7 +1840,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Expansión Dinámica:</strong> El catálogo crece continuamente sin depender de actualizaciones de código.</div>
         <div>23 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 24: BOTÓN "VER SALDO DE LOS 122 REPOS (84 PENDIENTES)"
          ========================================== -->
     <section class="slide" id="slide-24">
@@ -1863,7 +1895,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Roadmap Vivo:</strong> La comunidad y los clientes deciden qué tecnologías del backlog se priorizan.</div>
         <div>24 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 25: DESGLOSE TAXONÓMICO DE LOS 122 REPOS
          ========================================== -->
     <section class="slide" id="slide-25">
@@ -1925,7 +1959,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Taxonomía Robusta:</strong> 100% categorizado bajo licencias abiertas permisivas OSI.</div>
         <div>25 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 26: BOTÓN "CAPAS 1-4: ARQUITECTURA DE SOFTWARE"
          ========================================== -->
     <section class="slide" id="slide-26">
@@ -1972,7 +2008,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>De la Lógica a los Contenedores:</strong> Cero ambigüedad para los ingenieros DevOps de tu equipo.</div>
         <div>26 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 27: CAPAS 1-4 EN ACCIÓN - DOCKER RUN & SCRIPTS
          ========================================== -->
     <section class="slide" id="slide-27">
@@ -2030,7 +2068,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Time-to-Deploy Inmediato:</strong> Elimina horas de redacción de scripts y resolución de dependencias.</div>
         <div>27 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 28: BOTÓN "CAPA 0: HARDWARE RECOMENDADO & RADAR"
          ========================================== -->
     <section class="slide" id="slide-28">
@@ -2072,7 +2112,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>La Máquina Ideal:</strong> Cada arquitectura calculada selecciona automáticamente el Tier óptimo.</div>
         <div>28 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 29: CAPA 0 - TIERS & DIAGRAMA RADAR 5D
          ========================================== -->
     <section class="slide" id="slide-29">
@@ -2126,7 +2168,9 @@ print("Header written to generate_full_presentation.py")
         <div><strong>Equilibrio Óptimo:</strong> El radar visualiza exactamente si tu máquina está balanceada para la carga.</div>
         <div>29 de 30</div>
       </div>
-    </section>\n\n    <!-- ==========================================
+    </section>
+
+    <!-- ==========================================
          DIAPOSITIVA 30: JUSTIFICACIÓN FINANCIERA & CIERRE
          ========================================== -->
     <section class="slide" id="slide-30">
