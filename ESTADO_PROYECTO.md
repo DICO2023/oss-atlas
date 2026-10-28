@@ -1,7 +1,7 @@
 # 🚀 Estado del Proyecto: OSS Atlas (Acelerador de Integraciones Open Source)
 
-**Fecha de última sesión:** 23 de Octubre de 2026  
-**Objetivo:** Desarrollar, auditar y preparar para monetización/despliegue la plataforma B2B de inteligencia arquitectónica Open Source bajo el modelo Open-Core sin dependencias de nubes propietarias.  
+**Fecha de última sesión:** 27 de Octubre de 2026  
+**Objetivo:** Desarrollar, auditar y operar la plataforma B2B de inteligencia arquitectónica 100% Open Source bajo Licencia MIT, con dimensionamiento de hardware físico on-premise (Capa 0) y monetización ética mediante el programa Amazon Associates (`iotdico-20`).  
 **Titularidad & Autoría Oficial (Formato Híbrido):** `EdisonPEÑA (Iotdico - https://ossatlas.iotdico.com)`  
 **Subdominio Corporativo Asignado:** `https://ossatlas.iotdico.com` (Hostinger Business Hosting activo hasta el 23 de enero de 2029).
 
@@ -16,6 +16,7 @@
 | **Build Producción** | Next.js 15 compilado (`npm run build`) | **Verificado 100% exitoso** (0 errores de tipos / lint) |
 | **Contenedor Producción** | Imagen Docker `acelerador-frontend:latest` (347 MB en Alpine Linux) | Compilada y lista |
 | **Despliegue Global en Vivo** | Vercel Edge Network + DNS Hostinger CNAME (`ossatlas.iotdico.com`) | **100% operativo con SSL activo de por vida** |
+| **Programa de Afiliados** | Amazon Associates (`iotdico-20`) | **Activo y verificado** en hardware on-premise con leyenda legal |
 
 ### Comandos para ejecutar el entorno:
 ```bash
@@ -80,11 +81,10 @@ npm run dev
 
 ## 🎯 3. Decisiones Estratégicas y de Negocio
 
-1. **Rumbo del Proyecto: Autónomo / Open-Core B2B:**
-   - Retención absoluta de titularidad y propiedad intelectual por parte de EdisonPEÑA (Iotdico).
-   - Modelo comercial: **Open-Core Freemium**:
-     - *Capa Libre / Open Source:* Catálogo con 25 herramientas curadas, búsqueda híbrida local y despliegue Docker.
-     - *Capa Monetizable SaaS ($19 - $49 USD/mes):* Guías paso a paso para Windows y Mac (.md / .pdf), consultas ilimitadas al Arquitecto RAG, manifiestos unificados y soporte técnico.
+1. **Rumbo del Proyecto: 100% Open Source Comunitario bajo Licencia MIT:**
+   - Retención absoluta de titularidad y autoría intelectual por parte de EdisonPEÑA (Iotdico).
+   - **Eliminación total de muros de pago (Paywalls):** Consultas ilimitadas en el Arquitecto RAG y descargas libres de guías de integración (.md y .pdf) para democratizar la adopción tecnológica B2B.
+   - **Monetización Ética de Hardware On-Premise (Amazon Associates):** Recomendación de la Capa 0 física (Mini PCs, Servidores Torre, Servidores Rack y AI Workstations) con el ID oficial `iotdico-20` para cubrir infraestructura y generar ingresos de alto ticket sin cobrar al desarrollador ni bloquear software libre.
 2. **Nombre Oficial de Marca y Producto:**
    - **OSS Atlas** *(The Open-Source Architecture & Intelligence Atlas)*.
 3. **Infraestructura Activa a Costo Cero:**
@@ -350,6 +350,8 @@ Módulo técnico de generación y descarga de guías de integración para cada u
 - **Integración Nativa en el Asistente B2B ([page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx)):**
   - Pestañas superiores segmentadas: `🖥️ Capas 1-4: Arquitectura de Software` y `🖲️ Capa 0: Hardware Recomendado & Diagrama Radar`.
   - Activado y verificado el programa de **Amazon Associates** con el ID único oficial `iotdico-20` (`NEXT_PUBLIC_AMAZON_AFFILIATE_TAG=iotdico-20`), inyectando automáticamente el parámetro `&tag=iotdico-20` en todos los enlaces y activando el descargo de transparencia legal en UI y guías.
+  - Ecosistema de marcas líderes integrado y verificado: Minisforum, Beelink, Geekom, GMKtec, Apple Silicon Mac Studio, NVIDIA, Microsoft, Dell, Lenovo y Supermicro con enlaces directos categorizados.
+  - Optimización de layout del Asistente B2B: visualización Blueprint en ancho completo y fila superior compacta de telemetría de arquitectura (Salud del Stack, Capex Físico y Ahorro SaaS Propietario).
 - **Soporte Tri-Plataforma Nativo en Guías (.md & .pdf) e Interfaz:**
   - Incorporado **🐧 Linux nativo (Ubuntu / Debian / RHEL / Docker Engine & systemd)** con comandos oficiales de instalación de Docker, optimización del kernel (sysctl: `vm.max_map_count`, `net.core.somaxconn`), permisos persistentes `/opt/oss-atlas-data`, reglas de cortafuegos UFW/Firewalld y políticas SELinux.
   - Ficha de especificaciones de Hardware On-Premise incorporada en las descargas de guías `.md` y `.pdf` para presentación directa a equipos de compras y CTOs.
@@ -357,7 +359,7 @@ Módulo técnico de generación y descarga de guías de integración para cada u
   - `npm run typecheck` (`tsc --noEmit`): **0 errores de tipos**.
   - `npm run lint`: **0 advertencias, 0 errores** de ESLint.
   - `npm run build`: Compilación Next.js 15 exitosa (Exit Code 0).
-  - Versionado y desplegado en GitHub `origin main` (commits `5e2ecd0` y `74701c9`).
+  - Versionado y desplegado en GitHub `origin main` (commits `5e2ecd0`, `74701c9`, `434d8ee`, `51a0324`, `20521e5` y `30c18ca`).
 
 ---
 
@@ -367,9 +369,12 @@ Módulo técnico de generación y descarga de guías de integración para cada u
 - [test_github_evaluator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/scripts/test_github_evaluator.ts) — Suite de validación y pruebas de estrés para el módulo de auditoría On-Demand de GitHub.
 - [MANUAL_MAESTRO_USUARIO.md](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/MANUAL_MAESTRO_USUARIO.md) — Documento maestro y guía completa de usuario para arquitectos y desarrolladores.
 - [ingest_12_tools.js](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/ingest_12_tools.js) — Script de ingesta masiva y vectorización `halfvec(1536)` para las 12 herramientas de IA en Neon PostgreSQL.
-- [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos para Windows y Mac.
-- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal 100% Open Source (Hero, Catálogo de 25 herramientas, Sección Explicativa de Servicios, Modal de Ingesta & Auditoría GitHub, Asistente RAG Ilimitado, Manifiesto Comunitario, Selector de Idioma y Descarga Libre de Guías).
-- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) adaptado 100% a la filosofía comunitaria Open Source.
+- [guideGenerator.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/guideGenerator.ts) — Generador técnico de guías descargables (.md y .pdf) con flujos adaptativos tri-plataforma (Windows, macOS y Linux) y ficha de hardware físico.
+- [hardwareCatalog.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/hardwareCatalog.ts) — Catálogo de hardware físico Capa 0 (Mini PC, Torre PYME, Rack Enterprise y AI Workstation), dimensionamiento dinámico y enlaces de afiliados Amazon (`iotdico-20`).
+- [HardwareRadarChart.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/components/HardwareRadarChart.tsx) — Componente de gráfico vectorial Radar / Spider en Recharts con modos Enfocado y Comparativo de 5 dimensiones.
+- [HardwareRecommendationSheet.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/components/HardwareRecommendationSheet.tsx) — Interfaz de recomendación de hardware en el Asistente B2B, calculadora de ROI, especificaciones de ingeniería y descargo legal de Amazon Associates.
+- [page.tsx](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/page.tsx) — Interfaz principal 100% Open Source (Floating Island Navbar, Catálogo de 25 herramientas, Asistente RAG Ilimitado, Pestaña Capa 0 de Hardware, Manifiesto Comunitario y Modal Tri-Plataforma).
+- [translations.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/translations.ts) — Diccionario centralizado de traducción Español/Inglés (`TRANSLATIONS.es` y `TRANSLATIONS.en`) adaptado 100% a la filosofía comunitaria Open Source y hardware on-premise.
 - [route.ts (Catalog Sync)](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/app/api/v1/catalog/sync/route.ts) — Ingesta continua con Health Score ponderado y vectorización `halfvec(1536)`.
 - [search.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/search.ts) — Motor de búsqueda híbrida RRF con FTS y vectores semánticos.
 - [rag.ts](file:///d:/AntigravityWorkspace/NO%20COUNTRY/acelerador-integraciones-open-source/frontend/lib/server/rag.ts) — Asistente de arquitectura con evaluación RAGAS de cero alucinaciones.
