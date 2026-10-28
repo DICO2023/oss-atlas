@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OSS Atlas | Presentación Ejecutiva B2B - Soberanía Tecnológica, Software & Hardware On-Premise</title>
-  <meta name="description" content="Presentación ejecutiva de 10 diapositivas para líderes de negocios B2B sobre soberanía de datos, privacidad del know-how y arquitectura de software y hardware on-premise frente a la nube tradicional.">
+  <meta name="description" content="Presentación ejecutiva de 30 diapositivas para líderes de negocios B2B sobre soberanía de datos, privacidad del know-how, arquitectura RAG de 4 capas y hardware físico on-premise frente a la nube tradicional.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@
     }
     .progress-bar {
       height: 100%;
-      width: 10%;
+      width: 3.33%;
       background: linear-gradient(90deg, var(--cyan-primary), var(--emerald-primary));
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 0 12px var(--cyan-primary);
@@ -110,6 +110,7 @@
       font-size: 0.78rem;
       color: var(--cyan-light);
       font-weight: 600;
+      white-space: nowrap;
     }
     .nav-btn {
       background: rgba(255, 255, 255, 0.08);
@@ -123,6 +124,7 @@
       align-items: center;
       gap: 4px;
       transition: all 0.2s;
+      white-space: nowrap;
     }
     .nav-btn:hover {
       background: rgba(6, 182, 212, 0.2);
@@ -146,11 +148,11 @@
       width: 100%;
       max-width: 1240px;
       height: calc(100vh - 140px);
-      max-height: 720px;
+      max-height: 730px;
       background: radial-gradient(circle at top right, rgba(30, 41, 59, 0.45), rgba(3, 7, 18, 0.95) 70%);
       border: 1px solid var(--border-card);
       border-radius: 20px;
-      padding: 40px 48px;
+      padding: 34px 42px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -168,7 +170,6 @@
       z-index: 10;
     }
 
-    /* Scrollbar for slide content if needed on small screens */
     .slide::-webkit-scrollbar {
       width: 4px;
     }
@@ -189,20 +190,21 @@
       padding: 4px 12px;
       border-radius: 9999px;
       width: fit-content;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .badge-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan-light); border: 1px solid rgba(6, 182, 212, 0.3); }
     .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald-light); border: 1px solid rgba(16, 185, 129, 0.3); }
     .badge-purple { background: rgba(139, 92, 246, 0.15); color: var(--purple-light); border: 1px solid rgba(139, 92, 246, 0.3); }
     .badge-amber { background: rgba(245, 158, 11, 0.15); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-rose { background: rgba(244, 63, 94, 0.15); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.3); }
 
     .slide-title {
-      font-size: 2.15rem;
+      font-size: 2.05rem;
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.15;
       color: #ffffff;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .slide-title span {
       background: linear-gradient(135deg, var(--cyan-light), var(--emerald-light));
@@ -210,31 +212,31 @@
       -webkit-text-fill-color: transparent;
     }
     .slide-subtitle {
-      font-size: 1rem;
+      font-size: 0.94rem;
       color: var(--text-muted);
       font-weight: 400;
       line-height: 1.45;
-      max-width: 950px;
-      margin-bottom: 24px;
+      max-width: 980px;
+      margin-bottom: 18px;
     }
 
     /* Layout Grids */
     .grid-2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 16px;
       flex-grow: 1;
     }
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 16px;
       flex-grow: 1;
     }
     .grid-4 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      gap: 14px;
       flex-grow: 1;
     }
 
@@ -243,7 +245,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border-card);
       border-radius: 14px;
-      padding: 20px;
+      padding: 16px 18px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -255,10 +257,10 @@
       box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.1);
     }
     .card-icon {
-      font-size: 1.6rem;
-      margin-bottom: 12px;
-      width: 42px;
-      height: 42px;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.05);
       display: flex;
@@ -266,13 +268,13 @@
       justify-content: center;
     }
     .card-title {
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 700;
       color: #fff;
       margin-bottom: 6px;
     }
     .card-desc {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
       line-height: 1.45;
     }
@@ -282,12 +284,12 @@
       background: rgba(6, 182, 212, 0.08);
       border: 1px solid rgba(6, 182, 212, 0.25);
       border-radius: 12px;
-      padding: 14px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
     }
     .stat-val {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 900;
       color: var(--cyan-light);
       font-family: var(--font-mono);
@@ -295,7 +297,7 @@
       margin-bottom: 4px;
     }
     .stat-label {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-subtle);
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -306,15 +308,15 @@
     .pill-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 6px;
+      margin-top: 10px;
     }
     .mini-pill {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 3px 9px;
+      padding: 3px 8px;
       border-radius: 9999px;
-      font-size: 0.72rem;
+      font-size: 0.69rem;
       color: #e2e8f0;
       font-family: var(--font-mono);
     }
@@ -330,15 +332,50 @@
       padding: 12px;
     }
 
+    /* Prompt Quote Box */
+    .prompt-box {
+      background: rgba(6, 182, 212, 0.06);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 0.81rem;
+      color: #cffafe;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    /* UI Mockup Window */
+    .ui-window {
+      background: #020617;
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .ui-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 8px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
     /* Slide Footer */
     .slide-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 18px;
-      margin-top: 16px;
+      padding-top: 14px;
+      margin-top: 14px;
       border-top: 1px solid rgba(255, 255, 255, 0.07);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       color: var(--text-subtle);
     }
     .footer-highlight {
@@ -349,32 +386,33 @@
     /* Bottom Control Bar */
     .bottom-controls {
       position: fixed;
-      bottom: 14px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: rgba(15, 23, 42, 0.85);
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--border-card);
       backdrop-filter: blur(16px);
-      padding: 6px 14px;
+      padding: 6px 16px;
       border-radius: 9999px;
       z-index: 90;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      max-width: 95vw;
     }
     .ctrl-btn {
       background: none;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.1rem;
       transition: all 0.2s;
     }
     .ctrl-btn:hover {
@@ -384,30 +422,32 @@
     .dots-container {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      overflow-x: auto;
+      max-width: 620px;
+      padding: 4px 2px;
     }
     .dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.2);
       cursor: pointer;
       transition: all 0.25s;
+      flex-shrink: 0;
     }
     .dot.active {
-      width: 22px;
+      width: 18px;
       border-radius: 9999px;
       background: var(--cyan-primary);
       box-shadow: 0 0 8px var(--cyan-primary);
     }
 
-    /* Animations */
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.5; transform: scale(0.9); }
     }
 
-    /* Key indicator pills */
     .key-badge {
       display: inline-block;
       background: rgba(255, 255, 255, 0.1);
@@ -420,7 +460,6 @@
       margin-left: 2px;
     }
 
-    /* Media Print Mode (Export to PDF) */
     @media print {
       body {
         overflow: visible;
@@ -451,11 +490,10 @@
       }
     }
 
-    /* Responsive adjustments */
     @media (max-width: 900px) {
-      .slide-title { font-size: 1.6rem; }
+      .slide-title { font-size: 1.5rem; }
       .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-      .slide { padding: 24px 20px; }
+      .slide { padding: 22px 18px; }
       .top-nav { display: none; }
     }
   </style>
@@ -472,10 +510,10 @@
     <div class="brand-pill">
       <div class="brand-dot"></div>
       <span>OSS Atlas</span>
-      <span style="font-size: 0.68rem; padding: 2px 6px; background: rgba(6,182,212,0.15); border-radius: 4px; color: var(--cyan-light);">B2B Pitch</span>
+      <span style="font-size: 0.68rem; padding: 2px 6px; background: rgba(6,182,212,0.15); border-radius: 4px; color: var(--cyan-light);">Presentación Ejecutiva B2B</span>
     </div>
     <div class="nav-divider"></div>
-    <div class="slide-counter" id="slideCounter">DIAPOSITIVA 01 / 10</div>
+    <div class="slide-counter" id="slideCounter">DIAPOSITIVA 01 / 30</div>
     <div class="nav-divider"></div>
     <button class="nav-btn" onclick="toggleFullscreen()" title="Pantalla Completa (F)">
       <span>⛶</span> Fullscreen
@@ -488,10 +526,7 @@
   <!-- Slides Wrapper -->
   <main class="slides-wrapper">
 
-    <!-- ==========================================
-         DIAPOSITIVA 1: PORTADA & VISIÓN EJECUTIVA
-         ========================================== -->
-    <section class="slide active" id="slide-1">
+<section class="slide active" id="slide-1">
       <div>
         <div class="slide-badge badge-cyan">💼 Presentación Ejecutiva para Fundadores & CTOs B2B</div>
         <h1 class="slide-title">Soberanía Tecnológica B2B:<br><span>Software & Hardware On-Premise</span></h1>
@@ -513,7 +548,7 @@
           <div class="card" style="border-left: 3px solid var(--purple-primary);">
             <div class="card-icon" style="color: var(--purple-light);">⚡</div>
             <div class="card-title">100% Open Source (MIT)</div>
-            <div class="card-desc">Catálogo de 25 herramientas de clase empresarial, búsqueda híbrida RRF, arquitecto RAG y guías tri-plataforma de despliegue libre.</div>
+            <div class="card-desc">Catálogo activo de <strong>38 herramientas</strong> de clase empresarial, búsqueda híbrida RRF, arquitecto RAG y guías tri-plataforma de despliegue libre.</div>
           </div>
         </div>
       </div>
@@ -570,7 +605,7 @@
 
       <div class="slide-footer">
         <div><strong>Insight B2B:</strong> El activo más valioso de una empresa es su <span class="footer-highlight">conocimiento particular acumulado</span>.</div>
-        <div>2 de 10</div>
+        <div>2 de 30</div>
       </div>
     </section>
 
@@ -631,15 +666,15 @@
           </div>
         </div>
 
-        <div style="margin-top: 18px; padding: 12px 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
-          <div style="font-size: 0.85rem; color: #d1fae5;"><strong>Catálogo Curado Activo:</strong> 25 repositorios de grado enterprise auditados con Docker y cero barreras comerciales.</div>
+        <div style="margin-top: 16px; padding: 12px 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-size: 0.85rem; color: #d1fae5;"><strong>Catálogo Curado Activo:</strong> 38 repositorios de grado enterprise auditados con Docker y cero barreras comerciales (de 122 proyectados).</div>
           <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--emerald-light);">LICENCIA MIT LIBRE</span>
         </div>
       </div>
 
       <div class="slide-footer">
         <div><strong>Arquitectura Multicapa:</strong> Todos los componentes se comunican de forma desacoplada y segura.</div>
-        <div>3 de 10</div>
+        <div>3 de 30</div>
       </div>
     </section>
 
@@ -677,7 +712,7 @@
             </div>
 
             <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
-              Integrado nativamente con Neon Serverless PostgreSQL y vectorización semántica inmediata de 1536 dimensiones.
+              Integrado nativamente con PostgreSQL 16 + pgvector y vectorización semántica inmediata de 1536 dimensiones.
             </div>
           </div>
         </div>
@@ -685,7 +720,7 @@
 
       <div class="slide-footer">
         <div><strong>Garantía de Confianza:</strong> Solo recomendamos software que supere auditorías de seguridad corporativa.</div>
-        <div>4 de 10</div>
+        <div>4 de 30</div>
       </div>
     </section>
 
@@ -734,7 +769,7 @@
 
       <div class="slide-footer">
         <div><strong>Zero-Hallucination Guarantee:</strong> Respuestas técnicas fundamentadas en código y documentación verificada.</div>
-        <div>5 de 10</div>
+        <div>5 de 30</div>
       </div>
     </section>
 
@@ -798,7 +833,7 @@
 
       <div class="slide-footer">
         <div><strong>Infraestructura Propia:</strong> El equipo es un activo de la empresa (Capex), no una renta eterna (Opex).</div>
-        <div>6 de 10</div>
+        <div>6 de 30</div>
       </div>
     </section>
 
@@ -814,28 +849,18 @@
         </p>
 
         <div class="grid-2">
-          <!-- Radar SVG Diagram -->
           <div class="radar-container">
             <svg viewBox="0 0 400 340" style="width: 100%; max-height: 290px;">
-              <!-- Background Concentric Pentagons -->
               <polygon points="200,40 330,130 280,270 120,270 70,130" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
               <polygon points="200,75 295,145 260,245 140,245 105,145" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
               <polygon points="200,110 260,160 240,220 160,220 140,160" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
-              
-              <!-- Axes -->
               <line x1="200" y1="170" x2="200" y2="40" stroke="#475569" stroke-width="1"/>
               <line x1="200" y1="170" x2="330" y2="130" stroke="#475569" stroke-width="1"/>
               <line x1="200" y1="170" x2="280" y2="270" stroke="#475569" stroke-width="1"/>
               <line x1="200" y1="170" x2="120" y2="270" stroke="#475569" stroke-width="1"/>
               <line x1="200" y1="170" x2="70" y2="130" stroke="#475569" stroke-width="1"/>
-
-              <!-- Tier 4: AI Workstation Polygon (Amber/Purple) -->
               <polygon points="200,50 320,135 270,250 140,260 85,135" fill="rgba(245, 158, 11, 0.25)" stroke="#f59e0b" stroke-width="2.5"/>
-
-              <!-- Tier 1: Mini PC Polygon (Cyan) -->
               <polygon points="200,105 240,165 210,230 150,235 125,150" fill="rgba(6, 182, 212, 0.35)" stroke="#06b6d4" stroke-width="2"/>
-
-              <!-- Axis Labels -->
               <text x="200" y="28" fill="#67e8f9" font-size="11" font-weight="700" text-anchor="middle">CPU & Cómputo</text>
               <text x="340" y="135" fill="#fde68a" font-size="11" font-weight="700" text-anchor="start">RAM & ECC</text>
               <text x="290" y="290" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="start">NVMe IOPS</text>
@@ -844,20 +869,17 @@
             </svg>
           </div>
 
-          <!-- Financial Analysis -->
           <div class="card" style="justify-content: space-between;">
             <div>
               <div class="card-title">Análisis de Retorno de Inversión (ROI)</div>
               <div class="card-desc" style="margin-bottom: 12px;">
                 Comparativa financiera entre mantener una instancia equivalente en AWS/Azure vs. adquirir hardware propio:
               </div>
-
               <div style="display: flex; flex-direction: column; gap: 10px;">
                 <div style="background: rgba(244, 63, 94, 0.1); border-left: 3px solid var(--rose-primary); padding: 8px 12px; border-radius: 4px;">
                   <div style="font-size: 0.75rem; color: #fda4af;">Nube Tradicional (Instancia GPU / c6i.4xlarge + Storage)</div>
                   <div style="font-size: 0.95rem; font-weight: 700; color: #fff;">$1,180 USD / mes ($28,320 USD en 24 meses)</div>
                 </div>
-
                 <div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--emerald-primary); padding: 8px 12px; border-radius: 4px;">
                   <div style="font-size: 0.75rem; color: var(--emerald-light);">Hardware Físico On-Premise (Tier 4 AI Workstation)</div>
                   <div style="font-size: 0.95rem; font-weight: 700; color: #fff;">$3,650 USD (Pago Único) + ~$25 USD/mes energía</div>
@@ -881,7 +903,7 @@
 
       <div class="slide-footer">
         <div><strong>Equilibrio Financiero:</strong> Después del mes 4, la infraestructura opera a costo marginal prácticamente cero.</div>
-        <div>7 de 10</div>
+        <div>7 de 30</div>
       </div>
     </section>
 
@@ -934,7 +956,7 @@
 
       <div class="slide-footer">
         <div><strong>Ventaja Competitiva B2B:</strong> Vender a clientes corporativos garantizando que sus datos <span class="footer-highlight">jamás tocan la nube pública</span>.</div>
-        <div>8 de 10</div>
+        <div>8 de 30</div>
       </div>
     </section>
 
@@ -994,7 +1016,7 @@
 
       <div class="slide-footer">
         <div><strong>Time-to-Market Acelerado:</strong> Guías estandarizadas que eliminan semanas de investigación devops.</div>
-        <div>9 de 10</div>
+        <div>9 de 30</div>
       </div>
     </section>
 
@@ -1013,7 +1035,7 @@
           <div class="card" style="background: rgba(6, 182, 212, 0.08); border-color: rgba(6, 182, 212, 0.4);">
             <div class="card-icon" style="color: var(--cyan-light);">🚀</div>
             <div class="card-title">1. Explora en Vivo</div>
-            <div class="card-desc">Accede a la plataforma en producción global con catálogo interactivo, auditoría GitHub y asistente RAG sin restricciones.</div>
+            <div class="card-desc">Accede a la plataforma en producción global con catálogo interactivo de 38 herramientas, auditoría GitHub y asistente RAG sin restricciones.</div>
             <div style="margin-top: auto; padding-top: 12px;">
               <a href="https://ossatlas.iotdico.com" target="_blank" style="display: inline-block; background: var(--cyan-primary); color: #041017; font-weight: 700; font-size: 0.8rem; padding: 6px 14px; border-radius: 6px; text-decoration: none;">
                 ossatlas.iotdico.com ↗
@@ -1051,17 +1073,1159 @@
 
       <div class="slide-footer">
         <div><strong>OSS Atlas:</strong> Propiedad y Autoría de <strong>EdisonPEÑA (Iotdico)</strong> • Licencia MIT.</div>
-        <div>10 de 10 • Fin de la Presentación</div>
+        <div>10 de 30 • Continúa a los Módulos de Operación Práctica →</div>
       </div>
     </section>
 
+    <!-- ==========================================
+         DIAPOSITIVA 11: ARQUITECTURA DE LA PLATAFORMA (LOS 7 COMPONENTES)
+         ========================================== -->
+    <section class="slide" id="slide-11">
+      <div>
+        <div class="slide-badge badge-cyan">🧭 Módulos Operativos de OSS Atlas</div>
+        <h2 class="slide-title">Recorrido por la Plataforma: <span>7 Componentes Estratégicos</span></h2>
+        <p class="slide-subtitle">
+          Estructura funcional de la aplicación web de producción para acelerar la toma de decisiones técnicas, evaluar software y dimensionar hardware sin fricción.
+        </p>
+
+        <div class="grid-3">
+          <div class="card" style="border-top: 3px solid var(--cyan-primary);">
+            <div class="card-icon" style="color: var(--cyan-light);">🗺️</div>
+            <div class="card-title">1. Mapa RAG B2B</div>
+            <div class="card-desc">Topología visual interactiva que encadena las 4 capas de software con justificación técnica y triggers operativos.</div>
+          </div>
+          <div class="card" style="border-top: 3px solid var(--emerald-primary);">
+            <div class="card-icon" style="color: var(--emerald-light);">📋</div>
+            <div class="card-title">2. Consultas B2B Preconfiguradas</div>
+            <div class="card-desc">Escenarios industriales probados (Fintech, Salud, Logística, Retail) con métricas RAGAS precalculadas.</div>
+          </div>
+          <div class="card" style="border-top: 3px solid var(--purple-primary);">
+            <div class="card-icon" style="color: var(--purple-light);">⚡</div>
+            <div class="card-title">3. Sintetizador RAG Libre</div>
+            <div class="card-desc">Entrada en lenguaje natural para describir cualquier necesidad y generar un stack multicapa a la medida.</div>
+          </div>
+          <div class="card" style="border-top: 3px solid var(--rose-primary);">
+            <div class="card-icon" style="color: var(--rose-primary);">🛡️</div>
+            <div class="card-title">4. Auditor GitHub On-Demand</div>
+            <div class="card-desc">Evaluación en <900 ms de cualquier repositorio: recencia de commits, licencia OSI, CVEs y Dockerfile.</div>
+          </div>
+          <div class="card" style="border-top: 3px solid var(--amber-primary);">
+            <div class="card-icon" style="color: var(--amber-primary);">🖥️</div>
+            <div class="card-title">5. Capas 1-4: Software</div>
+            <div class="card-desc">Vista en profundidad de Auth, DBS, Payments e IA con comandos de despliegue Docker y guías .md/.pdf.</div>
+          </div>
+          <div class="card" style="border-top: 3px solid #38bdf8;">
+            <div class="card-icon" style="color: #38bdf8);">🖲️</div>
+            <div class="card-title">6. Capa 0: Hardware & Radar</div>
+            <div class="card-desc">Dimensionamiento físico en 4 Tiers, diagrama radar pentagonal 5D y cálculo de ROI vs AWS.</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; padding: 10px 16px; background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-size: 0.82rem; color: #ede9fe;">
+            <strong>7. Saldo de los 122 Repositorios (84 pendientes):</strong> Botón dedicado para explorar y auditar el backlog de tecnologías proyectadas.
+          </div>
+          <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--purple-light);">ROADMAP INTEGRADO</span>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Ecosistema Integrado:</strong> Del requerimiento en texto a la orden de compra de hardware en minutos.</div>
+        <div>11 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 12: BLOQUE 1 - GENERADOR DE MAPA RAG B2B
+         ========================================== -->
+    <section class="slide" id="slide-12">
+      <div>
+        <div class="slide-badge badge-cyan">🗺️ Bloque 1: Arquitectura RAG</div>
+        <h2 class="slide-title">El Mapa RAG B2B: <span>Topología Visual Interconectada</span></h2>
+        <p class="slide-subtitle">
+          Ubicado en la sección principal del Asistente RAG, el generador emite una cadena horizontal desacoplada de 4 capas donde cada nodo tiene rol, estado y justificación verificada.
+        </p>
+
+        <div class="ui-window">
+          <div class="ui-top-bar">
+            <span>● PIPELINE MULTI-CAPA EMITIDO EN TIEMPO REAL</span>
+            <span>RRF Score: 0.0328 • Latencia: 184ms</span>
+          </div>
+
+          <div class="node-flow" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: transparent; padding: 0;">
+            <div class="node-item" style="border-top: 3px solid #38bdf8;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="mini-pill" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1);">CAPA 1: AUTH</span>
+                <span style="font-size: 0.68rem; color: var(--emerald-light); font-weight: 700;">APROBADO</span>
+              </div>
+              <div style="font-weight: 800; font-size: 0.92rem; color: #fff;">Keycloak IAM</div>
+              <div style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--cyan-light); margin: 3px 0;">Apache-2.0 • 95.0 Health</div>
+              <p style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35;">Federación SSO OIDC/SAML 2.0 y emisión de JWT sin cobro por usuario MAU.</p>
+            </div>
+
+            <div class="node-item" style="border-top: 3px solid #34d399;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="mini-pill" style="color: #34d399; background: rgba(52, 211, 153, 0.1);">CAPA 2: DBS</span>
+                <span style="font-size: 0.68rem; color: var(--emerald-light); font-weight: 700;">APROBADO</span>
+              </div>
+              <div style="font-weight: 800; font-size: 0.92rem; color: #fff;">PostgreSQL + pgvector</div>
+              <div style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--emerald-light); margin: 3px 0;">PostgreSQL • 98.0 Health</div>
+              <p style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35;">Almacenamiento ACID e índices HNSW halfvec(1536) para consultas híbridas.</p>
+            </div>
+
+            <div class="node-item" style="border-top: 3px solid #f472b6;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="mini-pill" style="color: #f472b6; background: rgba(244, 114, 182, 0.1);">CAPA 3: PAYMENTS</span>
+                <span style="font-size: 0.68rem; color: var(--emerald-light); font-weight: 700;">APROBADO</span>
+              </div>
+              <div style="font-weight: 800; font-size: 0.92rem; color: #fff;">Juspay Hyperswitch</div>
+              <div style="font-size: 0.72rem; font-family: var(--font-mono); color: #f472b6; margin: 3px 0;">Apache-2.0 • 93.0 Health</div>
+              <p style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35;">Switch financiero en Rust con failover automático entre adquirentes.</p>
+            </div>
+
+            <div class="node-item" style="border-top: 3px solid #a78bfa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="mini-pill" style="color: #a78bfa; background: rgba(167, 139, 250, 0.1);">CAPA 4: AI RAG</span>
+                <span style="font-size: 0.68rem; color: var(--emerald-light); font-weight: 700;">APROBADO</span>
+              </div>
+              <div style="font-weight: 800; font-size: 0.92rem; color: #fff;">LangChain + Ragas</div>
+              <div style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--purple-light); margin: 3px 0;">MIT • 94.0 Health</div>
+              <p style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35;">Pipeline de orquestación con umbral estricto de fidelidad sin alucinación.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 14px;">
+          <div class="stat-box" style="flex: 1;">
+            <div class="stat-val" style="font-size: 1.3rem;">100% Permisivo</div>
+            <div class="stat-label">Licencias Apache-2.0 / MIT</div>
+          </div>
+          <div class="stat-box" style="flex: 1;">
+            <div class="stat-val" style="font-size: 1.3rem;">Zero Cloud Lock-in</div>
+            <div class="stat-label">Auto-hospedable en Docker</div>
+          </div>
+          <div class="stat-box" style="flex: 1;">
+            <div class="stat-val" style="font-size: 1.3rem;">$3,600 / mes</div>
+            <div class="stat-label">Ahorro Promedio en SaaS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Topología Transparente:</strong> Cada componente es reemplazable independientemente sin romper el sistema.</div>
+        <div>12 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 13: BLOQUE 1 - TRIGGERS & CONECTIVIDAD
+         ========================================== -->
+    <section class="slide" id="slide-13">
+      <div>
+        <div class="slide-badge badge-emerald">⚡ Event-Driven B2B Pipeline</div>
+        <h2 class="slide-title">Conectividad & Triggers: <span>Comunicación entre Capas</span></h2>
+        <p class="slide-subtitle">
+          El mapa RAG B2B no es un diagrama estático; define los disparadores técnicos (triggers) que orquestan el flujo de datos seguro entre cada nivel.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--cyan-light); margin-bottom: 6px;">DISPARADOR CAPA 1 → CAPA 2</div>
+            <div class="card-title">Token RS256 & Context Injection</div>
+            <div class="card-desc">
+              El cliente se autentica en <strong>Keycloak</strong> vía OIDC. El API Gateway valida la firma criptográfica RS256 e inyecta el Tenant ID y permisos RBAC en la sesión PostgreSQL con Row-Level Security (RLS).
+            </div>
+            <div style="margin-top: auto; padding-top: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">
+              Evento: `OIDC JWT Bearer Issuance`
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--emerald-light); margin-bottom: 6px;">DISPARADOR CAPA 2 → CAPA 4</div>
+            <div class="card-title">HNSW Vector Search on Change</div>
+            <div class="card-desc">
+              Al insertar o modificar contratos o pedidos en <strong>PostgreSQL</strong>, un disparador (`ON INSERT row`) invoca el pipeline de embeddings que actualiza el índice `halfvec(1536)` en memoria para inferencia RAG.
+            </div>
+            <div style="margin-top: auto; padding-top: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">
+              Evento: `RRF Hybrid Query RPC`
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="font-size: 0.72rem; font-family: var(--font-mono); color: #f472b6; margin-bottom: 6px;">DISPARADOR CAPA 4 → CAPA 3</div>
+            <div class="card-title">Verified Agent Payment Intent</div>
+            <div class="card-desc">
+              El asistente RAG analiza la cotización y, solo tras certificar fidelidad <strong>RAGAS = 1.00</strong>, despacha una llamada idempotente al endpoint de <strong>Hyperswitch</strong> para enrutar el cobro interbancario.
+            </div>
+            <div style="margin-top: auto; padding-top: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">
+              Evento: `Checkout Session Webhook`
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; background: rgba(2, 6, 23, 0.7); border: 1px solid var(--border-card); border-radius: 10px; padding: 12px 16px; font-family: var(--font-mono); font-size: 0.78rem; color: #a5f3fc;">
+          <span style="color: var(--cyan-light);">Pipeline:</span> Client (HTTPS) → Keycloak JWT → FastAPI Gateway → Postgres RLS → pgvector HNSW → LangChain RAG → Hyperswitch RPC
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Cero Acoplamiento:</strong> Microservicios comunicados por APIs REST y Webhooks JSON estándar.</div>
+        <div>13 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 14: BLOQUE 2 - CONSULTAS PRECONFIGURADAS
+         ========================================== -->
+    <section class="slide" id="slide-14">
+      <div>
+        <div class="slide-badge badge-purple">📋 Bloque 2: Casos B2B Preconfigurados</div>
+        <h2 class="slide-title">Consultas de Arquitectura B2B: <span>Plantillas Listas para Usar</span></h2>
+        <p class="slide-subtitle">
+          El panel lateral del Asistente RAG contiene escenarios empresariales precargados que resuelven los problemas más comunes de las startups y corporativos B2B con un solo clic.
+        </p>
+
+        <div class="grid-3">
+          <div class="card" style="border-left: 3px solid var(--cyan-primary);">
+            <div style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--cyan-light);">CASO 1: FINTECH CORPORATIVO</div>
+            <div class="card-title" style="margin-top: 4px;">Pasarela B2B & Ledger</div>
+            <div class="card-desc">
+              Enrutamiento inteligente de pagos multi-adquirente, facturación recurrente (metering) y conciliación contable sin pagar comisiones por procesamiento SaaS.
+            </div>
+            <div class="pill-list">
+              <span class="mini-pill">Hyperswitch</span>
+              <span class="mini-pill">Lago</span>
+              <span class="mini-pill">PostgreSQL</span>
+            </div>
+          </div>
+
+          <div class="card" style="border-left: 3px solid var(--emerald-primary);">
+            <div style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--emerald-light);">CASO 2: LOGÍSTICA & SUPPLY CHAIN</div>
+            <div class="card-title" style="margin-top: 4px;">Orquestador de Cadena</div>
+            <div class="card-desc">
+              Catálogo de cientos de miles de SKUs con búsqueda instantánea tolerante a fallos, base relacional de pedidos y agentes de cotización automatizada.
+            </div>
+            <div class="pill-list">
+              <span class="mini-pill">Meilisearch</span>
+              <span class="mini-pill">Keycloak</span>
+              <span class="mini-pill">Supabase</span>
+            </div>
+          </div>
+
+          <div class="card" style="border-left: 3px solid var(--purple-primary);">
+            <div style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--purple-light);">CASO 3: SALUD & EXPEDIENTES</div>
+            <div class="card-title" style="margin-top: 4px;">Historias Clínicas HIPAA</div>
+            <div class="card-desc">
+              Transcripción de voz en GPU local, almacenamiento de historias clínicas encriptadas y consulta semántica sin enviar datos a OpenAI ni a servidores externos.
+            </div>
+            <div class="pill-list">
+              <span class="mini-pill">Meetily AI</span>
+              <span class="mini-pill">Qdrant</span>
+              <span class="mini-pill">Zitadel</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding: 12px 18px; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-size: 0.82rem; color: #cffafe;">
+            Al hacer clic en cualquier caso preconfigurado, el sistema carga instantáneamente el <strong>texto del prompt</strong>, emite el <strong>mapa RAG</strong> y actualiza el <strong>dimensionamiento de hardware físico (Capa 0)</strong>.
+          </div>
+          <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--cyan-light);">1-CLICK BLUEPRINT</span>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Ahorro en Consultoría:</strong> Reduce de 3 semanas a 10 segundos la selección inicial del stack tecnológico.</div>
+        <div>14 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 15: BLOQUE 2 - MÉTRICAS CARDINALES RAGAS
+         ========================================== -->
+    <section class="slide" id="slide-15">
+      <div>
+        <div class="slide-badge badge-emerald">📊 Bloque 2: Calidad Certificada</div>
+        <h2 class="slide-title">Dashboard RAGAS: <span>4 Métricas Cardinales de Calidad</span></h2>
+        <p class="slide-subtitle">
+          Cada arquitectura emitida incluye una tarjeta de telemetría RAGAS que audita matemáticamente la respuesta del asistente para erradicar cualquier invención o alucinación técnica.
+        </p>
+
+        <div class="grid-4">
+          <div class="card" style="border-top: 3px solid var(--cyan-primary);">
+            <div class="stat-val">0.98</div>
+            <div class="card-title" style="font-size: 0.95rem;">Context Precision</div>
+            <div class="card-desc" style="font-size: 0.78rem;">Proporción de fragmentos recuperados de PostgreSQL que resultan estrictamente relevantes para resolver el prompt.</div>
+            <div style="margin-top: auto; font-size: 0.7rem; color: var(--emerald-light); font-weight: 700;">Óptimo (>0.90)</div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid var(--emerald-primary);">
+            <div class="stat-val">0.95</div>
+            <div class="card-title" style="font-size: 0.95rem;">Context Recall</div>
+            <div class="card-desc" style="font-size: 0.78rem;">Capacidad del motor para recuperar todos los componentes necesarios para cubrir las 4 capas de software sin omisiones.</div>
+            <div style="margin-top: auto; font-size: 0.7rem; color: var(--emerald-light); font-weight: 700;">Óptimo (>0.90)</div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid var(--purple-primary);">
+            <div class="stat-val" style="color: var(--purple-light);">1.00</div>
+            <div class="card-title" style="font-size: 0.95rem;">Faithfulness (Fidelidad)</div>
+            <div class="card-desc" style="font-size: 0.78rem;">Garantía absoluta de que cada afirmación, comando y trigger está sustentado 100% en la documentación verificada.</div>
+            <div style="margin-top: auto; font-size: 0.7rem; color: var(--cyan-light); font-weight: 700;">100% Sin Alucinación</div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid var(--amber-primary);">
+            <div class="stat-val" style="color: #fde68a;">0.96</div>
+            <div class="card-title" style="font-size: 0.95rem;">Answer Relevance</div>
+            <div class="card-desc" style="font-size: 0.78rem;">Medición de pertinencia directa de la respuesta respecto a las restricciones de negocio y soberanía expresadas por el usuario.</div>
+            <div style="margin-top: auto; font-size: 0.7rem; color: var(--emerald-light); font-weight: 700;">Alta Precisión</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; background: rgba(2, 6, 23, 0.7); border: 1px solid var(--border-card); border-radius: 10px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-size: 0.8rem; color: #e2e8f0;"><strong>Latencia P95:</strong> 184 ms en Neon PostgreSQL con vectorización unitaria `halfvec(1536)` e índices HNSW.</div>
+          <span class="mini-pill" style="color: var(--emerald-light); border-color: rgba(16, 185, 129, 0.4);">RAGAS VALIDATED</span>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Rigor Matemático:</strong> Ningún software es sugerido si su fidelidad al contexto recuperado cae bajo 0.95.</div>
+        <div>15 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 16: BLOQUE 3 - SINTETIZAR ARQUITECTURA RAG LIBRE
+         ========================================== -->
+    <section class="slide" id="slide-16">
+      <div>
+        <div class="slide-badge badge-cyan">⚡ Bloque 3: Entrada Libre</div>
+        <h2 class="slide-title">Sintetizar Arquitectura RAG: <span>Requerimiento Libre</span></h2>
+        <p class="slide-subtitle">
+          El bloque inferior permite a cualquier usuario describir su necesidad particular en lenguaje natural y presionar el botón de síntesis para obtener una arquitectura a la medida.
+        </p>
+
+        <div class="ui-window">
+          <div class="ui-top-bar">
+            <span>● ENTRADA DE REQUERIMIENTO CORPORATIVO LIBRE</span>
+            <span>Acceso 100% Gratuito e Ilimitado</span>
+          </div>
+
+          <div style="position: relative;">
+            <div class="prompt-box" style="background: rgba(15, 23, 42, 0.9); border-color: rgba(6, 182, 212, 0.4); padding: 16px; min-height: 85px;">
+              <span style="color: var(--text-muted); font-size: 0.85rem;">
+                "Necesitamos migrar un sistema SaaS de RRHH a hardware propio: autenticación de 5,000 empleados con active directory, base de datos relacional para nóminas, asistente de IA para responder consultas sobre convenios laborales y facturación interna de centros de costos..."
+              </span>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+              <div style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--cyan-primary), var(--emerald-primary)); color: #041017; font-weight: 800; font-size: 0.82rem; padding: 10px 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);">
+                <span>⚡</span> Sintetizar Arquitectura RAG
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 14px;">
+          <div class="card">
+            <div class="card-title">1. Lenguaje Natural</div>
+            <div class="card-desc">No requieres conocer nombres de tecnologías. Describe el problema de negocio, volumen de datos o restricciones de privacidad.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">2. Inferencia en < 2 Segundos</div>
+            <div class="card-desc">El backend vectoriza el prompt, realiza la búsqueda híbrida y estructura las 4 capas con justificación funcional.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">3. Dimensionamiento Instantáneo</div>
+            <div class="card-desc">Calcula inmediatamente los requerimientos de CPU, RAM, NVMe y GPU física en la Capa 0 de Hardware.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Sin Costos Ocultos:</strong> Diseñado para empoderar a fundadores y arquitectos sin cobrar membresías.</div>
+        <div>16 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 17: BLOQUE 3 - CÓMO FUNCIONA LA SÍNTESIS RAG
+         ========================================== -->
+    <section class="slide" id="slide-17">
+      <div>
+        <div class="slide-badge badge-purple">⚙️ Anatomía del Backend</div>
+        <h2 class="slide-title">Cómo Funciona el Endpoint <span>/api/v1/rag/architecture</span></h2>
+        <p class="slide-subtitle">
+          El flujo interno que transforma un texto de requerimiento en una arquitectura completa y validada matemáticamente.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon" style="color: var(--cyan-light);">1</div>
+            <div class="card-title">Vectorización & FTS</div>
+            <div class="card-desc">
+              El endpoint normaliza el texto, elimina stopwords y genera un vector de 1536 dimensiones. Simultáneamente, construye la consulta léxica `to_tsquery('simple', ...)`.
+            </div>
+            <div class="pill-list" style="margin-top: auto;">
+              <span class="mini-pill">halfvec(1536)</span>
+              <span class="mini-pill">Lexical tokens</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-icon" style="color: var(--emerald-light);">2</div>
+            <div class="card-title">Fusión Recíproca (RRF k=60)</div>
+            <div class="card-desc">
+              PostgreSQL ejecuta ambas ramas en paralelo. RRF fusiona los rankings eliminando sesgos de palabras clave o variaciones de embeddings:
+              <br><code style="color: var(--cyan-light); font-size: 0.72rem;">1/(60+r_lex) + 1/(60+r_vec)</code>
+            </div>
+            <div class="pill-list" style="margin-top: auto;">
+              <span class="mini-pill">HNSW <=> Distance</span>
+              <span class="mini-pill">ts_rank_cd</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-icon" style="color: var(--purple-light);">3</div>
+            <div class="card-title">Estructuración Multicapa</div>
+            <div class="card-desc">
+              El asistente asigna cada herramienta ganadora a su capa correspondiente (Auth, DBS, Payments, AI), redacta el resumen ejecutivo e invoca el dimensionamiento de hardware.
+            </div>
+            <div class="pill-list" style="margin-top: auto;">
+              <span class="mini-pill">4 Capas Mapeadas</span>
+              <span class="mini-pill">Justificación ACID</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; background: rgba(2, 6, 23, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 16px; font-family: var(--font-mono); font-size: 0.75rem; color: #a5f3fc;">
+          POST /api/v1/rag/architecture &nbsp;→&nbsp; HTTP 200 OK &nbsp;•&nbsp; { prompt, business_domain, nodes[4], ragas, hardware_tier }
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Alta Disponibilidad:</strong> Endpoint serverless desacoplado con tiempos de respuesta consistentes sub-2s.</div>
+        <div>17 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 18: CASOS B2B PARA EVALUAR #1 - FINTECH
+         ========================================== -->
+    <section class="slide" id="slide-18">
+      <div>
+        <div class="slide-badge badge-cyan">💡 Casos de Negocio B2B para Evaluar (1 / 3)</div>
+        <h2 class="slide-title">Sector Fintech: <span>Pasarela de Pagos & Ledger B2B</span></h2>
+        <p class="slide-subtitle">
+          Copia y pega este requerimiento real en el bloque <strong>"Sintetizar Arquitectura RAG"</strong> de la plataforma para verificar el resultado generado.
+        </p>
+
+        <div class="prompt-box" style="margin-bottom: 16px;">
+          "Necesito diseñar una infraestructura financiera de alta disponibilidad para enrutamiento inteligente de pagos B2B multi-adquirente, facturación por consumo (metering), conciliación contable automática en libros mayores ACID y SSO corporativo SAML 2.0 para operadores logísticos sin pagar licencias mensuales por usuario."
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Resultado Arquitectónico Emitido</div>
+            <div class="card-desc" style="display: flex; flex-direction: column; gap: 8px;">
+              <div><strong>Capa 1 (Auth):</strong> Keycloak Enterprise IAM (Apache-2.0) para federación SAML/OIDC corporativa sin cobro por MAU.</div>
+              <div><strong>Capa 2 (DBS):</strong> PostgreSQL 16 + pgvector (PostgreSQL) para ledger contable inmutable y detección de anomalías vectoriales.</div>
+              <div><strong>Capa 3 (Payments):</strong> Juspay Hyperswitch Router (Apache-2.0) para conmutación transparente entre pasarelas sin downtime.</div>
+              <div><strong>Capa 4 (AI Engine):</strong> LangChain + Ragas Pipeline (MIT) para auditoría de reglas de pago y verificación de fidelidad.</div>
+            </div>
+          </div>
+
+          <div class="card" style="justify-content: space-between;">
+            <div>
+              <div class="card-title">Impacto Operativo & Financiero</div>
+              <div class="card-desc">Sustituye Stripe Connect ($0.30 + 2.9%), Auth0 Enterprise ($2,400 USD/mes) y DataDog Audit ($600 USD/mes).</div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 12px;">
+              <div class="stat-box" style="flex: 1;">
+                <div class="stat-val" style="color: var(--emerald-light);">$3,600</div>
+                <div class="stat-label">Ahorro Mensual USD</div>
+              </div>
+              <div class="stat-box" style="flex: 1;">
+                <div class="stat-val" style="color: var(--cyan-light);">Tier 2</div>
+                <div class="stat-label">Hardware Recomendado</div>
+              </div>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 8px;">
+              Servidor Torre PYME (Intel Xeon / 64GB ECC / RAID 1 NVMe) amortizado en 3.5 meses.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Listo para Probar:</strong> Puedes ejecutar este texto exacto en <span class="footer-highlight">https://ossatlas.iotdico.com</span></div>
+        <div>18 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 19: CASOS B2B PARA EVALUAR #2 - SALUD DIGITAL HIPAA
+         ========================================== -->
+    <section class="slide" id="slide-19">
+      <div>
+        <div class="slide-badge badge-purple">🛡️ Casos de Negocio B2B para Evaluar (2 / 3)</div>
+        <h2 class="slide-title">Sector Salud: <span>Telemedicina & Expedientes HIPAA</span></h2>
+        <p class="slide-subtitle">
+          Copia y pega este requerimiento real en el bloque <strong>"Sintetizar Arquitectura RAG"</strong> para validar el stack de privacidad absoluta.
+        </p>
+
+        <div class="prompt-box" style="margin-bottom: 16px;">
+          "Requiero una plataforma de telemedicina y expedientes clínicos que garantice cumplimiento estricto HIPAA y soberanía total de datos, con transcripción local de audio de consultas médicas, búsqueda semántica en historiales médicos y control de acceso RBAC granular sin que ningún dato salga a nubes públicas."
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Resultado Arquitectónico Emitido</div>
+            <div class="card-desc" style="display: flex; flex-direction: column; gap: 8px;">
+              <div><strong>Capa 1 (Auth):</strong> Zitadel IAM (Apache-2.0) con soporte multi-tenancy clínico y autenticación sin contraseñas (Passkeys/FIDO2).</div>
+              <div><strong>Capa 2 (DBS):</strong> Qdrant Vector Engine (Apache-2.0) para indexación semántica de diagnósticos clínicos y consentimientos.</div>
+              <div><strong>Capa 3 (Payments):</strong> KillBill Enterprise Billing (Apache-2.0) para facturación de seguros médicos y copagos.</div>
+              <div><strong>Capa 4 (AI Engine):</strong> Meetily AI Whisper Local (MIT) para transcripción de audio en Workstation propia sin telemetría.</div>
+            </div>
+          </div>
+
+          <div class="card" style="justify-content: space-between;">
+            <div>
+              <div class="card-title">Soberanía de Datos & Compliance</div>
+              <div class="card-desc">Cumplimiento HIPAA / GDPR por diseño físico al operar dentro de la red del hospital o clínica (Air-gapped compatible).</div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 12px;">
+              <div class="stat-box" style="flex: 1;">
+                <div class="stat-val" style="color: var(--emerald-light);">$4,200</div>
+                <div class="stat-label">Ahorro Mensual USD</div>
+              </div>
+              <div class="stat-box" style="flex: 1;">
+                <div class="stat-val" style="color: var(--amber-primary);">Tier 4</div>
+                <div class="stat-label">Hardware Recomendado</div>
+              </div>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 8px;">
+              AI Workstation (Ryzen 9 / 128GB / GPU RTX 4090 24GB) para transcripción e inferencia local sub-segundo.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Privacidad No Negociable:</strong> Los historiales de pacientes jamás alimentan modelos de terceros.</div>
+        <div>19 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 20: CASOS B2B PARA EVALUAR #3 - SUPPLY CHAIN
+         ========================================== -->
+    <section class="slide" id="slide-20">
+      <div>
+        <div class="slide-badge badge-emerald">📦 Casos de Negocio B2B para Evaluar (3 / 3)</div>
+        <h2 class="slide-title">Sector Logística: <span>Supply Chain & Catálogo de 500k SKUs</span></h2>
+        <p class="slide-subtitle">
+          Copia y pega este requerimiento en la barra de síntesis para ver cómo OSS Atlas resuelve latencias de e-commerce mayorista.
+        </p>
+
+        <div class="prompt-box" style="margin-bottom: 16px;">
+          "Buscamos modernizar la cadena de suministro B2B de un distribuidor mayorista: motor de búsqueda de catálogo de 500,000 SKUs con tolerancia a errores tipográficos sub-50ms, base de datos relacional para inventarios en tiempo real, pasarela de cobros B2B con reintentos y asistente agéntico de cotizaciones."
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Resultado Arquitectónico Emitido</div>
+            <div class="card-desc" style="display: flex; flex-direction: column; gap: 8px;">
+              <div><strong>Capa 1 (Auth):</strong> SuperTokens Core (Apache-2.0) para sesiones distribuidas de clientes mayoristas y choferes de flota.</div>
+              <div><strong>Capa 2 (DBS):</strong> Meilisearch Engine (MIT) en Rust para búsqueda facetada en <30ms + PostgreSQL 16 para inventario transaccional.</div>
+              <div><strong>Capa 3 (Payments):</strong> Juspay Hyperswitch (Apache-2.0) para procesamiento de transferencias y líneas de crédito B2B.</div>
+              <div><strong>Capa 4 (AI Engine):</strong> CopilotKit + LangChain (MIT) para generación de cotizaciones y pedidos desatendidos vía WhatsApp/Email.</div>
+            </div>
+          </div>
+
+          <div class="card" style="justify-content: space-between;">
+            <div>
+              <div class="card-title">Escalabilidad & Cero Cuellos de Botella</div>
+              <div class="card-desc">Sustituye Algolia Pro ($1,800/mes por millón de búsquedas) y servicios cloud con alta latencia de red.</div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 12px;">
+              <div class="stat-box" style="flex: 1;">
+                <div class="stat-val" style="color: var(--emerald-light);">$2,800</div>
+                <div class="stat-label">Ahorro Mensual USD</div>
+              </div>
+              <div class="stat-box" style="flex: 1;">
+                <div class="stat-val" style="color: var(--cyan-light);">Tier 1 / 2</div>
+                <div class="stat-label">Hardware Recomendado</div>
+              </div>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 8px;">
+              Mini PC Homelab Dual 2.5 GbE o Servidor Torre con 64GB DDR5 y NVMe PCIe 4.0.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Rendimiento Inmediato:</strong> Recuperación de catálogos masivos sin facturación por petición.</div>
+        <div>20 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 21: BOTÓN "AUDITAR UN REPOSITORIO DE GITHUB AHORA"
+         ========================================== -->
+    <section class="slide" id="slide-21">
+      <div>
+        <div class="slide-badge badge-rose">🛡️ Herramienta de Auditoría On-Demand</div>
+        <h2 class="slide-title">Botón: 'Auditar un Repositorio de GitHub Ahora'</h2>
+        <p class="slide-subtitle">
+          Disponible en el hero principal y en la barra de sincronización, este botón abre un escáner en tiempo real que conecta directamente con la API oficial de GitHub.
+        </p>
+
+        <div class="ui-window">
+          <div class="ui-top-bar">
+            <span>● MODAL DE AUDITORÍA & INGESTA AUTOMATIZADA</span>
+            <span>API GitHub Rate-Limit: Token Bucket Verificado</span>
+          </div>
+
+          <div style="display: flex; gap: 10px; align-items: center; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 14px;">
+            <span style="font-size: 1.1rem;">🔗</span>
+            <span style="font-family: var(--font-mono); font-size: 0.82rem; color: #fff; flex: 1;">
+              https://github.com/zitadel/zitadel
+            </span>
+            <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: var(--emerald-light); font-weight: 700; font-size: 0.75rem; padding: 6px 12px; border-radius: 8px;">
+              ⚡ Auditar en Vivo
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; font-size: 0.74rem; font-family: var(--font-mono); color: var(--text-muted);">
+            <span>ETag: W/"9f8e7d-github-api-cache"</span>
+            <span style="color: var(--emerald-light);">Latencia de Respuesta: 620 ms</span>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 14px;">
+          <div class="card">
+            <div class="card-title">Cero Sesgo Comercial</div>
+            <div class="card-desc">El algoritmo examina commits reales, releases firmados, incidencias cerradas y políticas de seguridad sin intervención manual.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Detección de Dockerfile</div>
+            <div class="card-desc">Inspecciona el árbol de código en busca de `Dockerfile` o `docker-compose.yml` para garantizar despliegue en 1 comando.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Prevención de Abandonware</div>
+            <div class="card-desc">Rechaza automáticamente cualquier repositorio que acumule más de 90 días sin actividad o que haya cambiado a licencia restrictiva.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Control de Calidad Continuo:</strong> Evita integrar proyectos huérfanos o con riesgos legales en tu negocio.</div>
+        <div>21 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 22: AUDITORÍA EN ACCIÓN - EL ALGORITMO 15/20/65
+         ========================================== -->
+    <section class="slide" id="slide-22">
+      <div>
+        <div class="slide-badge badge-cyan">🔬 Desglose del Algoritmo de Salud</div>
+        <h2 class="slide-title">Auditoría en Acción: <span>Cálculo 15% / 20% / 65%</span></h2>
+        <p class="slide-subtitle">
+          Al presionar "Auditar", el backend ejecuta en tiempo real el algoritmo determinista y despliega el desglose cuantitativo para el equipo de ingeniería.
+        </p>
+
+        <div class="grid-3">
+          <div class="card" style="border-top: 3px solid var(--cyan-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="mini-pill" style="color: var(--cyan-light);">PESO: 15%</span>
+              <strong style="font-family: var(--font-mono); color: var(--cyan-light); font-size: 1.1rem;">94 / 100</strong>
+            </div>
+            <div class="card-title">Velocidad de Commits</div>
+            <div class="card-desc">
+              Analiza la frecuencia de merges en la rama `main` y actividad de mantenedores en las últimas 12 semanas. Proyectos activos obtienen 90-100 pts.
+            </div>
+            <div style="margin-top: auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">
+              Métrica: Commits < 90 días
+            </div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid var(--emerald-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="mini-pill" style="color: var(--emerald-light);">PESO: 20%</span>
+              <strong style="font-family: var(--font-mono); color: var(--emerald-light); font-size: 1.1rem;">98 / 100</strong>
+            </div>
+            <div class="card-title">Seguridad Estructural</div>
+            <div class="card-desc">
+              Verifica licencia SPDX válida (Apache-2.0, MIT, PostgreSQL, BSD), ausencia de CVEs críticos en Dependabot y firma de commits GPG.
+            </div>
+            <div style="margin-top: auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">
+              Métrica: Zero CVEs Críticos
+            </div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid var(--purple-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="mini-pill" style="color: var(--purple-light);">PESO: 65%</span>
+              <strong style="font-family: var(--font-mono); color: var(--purple-light); font-size: 1.1rem;">95 / 100</strong>
+            </div>
+            <div class="card-title">Comunidad & Documentación</div>
+            <div class="card-desc">
+              El factor más crítico para empresas: claridad del README, ejemplos de `.env`, guías de backup/restore, soporte Compose y estrellas orgánicas (>1,000).
+            </div>
+            <div style="margin-top: auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">
+              Métrica: Dockerfile + Docs
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-size: 0.82rem; color: #d1fae5;">
+            <strong>Resultado Ponderado:</strong> (0.15 × 94) + (0.20 × 98) + (0.65 × 95) = <strong style="color: #fff; font-size: 0.95rem;">95.4 / 100 Health Score</strong> (ESTADO: APROBADO B2B).
+          </div>
+          <span class="mini-pill" style="color: var(--emerald-light); border-color: rgba(16, 185, 129, 0.4);">CERTIFICADO</span>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Criterio Enterprise:</strong> Si un proyecto tiene documentación deficiente, no califica para el catálogo.</div>
+        <div>22 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 23: AUDITORÍA A INGESTA EN 1 CLIC
+         ========================================== -->
+    <section class="slide" id="slide-23">
+      <div>
+        <div class="slide-badge badge-emerald">📥 De la Auditoría al Catálogo</div>
+        <h2 class="slide-title">Ingesta en 1 Clic: <span>Sincronización a PostgreSQL</span></h2>
+        <p class="slide-subtitle">
+          Cuando un repositorio auditado supera el 85% de Health Score, el modal habilita el botón de ingesta para sumarlo de inmediato a la base de datos de producción.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon" style="color: var(--cyan-light);">1</div>
+            <div class="card-title">Validación del Dictamen</div>
+            <div class="card-desc">El sistema muestra el badge verde de "APROBADO", el ahorro estimado respecto a SaaS privativo y los disparadores de integración extraídos del repositorio.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon" style="color: var(--emerald-light);">2</div>
+            <div class="card-title">Cálculo Vectorial Inmediato</div>
+            <div class="card-desc">Al hacer clic en "Incorporar al Catálogo", el backend genera el vector unitario `halfvec(1536)` sobre el nombre, descripción y triggers del repositorio.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon" style="color: var(--purple-light);">3</div>
+            <div class="card-title">Disponibilidad en RRF & RAG</div>
+            <div class="card-desc">Queda inmediatamente indexado para la búsqueda híbrida y para el Asistente RAG sin requerir reinicio del servidor ni reindexación manual.</div>
+          </div>
+        </div>
+
+        <div class="ui-window" style="margin-top: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; items-center; gap: 8px;">
+              <span style="font-size: 1.1rem;">✅</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: #fff;">Repositorio Calificado para Producción</span>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: var(--emerald-light); font-weight: 800; font-size: 0.75rem; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+              <span>+</span> Incorporar a PostgreSQL 16
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Expansión Dinámica:</strong> El catálogo crece continuamente sin depender de actualizaciones de código.</div>
+        <div>23 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 24: BOTÓN "VER SALDO DE LOS 122 REPOS (84 PENDIENTES)"
+         ========================================== -->
+    <section class="slide" id="slide-24">
+      <div>
+        <div class="slide-badge badge-purple">📋 Taxonomía & Backlog Estratégico</div>
+        <h2 class="slide-title">Botón: 'Ver Saldo de los 122 Repos (84 pendientes)'</h2>
+        <p class="slide-subtitle">
+          Situado en la barra superior de categorías, este botón permite a los líderes técnicos auditar y gestionar el roadmap completo de 122 tecnologías curadas para la arquitectura B2B.
+        </p>
+
+        <div class="ui-window">
+          <div class="ui-top-bar">
+            <span>● CONTROL DEL ROADMAP TAXONÓMICO B2B</span>
+            <span>38 Activas en Producción • 84 Pendientes de Ingesta</span>
+          </div>
+
+          <div style="display: flex; gap: 14px; align-items: center;">
+            <div style="flex: 1; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">UNIVERSO TAXONÓMICO</div>
+              <div style="font-size: 1.5rem; font-weight: 900; color: #fff;">122 Repos</div>
+            </div>
+            <div style="flex: 1; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: var(--emerald-light); font-family: var(--font-mono);">CATÁLOGO ACTIVO</div>
+              <div style="font-size: 1.5rem; font-weight: 900; color: var(--emerald-light);">38 Repos</div>
+            </div>
+            <div style="flex: 1; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: #fde68a; font-family: var(--font-mono);">SALDO POR AUDITAR</div>
+              <div style="font-size: 1.5rem; font-weight: 900; color: #f59e0b;">84 Pendientes</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 14px;">
+          <div class="card">
+            <div class="card-title">Transparencia Total</div>
+            <div class="card-desc">Permite conocer no solo qué software está activo hoy, sino qué tecnologías han sido investigadas y pre-aprobadas para cada capa.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Filtros por Estado</div>
+            <div class="card-desc">Conmuta con 1 clic entre "Solo Pendientes" (84 repos) o vista completa de las 122 tecnologías de la taxonomía.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Auditoría On-the-Fly</div>
+            <div class="card-desc">Cada herramienta del saldo incluye el botón `⚡ Auditar e Incorporar` para evaluarla contra GitHub y sumarla al catálogo activo.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Roadmap Vivo:</strong> La comunidad y los clientes deciden qué tecnologías del backlog se priorizan.</div>
+        <div>24 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 25: DESGLOSE TAXONÓMICO DE LOS 122 REPOS
+         ========================================== -->
+    <section class="slide" id="slide-25">
+      <div>
+        <div class="slide-badge badge-cyan">📊 Distribución Estructural</div>
+        <h2 class="slide-title">Distribución de los 122 Repositorios: <span>4 Categorías Clave</span></h2>
+        <p class="slide-subtitle">
+          El universo de 122 repositorios está normalizado en 4 pilares tecnológicos de referencia para cubrir todas las necesidades de una corporación moderna.
+        </p>
+
+        <div class="grid-4">
+          <div class="card" style="border-top: 3px solid #38bdf8;">
+            <div style="font-size: 1.3rem; margin-bottom: 6px;">🔐</div>
+            <div class="card-title" style="font-size: 0.95rem;">Auth & IAM (28 Repos)</div>
+            <div class="card-desc" style="font-size: 0.76rem;">Control de acceso zero-trust, OIDC/SAML, LDAP, RBAC/ABAC y gestión de sesiones.</div>
+            <div style="margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #38bdf8;">10 Activas • 18 Saldo</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">Keycloak, Zitadel, Ory...</div>
+            </div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid #34d399;">
+            <div style="font-size: 1.3rem; margin-bottom: 6px;">🗄️</div>
+            <div class="card-title" style="font-size: 0.95rem;">DBs & Vector (34 Repos)</div>
+            <div class="card-desc" style="font-size: 0.76rem;">Motores OLTP relacionales, almacenes vectoriales HNSW, motores de búsqueda y FTS.</div>
+            <div style="margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #34d399;">12 Activas • 22 Saldo</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">Postgres, Qdrant, Meili...</div>
+            </div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid #f472b6;">
+            <div style="font-size: 1.3rem; margin-bottom: 6px;">💳</div>
+            <div class="card-title" style="font-size: 0.95rem;">Payments & Ledger (19 Repos)</div>
+            <div class="card-desc" style="font-size: 0.76rem;">Switches multi-adquirente en Rust, libros contables ACID y facturación por consumo.</div>
+            <div style="margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #f472b6;">6 Activas • 13 Saldo</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">Hyperswitch, Lago, KillBill...</div>
+            </div>
+          </div>
+
+          <div class="card" style="border-top: 3px solid #a78bfa;">
+            <div style="font-size: 1.3rem; margin-bottom: 6px;">🤖</div>
+            <div class="card-title" style="font-size: 0.95rem;">AI & RAG Engine (41 Repos)</div>
+            <div class="card-desc" style="font-size: 0.76rem;">Inferencia local vLLM, transcripción Whisper, orquestadores LangChain y frameworks RAG.</div>
+            <div style="margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #a78bfa;">10 Activas • 31 Saldo</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">vLLM, Meetily, CopilotKit...</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; text-align: center; font-size: 0.82rem; color: var(--text-muted);">
+          Total: <strong style="color: #fff;">38 herramientas activas auditadas</strong> + <strong style="color: #f59e0b;">84 en saldo pendiente</strong> = <strong style="color: var(--cyan-light);">122 repositorios proyectados</strong>.
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Taxonomía Robusta:</strong> 100% categorizado bajo licencias abiertas permisivas OSI.</div>
+        <div>25 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 26: BOTÓN "CAPAS 1-4: ARQUITECTURA DE SOFTWARE"
+         ========================================== -->
+    <section class="slide" id="slide-26">
+      <div>
+        <div class="slide-badge badge-cyan">🖥️ Vista de Software</div>
+        <h2 class="slide-title">Botón: 'Capas 1-4: Arquitectura de Software'</h2>
+        <p class="slide-subtitle">
+          Dentro del Asistente RAG, esta pestaña conmuta a la perspectiva de arquitectura lógica para inspeccionar los contenedores, roles y puertos de cada solución emitida.
+        </p>
+
+        <div class="ui-window">
+          <div style="display: flex; gap: 8px; background: rgba(15, 23, 42, 0.9); padding: 6px; border-radius: 10px;">
+            <div style="flex: 1; text-align: center; padding: 8px; border-radius: 8px; background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.5); color: var(--cyan-light); font-weight: 700; font-size: 0.78rem;">
+              🖥️ Capas 1-4: Arquitectura de Software (Activo)
+            </div>
+            <div style="flex: 1; text-align: center; padding: 8px; border-radius: 8px; color: var(--text-muted); font-size: 0.78rem;">
+              🖲️ Capa 0: Hardware Recomendado & Diagrama Radar
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 14px;">
+          <div class="card">
+            <div class="card-title">Qué Revela Esta Vista</div>
+            <div class="card-desc" style="display: flex; flex-direction: column; gap: 8px;">
+              <div>• <strong>Topología de Microservicios:</strong> Cómo interactúan los 4 contenedores en la red Docker puente interna (`oss-atlas-net`).</div>
+              <div>• <strong>Mapeo de Puertos Seguros:</strong> Puertos de desarrollo y producción (8080 Keycloak, 5432 Postgres, 8000 Hyperswitch, 7700 Meilisearch).</div>
+              <div>• <strong>Manejo de Secretos:</strong> Configuración de tokens JWT RS256, certificados TLS y credenciales sin hardcoding.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Exportación de Artefactos de Ingeniería</div>
+            <div class="card-desc" style="display: flex; flex-direction: column; gap: 8px;">
+              <div>• <strong>Docker Compose Unificado:</strong> Manifiesto `.yml` con healthchecks, límites de memoria RAM y reinicio automático.</div>
+              <div>• <strong>Variables de Entorno (.env.example):</strong> Documentación exhaustiva de cada parámetro requerido para producción.</div>
+              <div>• <strong>Guías Paso a Paso (.md / .pdf):</strong> Procedimiento de instalación y verificación para Linux, Windows y Mac.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>De la Lógica a los Contenedores:</strong> Cero ambigüedad para los ingenieros DevOps de tu equipo.</div>
+        <div>26 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 27: CAPAS 1-4 EN ACCIÓN - DOCKER RUN & SCRIPTS
+         ========================================== -->
+    <section class="slide" id="slide-27">
+      <div>
+        <div class="slide-badge badge-emerald">⚙️ Despliegue en 1 Comando</div>
+        <h2 class="slide-title">Capas 1-4 en Acción: <span>Comandos Docker Run & Guías</span></h2>
+        <p class="slide-subtitle">
+          Cada tarjeta de software incluye botones de acción rápida para copiar comandos de ejecución directa y descargar guías de integración tri-plataforma.
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Comando Docker Run de 1 Clic</div>
+            <div style="background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--emerald-light); line-height: 1.5; margin: 8px 0 12px 0;">
+              docker run -d --name pgvector-hybrid \<br>
+              &nbsp;&nbsp;-p 5432:5432 \<br>
+              &nbsp;&nbsp;-e POSTGRES_PASSWORD=atlas_secret \<br>
+              &nbsp;&nbsp;-v pgdata:/var/lib/postgresql/data \<br>
+              &nbsp;&nbsp;pgvector/pgvector:pg16
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <div style="background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.3); color: var(--cyan-light); font-size: 0.72rem; padding: 6px 12px; border-radius: 6px;">
+                📋 Copiar Docker Run
+              </div>
+              <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--emerald-light); font-size: 0.72rem; padding: 6px 12px; border-radius: 6px;">
+                🔍 Inspeccionar Detalle
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Descarga de Guías Tri-Plataforma (.md & .pdf)</div>
+            <div class="card-desc" style="margin-bottom: 12px;">
+              Documentación técnica generada a la medida del sistema operativo del servidor o estación de trabajo de tu empresa:
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 6px; font-size: 0.76rem;">
+                <span>🐧 <strong>Linux Nativo</strong> (systemd, sysctl tuning, UFW)</span>
+                <span class="mini-pill" style="color: var(--cyan-light);">Descargar .md / .pdf</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 6px; font-size: 0.76rem;">
+                <span>🪟 <strong>Windows Enterprise</strong> (PowerShell, WSL2)</span>
+                <span class="mini-pill" style="color: var(--cyan-light);">Descargar .md / .pdf</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 6px; font-size: 0.76rem;">
+                <span>🍎 <strong>macOS</strong> (Apple Silicon M1-M4, Colima ARM64)</span>
+                <span class="mini-pill" style="color: var(--cyan-light);">Descargar .md / .pdf</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Time-to-Deploy Inmediato:</strong> Elimina horas de redacción de scripts y resolución de dependencias.</div>
+        <div>27 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 28: BOTÓN "CAPA 0: HARDWARE RECOMENDADO & RADAR"
+         ========================================== -->
+    <section class="slide" id="slide-28">
+      <div>
+        <div class="slide-badge badge-amber">🖲️ Soberanía Física</div>
+        <h2 class="slide-title">Botón: 'Capa 0: Hardware Recomendado & Radar'</h2>
+        <p class="slide-subtitle">
+          La pestaña que materializa la soberanía: conmuta del software lógico al dimensionamiento de la máquina física que operará en las instalaciones de tu empresa.
+        </p>
+
+        <div class="ui-window">
+          <div style="display: flex; gap: 8px; background: rgba(15, 23, 42, 0.9); padding: 6px; border-radius: 10px;">
+            <div style="flex: 1; text-align: center; padding: 8px; border-radius: 8px; color: var(--text-muted); font-size: 0.78rem;">
+              🖥️ Capas 1-4: Arquitectura de Software
+            </div>
+            <div style="flex: 1; text-align: center; padding: 8px; border-radius: 8px; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fde68a; font-weight: 700; font-size: 0.78rem;">
+              🖲️ Capa 0: Hardware Recomendado & Diagrama Radar (Activo)
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 14px;">
+          <div class="card">
+            <div class="card-title">Por Qué Importa la Capa 0</div>
+            <div class="card-desc">El software libre necesita una base física confiable. Un dimensionamiento deficiente colapsa la base de datos; un sobredimensionamiento malgasta capital.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Soberanía de Datos Absoluta</div>
+            <div class="card-desc">Tus datos residen en almacenamiento NVMe bajo llave física en tu propia sede o racks dedicados. Cero riesgo de decomiso o bloqueo de cuenta cloud.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Conversión de Opex a Capex</div>
+            <div class="card-desc">Sustituye la factura mensual perpetua de la nube por un equipo amortizable contablemente con deducciones fiscales para la empresa.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>La Máquina Ideal:</strong> Cada arquitectura calculada selecciona automáticamente el Tier óptimo.</div>
+        <div>28 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 29: CAPA 0 - TIERS & DIAGRAMA RADAR 5D
+         ========================================== -->
+    <section class="slide" id="slide-29">
+      <div>
+        <div class="slide-badge badge-emerald">📊 Matriz de Cómputo On-Premise</div>
+        <h2 class="slide-title">Capa 0 en Acción: <span>Los 4 Tiers & Diagrama Radar 5D</span></h2>
+        <p class="slide-subtitle">
+          Evaluación multivariable que equilibra Cómputo CPU, Memoria ECC, Rendimiento NVMe, Ancho de Banda y Retorno Financiero (ROI).
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Resumen de los 4 Tiers Físicos</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+              <div style="border-left: 2px solid var(--cyan-primary); padding-left: 8px;">
+                <strong style="color: #fff; font-size: 0.82rem;">Tier 1: Mini PC Homelab (~$780 USD)</strong>
+                <p style="font-size: 0.74rem; color: var(--text-muted);">Ryzen 9 / 64GB DDR5 / 2TB NVMe / 35W TDP. Ideal para startups y oficinas pequeñas.</p>
+              </div>
+              <div style="border-left: 2px solid var(--emerald-primary); padding-left: 8px;">
+                <strong style="color: #fff; font-size: 0.82rem;">Tier 2: Servidor Torre PYME (~$1,850 USD)</strong>
+                <p style="font-size: 0.74rem; color: var(--text-muted);">Intel Xeon / 64-128GB ECC / RAID 1 NVMe / IPMI. Estabilidad continua 24/7 sin caídas.</p>
+              </div>
+              <div style="border-left: 2px solid var(--purple-primary); padding-left: 8px;">
+                <strong style="color: #fff; font-size: 0.82rem;">Tier 3: Rack Enterprise 1U/2U (~$4,600 USD)</strong>
+                <p style="font-size: 0.74rem; color: var(--text-muted);">Dual EPYC / 256GB ECC / 10 GbE Fibra. Cargas transaccionales de alta concurrencia.</p>
+              </div>
+              <div style="border-left: 2px solid var(--amber-primary); padding-left: 8px;">
+                <strong style="color: #fff; font-size: 0.82rem;">Tier 4: AI Workstation (~$3,650 USD)</strong>
+                <p style="font-size: 0.74rem; color: var(--text-muted);">Ryzen 9 / 128GB / GPU RTX 4090 24GB VRAM. Inferencia de LLMs y transcripción local.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="justify-content: space-between;">
+            <div class="card-title">Los 5 Ejes del Diagrama Radar</div>
+            <div class="card-desc" style="display: flex; flex-direction: column; gap: 6px;">
+              <div>• <strong>CPU & Cómputo:</strong> Cores físicos y frecuencia sostenida para microservicios.</div>
+              <div>• <strong>RAM & ECC:</strong> Capacidad para índices vectoriales y protección anti-bitflip.</div>
+              <div>• <strong>NVMe IOPS:</strong> Lectura/escritura aleatoria ultrarrápida para PostgreSQL.</div>
+              <div>• <strong>Red & Conectividad:</strong> Puertos 2.5 GbE y 10 GbE para transferencias LAN sin latencia.</div>
+              <div>• <strong>Eficiencia ROI:</strong> Amortización en menos de 4 meses con bajo consumo en watts.</div>
+            </div>
+            <div style="margin-top: 10px; padding: 8px 12px; background: rgba(245, 158, 11, 0.1); border-radius: 6px; font-size: 0.75rem; color: #fde68a;">
+              Fabricantes Homologados: Minisforum, Beelink, Dell, Supermicro, Lenovo, NVIDIA y Apple.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>Equilibrio Óptimo:</strong> El radar visualiza exactamente si tu máquina está balanceada para la carga.</div>
+        <div>29 de 30</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         DIAPOSITIVA 30: JUSTIFICACIÓN FINANCIERA & CIERRE
+         ========================================== -->
+    <section class="slide" id="slide-30">
+      <div>
+        <div class="slide-badge badge-cyan">💰 El Caso de Negocio Definitivo</div>
+        <h2 class="slide-title">Justificación para el CFO: <span>$24,070 USD de Ahorro Neto</span></h2>
+        <p class="slide-subtitle">
+          El retorno financiero de la soberanía tecnológica: cómo transformar un gasto operativo incontrolable en un activo corporativo propio de alta rentabilidad.
+        </p>
+
+        <div class="grid-3">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <div style="font-size: 0.72rem; color: #fda4af; font-family: var(--font-mono);">ESCENARIO NUBE AWS / AZURE</div>
+            <div class="card-title" style="color: #fda4af;">$28,320 USD</div>
+            <div class="card-desc">Costo acumulado a 24 meses por instancia GPU c6i.4xlarge, almacenamiento EBS, egress de red y licencias SaaS adicionales.</div>
+            <div style="margin-top: auto; font-size: 0.72rem; color: #fda4af;">Opex 100% no amortizable</div>
+          </div>
+
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 0.72rem; color: var(--emerald-light); font-family: var(--font-mono);">HARDWARE ON-PREMISE (TIER 4)</div>
+            <div class="card-title" style="color: var(--emerald-light);">$4,250 USD</div>
+            <div class="card-desc">$3,650 USD adquisición única de servidor RTX 4090 + ~$25 USD/mes de consumo eléctrico a plena carga durante 24 meses.</div>
+            <div style="margin-top: auto; font-size: 0.72rem; color: var(--emerald-light);">Activo propio (Capex deducible)</div>
+          </div>
+
+          <div class="card" style="border-color: rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.08);">
+            <div style="font-size: 0.72rem; color: var(--cyan-light); font-family: var(--font-mono);">BALANCE ECONÓMICO FINAL</div>
+            <div class="card-title" style="color: var(--cyan-light);">+85% Ahorro</div>
+            <div class="card-desc"><strong>$24,070 USD de capital liberado</strong> para reinvertir en ventas, talento e innovación, con punto de equilibrio en el mes 3.1.</div>
+            <div style="margin-top: auto; font-size: 0.72rem; color: var(--cyan-light);">ROI: 3.1 Meses</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; text-align: center; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-card); border-radius: 12px; padding: 14px 20px;">
+          <div style="font-size: 0.95rem; font-weight: 800; color: #fff;">
+            Empieza a Construir tu Soberanía Tecnológica Hoy Mismo
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+            Plataforma Global en Vivo: <a href="https://ossatlas.iotdico.com" target="_blank" style="color: var(--cyan-light); text-decoration: none; font-weight: 700;">ossatlas.iotdico.com</a> • Repositorio GitHub: <a href="https://github.com/DICO2023/oss-atlas" target="_blank" style="color: var(--emerald-light); text-decoration: none; font-weight: 700;">github.com/DICO2023/oss-atlas</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div><strong>OSS Atlas:</strong> Propiedad y Autoría de <strong>EdisonPEÑA (Iotdico)</strong> • Licencia MIT • Octubre 2026.</div>
+        <div>30 de 30 • Fin de la Presentación Ejecutiva</div>
+      </div>
+    </section>
   </main>
 
   <!-- Bottom Navigation Control Bar -->
   <footer class="bottom-controls">
     <button class="ctrl-btn" onclick="prevSlide()" title="Diapositiva Anterior (←)">‹</button>
     <div class="dots-container" id="dotsContainer">
-      <!-- Generated dynamically by JS -->
+      <!-- Generated dynamically by JS for 30 slides -->
     </div>
     <button class="ctrl-btn" onclick="nextSlide()" title="Siguiente Diapositiva (→ o Espacio)">›</button>
   </footer>
@@ -1069,7 +2233,7 @@
   <!-- Application Logic -->
   <script>
     let currentSlide = 1;
-    const totalSlides = 10;
+    const totalSlides = 30;
     const progressBar = document.getElementById('progressBar');
     const slideCounter = document.getElementById('slideCounter');
     const dotsContainer = document.getElementById('dotsContainer');
@@ -1090,6 +2254,7 @@
         if (slide) {
           if (i === currentSlide) {
             slide.classList.add('active');
+            slide.scrollTop = 0;
           } else {
             slide.classList.remove('active');
           }
@@ -1102,13 +2267,19 @@
         dots[i].className = `dot ${i + 1 === currentSlide ? 'active' : ''}`;
       }
 
+      // Scroll active dot into view if needed
+      if (dots[currentSlide - 1]) {
+        dots[currentSlide - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+
       // Update Progress Bar
       const percentage = (currentSlide / totalSlides) * 100;
       progressBar.style.width = `${percentage}%`;
 
       // Update Counter
       const paddedCurrent = String(currentSlide).padStart(2, '0');
-      slideCounter.textContent = `DIAPOSITIVA ${paddedCurrent} / ${totalSlides}`;
+      const paddedTotal = String(totalSlides).padStart(2, '0');
+      slideCounter.textContent = `DIAPOSITIVA ${paddedCurrent} / ${paddedTotal}`;
     }
 
     function nextSlide() {
